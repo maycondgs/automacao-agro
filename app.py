@@ -43,7 +43,7 @@ def iniciar_driver():
 
     })
     driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager().install()), options=chrome_options)
+        ChromeDriverManager()), options=chrome_options)
 
     return driver
 
@@ -1215,7 +1215,7 @@ schedule.every().day.at("06:00").do(run_threaded, scrapy_agro)
 schedule.every().monday.do(run_threaded, scrapy_tabela)
 
 
-
+print("Automacao Iniciada")
 while 1:
     schedule.run_pending()
     sleep(1)
