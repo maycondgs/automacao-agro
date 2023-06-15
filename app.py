@@ -178,7 +178,7 @@ def scraping(tipo, itemrq):
         nom = tipo.split('/')
         nome = nom[1]
         
-        
+ 
 
         for dat, estadua, naciona in zip(data, estadual, nacional):
 
