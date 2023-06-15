@@ -30,20 +30,19 @@ option = Options()
 def iniciar_driver():
 
     chrome_options = Options()
-    arguments = ['--lang=en-US', '--window-size=1920,1080',
-                 '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
-
+    chrome_options.binary_location = os.environ.get("/usr/bin/google-chrome")
+    arguments = ['--lang=pt-BR', '--window-size=1000,700', '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
     for argument in arguments:
         chrome_options.add_argument(argument)
-    chrome_options.headless = True
+
     chrome_options.add_experimental_option('prefs', {
         'download.prompt_for_download': False,
         'profile.default_content_setting_values.notifications': 2,
-        'profile.default_content_setting_values.automatic_downloads': 1
+        'profile.default_content_setting_values.automatic_downloads': 1,
 
     })
-    driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager()), options=chrome_options)
+
+    driver = webdriver.Chrome(executable_path= os.environ.get("/workspace/auto/Lib/site-packages/webdriver_manager"), chrome_options=chrome_options)
 
     return driver
 
@@ -1215,7 +1214,7 @@ schedule.every().day.at("06:00").do(run_threaded, scrapy_agro)
 schedule.every().monday.do(run_threaded, scrapy_tabela)
 
 
-print("Automacao Iniciada")
+
 while 1:
     schedule.run_pending()
     sleep(1)
