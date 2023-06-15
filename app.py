@@ -42,7 +42,7 @@ def iniciar_driver():
 
     })
 
-    driver = webdriver.Chrome(executable_path= os.environ.get("/auto/Lib/site-packages/webdriver_manager"), chrome_options=chrome_options)
+    driver = webdriver.Chrome(executable_path= os.environ.get("/auto/Lib/site-packages/webdriver_manager"), options=chrome_options)
 
     return driver
 
