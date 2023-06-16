@@ -28,10 +28,9 @@ data_hoje = f'{da[2]}/{da[1]}/{da[0]}'
 
 option = Options()
 def iniciar_driver():
-
     chrome_options = Options()
 
-    arguments = ['--lang=en-US', '--window-size=1920,1080',
+    arguments = ['--window-size=1920,1080',
                  '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
 
     for argument in arguments:
@@ -43,9 +42,9 @@ def iniciar_driver():
         'profile.default_content_setting_values.automatic_downloads': 1
 
     })
+    driver = webdriver.Chrome(service=ChromeService(
+        ChromeDriverManager().install()), options=chrome_options)
 
-    driver = webdriver.Chrome(ChromeDriverManager.install(), options=chrome_options)
-    
     return driver
 
 
