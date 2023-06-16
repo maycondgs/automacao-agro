@@ -44,8 +44,7 @@ def iniciar_driver():
 
     })
 
-    driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager().install()), options=chrome_options)
+    driver = webdriver.Chrome(ChromeDriverManager.install(), options=chrome_options)
     
     return driver
 
