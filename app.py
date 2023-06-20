@@ -129,7 +129,7 @@ def scrap(tipo, itemrq):
 
             dados.append({"Item": nome,"Estado": estado,"Data": dat,"Estadual": estadua,"Nacional": naciona})
 
-        bd = requests.get(f'https://api-cotacoes.agrolivrebrasil.com/mes/{itemrq}')
+        bd = requests.get(f'https://app.agrolivrebrasil.com/update/cotacoes/mes/{itemrq}')
 
         tb = json.loads(bd.content)
 
@@ -155,7 +155,7 @@ def scrap(tipo, itemrq):
                     "Nacional": novo[4],
                 }
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/mes/{itemrq}', headers=header, data=payl)
+                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/mes/{itemrq}', headers=header, data=payl)
             
         
 
@@ -190,7 +190,7 @@ def scraping(tipo, itemrq):
 
         st = json.dumps(dado)
 
-        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/mes/{itemrq}', headers=header, data=st)
+        requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/mes/{itemrq}', headers=header, data=st)
 
         
 
@@ -481,7 +481,7 @@ def crawlAlface(driver):
         })
 
         for dado in dados:
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface', data=dado)
+            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/alface', data=dado)
 
     else:
         next
@@ -594,7 +594,7 @@ def crawlRepolho(driver):
         })
 
         for dado in dados:
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho', data=dado)
+            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/repolho', data=dado)
     else:
         next
 
@@ -658,7 +658,7 @@ def scrapy_agro():
         for dado in dados:
             st = json.dumps(dado)
 
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
         pagini(driver, link)
 
@@ -673,7 +673,7 @@ def scrapy_agro():
             for dado in dados2:
                 st = json.dumps(dado)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
             proxpage(driver)
@@ -688,7 +688,7 @@ def scrapy_agro():
                 for dado in dados3:
                     st = json.dumps(dado)
 
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                    requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                 pagini(driver, link)
                 proxpage(driver)
@@ -704,7 +704,7 @@ def scrapy_agro():
                     for dado in dados4:
                         st = json.dumps(dado)
 
-                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                        requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                     pagini(driver, link)
                     proxpage(driver)
@@ -721,7 +721,7 @@ def scrapy_agro():
                         for dado in dados5:
                             st = json.dumps(dado)
 
-                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                         pagini(driver, link)
                         proxpage(driver)
@@ -739,7 +739,7 @@ def scrapy_agro():
                             for dado in dados6:
                                 st = json.dumps(dado)
 
-                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                             pagini(driver, link)
                             proxpage(driver)
@@ -758,7 +758,7 @@ def scrapy_agro():
                                 for dado in dados7:
                                     st = json.dumps(dado)
 
-                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                    requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                 pagini(driver, link)
                                 proxpage(driver)
@@ -778,7 +778,7 @@ def scrapy_agro():
                                     for dado in dados8:
                                         st = json.dumps(dado)
 
-                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                        requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                     pagini(driver, link)
                                     proxpage(driver)
@@ -799,7 +799,7 @@ def scrapy_agro():
                                         for dado in dados9:
                                             st = json.dumps(dado)
 
-                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                         pagini(driver, link)
                                         proxpage(driver)
@@ -821,7 +821,7 @@ def scrapy_agro():
                                             for dado in dados10:
                                                 st = json.dumps(dado)
 
-                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                             pagini(driver, link)
                                             proxpage(driver)
@@ -844,7 +844,7 @@ def scrapy_agro():
                                                 for dado in dados11:
                                                     st = json.dumps(dado)
 
-                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                    requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                 pagini(driver, link)
                                                 proxpage(driver)
@@ -868,7 +868,7 @@ def scrapy_agro():
                                                     for dado in dados12:
                                                         st = json.dumps(dado)
 
-                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                        requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                     pagini(driver, link)
                                                     proxpage(driver)
@@ -893,7 +893,7 @@ def scrapy_agro():
                                                         for dado in dados13:
                                                             st = json.dumps(dado)
 
-                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                         pagini(driver, link)
                                                         proxpage(driver)
@@ -919,7 +919,7 @@ def scrapy_agro():
                                                             for dado in dados14:
                                                                 st = json.dumps(dado)
 
-                                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                             pagini(driver, link)
                                                             proxpage(driver)
@@ -946,7 +946,7 @@ def scrapy_agro():
                                                                 for dado in dados15:
                                                                     st = json.dumps(dado)
 
-                                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                                    requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                                 pagini(driver, link)
                                                                 proxpage(driver)
@@ -974,7 +974,7 @@ def scrapy_agro():
                                                                     for dado in dados16:
                                                                         st = json.dumps(dado)
 
-                                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                                        requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
 
                                                                     pagini(driver, link)
                                                                     proxpage(driver)
@@ -1003,7 +1003,7 @@ def scrapy_agro():
                                                                         for dado in dados17:
                                                                             st = json.dumps(dado)
 
-                                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+                                                                            requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/{nome}',headers=header, data=st)
                                                                             
                                                                         
                                                                     except:
@@ -1181,7 +1181,7 @@ def scrapy_noticias():
 
             dados.append([titulo, link, hora, data_hoje])
 
-        bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias')
+        bd = requests.get('https://app.agrolivrebrasil.com/update/cotacoes/noticias')
 
         tb = json.loads(bd.content)
 
@@ -1197,7 +1197,7 @@ def scrapy_noticias():
 
                 st = json.dumps(payl)
                 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias', headers=header, data=st)
+                requests.post(f'https://app.agrolivrebrasil.com/update/cotacoes/pos/noticias', headers=header, data=st)
 
 
             
