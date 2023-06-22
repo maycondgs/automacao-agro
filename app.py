@@ -17,8 +17,12 @@ import json
 import os
 
     
+dda = datetime.today()
+da = str(dda).split(' ')
+dataa = da[0].split('-')
 
-data_hoje = f'{da[2]}/{da[1]}/{da[0]}'
+
+data_hoje = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 
 
 
