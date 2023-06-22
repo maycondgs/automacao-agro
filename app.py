@@ -633,7 +633,9 @@ def crawlNoticiasAgricolas():
                     "Titulo": novo[0],
                     "Link": novo[1],
                     "Hora": novo[2],
-                    "Data": novo[3]
+                    "Data": novo[3],
+                    "Referencia": 'agricolas',
+                    "Categoria": 'agricolas'
                 }
 
                 st = json.dumps(payl)
@@ -642,7 +644,7 @@ def crawlNoticiasAgricolas():
 
 def crawlNoticiasAgrolink():
         
-    links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/poltica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista',]
+    links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/politica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista',]
 
 
     for link in links:
