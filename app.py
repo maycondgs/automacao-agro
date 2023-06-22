@@ -17,11 +17,7 @@ import json
 import os
 
     
-date = datetime.now()
-dat = str(date)
-dda = dat.split(' ')
-da = dda[0].split('-')
-dia = da[2]
+
 data_hoje = f'{da[2]}/{da[1]}/{da[0]}'
 
 
@@ -599,6 +595,162 @@ def crawlRepolho(driver):
         next
 
 
+def crawlNoticiasAgricolas():
+
+    driver = iniciar_driver()
+
+    driver.get('https://www.noticiasagricolas.com.br/noticias/agronegocio/')
+    sleep(2)
+
+    dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
+
+
+    if dia_cotacao == data_hoje:
+
+        itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
+
+        dados = []
+
+        for item in itens:
+            link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
+            hora = item.find_element(By.TAG_NAME, 'span').text
+            titulo = item.find_element(By.TAG_NAME, 'h2').text
+
+            dados.append([titulo, link, hora, data_hoje])
+
+        bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/agricolas')
+
+        tb = json.loads(bd.content)
+
+        
+        for novo in dados:
+           if novo not in tb:
+                payl = {
+                    "Titulo": novo[0],
+                    "Link": novo[1],
+                    "Hora": novo[2],
+                    "Data": novo[3]
+                }
+
+                st = json.dumps(payl)
+                
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
+
+def crawlNoticiasAgrolink():
+        
+    links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/poltica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista',]
+
+
+    for link in links:
+        lnnk = link.split('/')
+        categoria = lnnk[5]
+        referencia = 'Agrolink'
+        
+        page = requests.get(link)
+
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        dom = etree.HTML(str(soup))
+
+
+        links2 = (dom.xpath('//*[@id="content"]/div/div/div[3]/div[1]/div[2]/div/div[1]/div[2]/div[1]/h3/a/@href'))
+        titulo = (dom.xpath('//*[@id="content"]/div/div/div[3]/div[1]/div[2]/div/div[1]/div[2]/div[1]/h3/a/text()'))
+        datt = (dom.xpath('//*[@id="content"]/div/div/div[3]/div[1]/div[2]/div/div[1]/div[2]/div[2]/ul/li[2]/small/text()'))
+
+        lnks2 = []
+        data = []
+        hora = []
+        
+
+        for da in datt:
+            dattt = da.split(' ')
+            data.append(dattt[0])
+            hora.append(dattt[1])
+
+        for lnk in links2:
+            lnks2.append(f'https://www.agrolink.com.br{lnk}')
+
+        novos = []
+
+        for titu, link, data, hora in zip(titulo, lnks2, data, hora):     
+            novos.append([titu, link, hora, data, referencia, categoria])
+
+        bd = requests.get(f'https://api-cotacoes.agrolivrebrasil.com/noticias/agrolink/{categoria}')
+
+        tb = json.loads(bd.content)
+
+        for novo in novos:
+            if novo not in tb:
+                payl = {
+                    "Titulo": novo[0],
+                    "Link": novo[1],
+                    "Hora": novo[2],
+                    "Data": novo[3],
+                    "Referencia": novo[4],
+                    "Categoria" : novo[5]
+                }
+
+                st = json.dumps(payl)
+            
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
+    
+def crawlNoticiasCanalRural():
+    
+    referencia = 'Canal Rural'
+
+    page = requests.get('https://www.canalrural.com.br/noticias')
+
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    dom = etree.HTML(str(soup))
+
+
+    linkss = (dom.xpath('//*[@id="desktop"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/h2/a/@href'))
+
+    novos = []
+
+    for linkk in linkss:
+        
+        page = requests.get(linkk)
+
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        dom = etree.HTML(str(soup))
+
+        titu = (dom.xpath('/html/body/main/div/div[1]/h1/text()'))
+        titul = titu[0].split('\n')
+        dat = (dom.xpath('/html/body/main/div/div[1]/p[2]/span/text()'))
+        datt = dat[0].split(' ÀS ')
+        data = datt[0]
+        horraa = datt[1]
+        horaa = horraa.split('h')
+        hora = f'{horaa[0]}:{horaa[1]}'
+
+
+        novos.append([titul[1], linkk, hora, data, referencia, referencia])
+        
+
+    bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/canalrural')
+
+    tb = json.loads(bd.content)
+
+    for novo in novos:
+        if novo not in tb:
+            payl = {
+                "Titulo": novo[0],
+                "Link": novo[1],
+                "Hora": novo[2],
+                "Data": novo[3],
+                "Referencia": novo[4],
+                "Categoria" : novo[4]
+            }
+
+            st = json.dumps(payl)
+        
+            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
+
+
+
 def scrapy_agro():
 
     driver = iniciar_driver()
@@ -1155,49 +1307,11 @@ def scrapy_tabela():
         scrap(tipo, itemrq)
         
 
-
-
-
 def scrapy_noticias():
-
-    driver = iniciar_driver()
-
-    driver.get('https://www.noticiasagricolas.com.br/noticias/agronegocio/')
-    sleep(2)
-
-    dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
-
-
-    if dia_cotacao == data_hoje:
-
-        itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
-
-        dados = []
-
-        for item in itens:
-            link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
-            hora = item.find_element(By.TAG_NAME, 'span').text
-            titulo = item.find_element(By.TAG_NAME, 'h2').text
-
-            dados.append([titulo, link, hora, data_hoje])
-
-        bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias')
-
-        tb = json.loads(bd.content)
-
-        
-        for novo in dados:
-           if novo not in tb:
-                payl = {
-                    "Titulo": novo[0],
-                    "Link": novo[1],
-                    "Hora": novo[2],
-                    "Data": novo[3]
-                }
-
-                st = json.dumps(payl)
-                
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias', headers=header, data=st)
+    crawlNoticiasAgricolas()
+    crawlNoticiasAgrolink()
+    crawlNoticiasCanalRural()
+    
 
 
             
