@@ -793,7 +793,7 @@ def scrapy_agro():
         sleep(2)
         driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
         sleep(7)
-
+        
         try:
             driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
             sleep(3)
@@ -805,8 +805,11 @@ def scrapy_agro():
             sleep(2)
         except:
             break
-        
+
+        print('iniciar varrendo precos')
         dados = varrer(driver)
+        print('precos')
+        
 
         sleep(1)
 
@@ -1324,7 +1327,7 @@ def run_threaded(func):
         
         
 
-schedule.every(1).minutes.do(run_threaded, scrapy_agro)
+schedule.every(5).minutes.do(run_threaded, scrapy_agro)
 schedule.every(100).minutes.do(run_threaded, scrapy_agro)
 
 
