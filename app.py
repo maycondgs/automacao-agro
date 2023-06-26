@@ -1316,7 +1316,5 @@ def scrapy_noticias():
 
 
             
-
-
 scrapy_agro()
 
