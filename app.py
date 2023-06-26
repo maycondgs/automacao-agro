@@ -47,13 +47,15 @@ def iniciar_driver():
 
     return driver
 
-
-
-urls = [
+ulll= [
+    
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/'},
     {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/'},
     {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/'},
+]
+
+urls = [
     {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'},
     {'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/'},
     {'milho,https://www.agrolink.com.br/cotacoes/graos/milho/'},
