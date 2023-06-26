@@ -1320,9 +1320,8 @@ def run_threaded(func):
     func_thread.start()
         
         
-schedule.every(1).minutes.do(run_threaded, scrapy_noticias)
-schedule.every().day.at("14:00").do(run_threaded, scrapy_agro)
-schedule.every().monday.do(run_threaded, scrapy_tabela)
+
+schedule.every(10).minutes.do(run_threaded, scrapy_agro)
 
 
 
