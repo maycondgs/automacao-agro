@@ -758,6 +758,7 @@ def scrapy_agro():
 
     driver = iniciar_driver()
 
+    print('iniciado!!!')
     driver.get('https://www.agrolink.com.br/login')
     sleep(2)
 
