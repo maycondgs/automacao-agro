@@ -600,6 +600,7 @@ def crawlRepolho(driver):
 
 
 def crawlNoticiasAgricolas():
+    
     referencia = 'agricolas'
 
     driver = iniciar_driver()
@@ -702,7 +703,7 @@ def crawlNoticiasAgrolink():
                 requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
     
 def crawlNoticiasCanalRural():
-    
+      
     referencia = 'Canal Rural'
 
     page = requests.get('https://www.canalrural.com.br/noticias')
@@ -711,30 +712,26 @@ def crawlNoticiasCanalRural():
 
     dom = etree.HTML(str(soup))
 
+    titulo = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]/h2/a/text()'))
+    link = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]/h2/a/@href'))
+    dat = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div[5]/div/div[2]/div/text()'))
+    data = []
+    hora = []
 
-    linkss = (dom.xpath('//*[@id="desktop"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/h2/a/@href'))
-
-    novos = []
-
-    for linkk in linkss:
-        
-        page = requests.get(linkk)
-
-        soup = BeautifulSoup(page.content, 'html.parser')
-
-        dom = etree.HTML(str(soup))
-
-        titu = (dom.xpath('/html/body/main/div/div[1]/h1/text()'))
-        titul = titu[0].split('\n')
-        dat = (dom.xpath('/html/body/main/div/div[1]/p[2]/span/text()'))
-        datt = dat[0].split(' ÀS ')
-        data = datt[0]
+    for dat in dat:
+        datt = str(dat).split(' às ')
         horraa = datt[1]
         horaa = horraa.split('h')
-        hora = f'{horaa[0]}:{horaa[1]}'
+        datta = datt[0].split('\n')
+        minuto = horaa[1].split('\n')
 
+        data.append(datta[1])
+        hora.append(f'{horaa[0]}:{minuto[0]}')
 
-        novos.append([titul[1], linkk, hora, data, referencia, referencia])
+    novos = []
+    
+    for titulo, link, data, hora in zip(titulo, link, data, hora):
+        novos.append([titulo, link, hora, data, referencia, referencia])
         
 
     bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/canalrural')
@@ -742,20 +739,19 @@ def crawlNoticiasCanalRural():
     tb = json.loads(bd.content)
 
     for novo in novos:
-        if novo not in tb:
-            payl = {
-                "Titulo": novo[0],
-                "Link": novo[1],
-                "Hora": novo[2],
-                "Data": novo[3],
-                "Referencia": novo[4],
-                "Categoria" : novo[4]
-            }
+            if novo not in tb:
+                payl = {
+                    "Titulo": novo[0],
+                    "Link": novo[1],
+                    "Hora": novo[2],
+                    "Data": novo[3],
+                    "Referencia": novo[4],
+                    "Categoria" : novo[5]
+                }
 
-            st = json.dumps(payl)
-        
-            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
-
+                st = json.dumps(payl)
+            
+                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
 
 
 def scrapy_agro():
