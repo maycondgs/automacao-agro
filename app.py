@@ -788,7 +788,7 @@ def scrapy_agro():
         sleep(7)
 
         driver.execute_script('window.scrollTo(0, 500);')
-        sleep(1)
+        sleep(2)
         driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
         sleep(7)
 
