@@ -30,7 +30,7 @@ option = Options()
 def iniciar_driver():
     chrome_options = Options()
 
-    arguments = ['--window-size=1920,1080',
+    arguments = ['--window-size=800,600',
                  '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
 
     for argument in arguments:
@@ -787,7 +787,7 @@ def scrapy_agro():
         driver.get(link)
         sleep(7)
 
-        driver.execute_script('window.scrollTo(0, 500);')
+        driver.execute_script('window.scrollTo(0, 450);')
         sleep(2)
         driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
         sleep(7)
