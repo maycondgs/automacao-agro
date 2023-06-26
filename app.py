@@ -1322,7 +1322,8 @@ def run_threaded(func):
         
         
 
-schedule.every(10).minutes.do(run_threaded, scrapy_agro)
+schedule.every(1).minutes.do(run_threaded, scrapy_agro)
+schedule.every(100).minutes.do(run_threaded, scrapy_agro)
 
 
 
