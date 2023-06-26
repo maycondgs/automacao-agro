@@ -104,6 +104,8 @@ tipos_couve = ['/couve-flor-1dz']
 tipos_cenoura = ['/cenoura-comum-cx-23-kg-cx-23kg', '/cenoura-cx-20kg', '/cenoura-extra-cx-19kg', '/cenoura-verao-a---atacado-cx-20kg', '/cenoura-verao-a-lavada-beneficiador-cx-20kg', '/cenoura-verao-aaa---beneficiador-cx-20kg', '/cenoura-verao-g---atacado-cx-20kg', '/cenoura-verao-g-lavada---beneficiador-cx-20kg', '/cenoura-verao-suja---produtor-cx-20kg']
 
 
+pytesseract.pytesseract.tesseract_cmd = "/app/.apt/usr/bin/tesseract"
+
 
 def scrap(tipo, itemrq):
 
@@ -295,7 +297,7 @@ def varrer(driver):
 
         imagem = cv2.imread("tag.png")
 
-        pytesseract.pytesseract.tesseract_cmd = "/app/.apt/usr/bin/tesseract"
+        
 
         pre = pytesseract.image_to_string(imagem)
         prec = pre.split('\n')
