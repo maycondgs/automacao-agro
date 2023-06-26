@@ -760,7 +760,6 @@ def scrapy_agro():
 
     driver = iniciar_driver()
 
-    print('iniciado!!!')
     driver.get('https://www.agrolink.com.br/login')
     sleep(2)
 
@@ -785,6 +784,8 @@ def scrapy_agro():
         lin = it[1].split("'")
         link = lin[0]
 
+        print(f'Varrendo: {item}')
+
 
         driver.get(link)
         sleep(7)
@@ -806,9 +807,7 @@ def scrapy_agro():
         except:
             break
 
-        print('iniciar varrendo precos')
         dados = varrer(driver)
-        print('precos')
         
 
         sleep(1)
@@ -1319,21 +1318,5 @@ def scrapy_noticias():
             
 
 
-
-
-def run_threaded(func):
-    func_thread = threading.Thread(target=func)
-    func_thread.start()
-        
-        
-
-schedule.every(5).minutes.do(run_threaded, scrapy_agro)
-schedule.every(100).minutes.do(run_threaded, scrapy_agro)
-
-
-
-while 1:
-    schedule.run_pending()
-    sleep(1)
-
+scrapy_agro()
 
