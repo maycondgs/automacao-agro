@@ -600,6 +600,7 @@ def crawlRepolho(driver):
 
 
 def crawlNoticiasAgricolas():
+    referencia = 'agricolas'
 
     driver = iniciar_driver()
 
@@ -620,7 +621,7 @@ def crawlNoticiasAgricolas():
             hora = item.find_element(By.TAG_NAME, 'span').text
             titulo = item.find_element(By.TAG_NAME, 'h2').text
 
-            dados.append([titulo, link, hora, data_hoje])
+            dados.append([titulo, link, hora, data_hoje, referencia, referencia])
 
         bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/agricolas')
 
@@ -634,13 +635,13 @@ def crawlNoticiasAgricolas():
                     "Link": novo[1],
                     "Hora": novo[2],
                     "Data": novo[3],
-                    "Referencia": 'agricolas',
-                    "Categoria": 'agricolas'
+                    "Referencia": novo[4],
+                    "Categoria": novo[5]
                 }
 
                 st = json.dumps(payl)
                 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
+                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
 
 def crawlNoticiasAgrolink():
         
@@ -650,7 +651,7 @@ def crawlNoticiasAgrolink():
     for link in links:
         lnnk = link.split('/')
         categoria = lnnk[5]
-        referencia = 'Agrolink'
+        referencia = 'agrolink'
         
         page = requests.get(link)
 
@@ -698,7 +699,7 @@ def crawlNoticiasAgrolink():
 
                 st = json.dumps(payl)
             
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
+                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
     
 def crawlNoticiasCanalRural():
     
@@ -753,7 +754,7 @@ def crawlNoticiasCanalRural():
 
             st = json.dumps(payl)
         
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
+            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
 
 
 
