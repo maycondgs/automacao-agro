@@ -50,9 +50,7 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
-    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
-    {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/'}
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'}
 ]
 
 urls = [
