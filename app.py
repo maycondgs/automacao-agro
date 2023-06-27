@@ -47,16 +47,20 @@ def iniciar_driver():
 
     return driver
 
-ulll= [
-    
+urlss = [
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/'},
     {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/'},
     {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/'},
-    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'}
+    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'},
 ]
 
 urls = [
+    {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
+    {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/'},
+    {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/'},
+    {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/'},
+    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'},
     {'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/'},
     {'milho,https://www.agrolink.com.br/cotacoes/graos/milho/'},
     {'soja,https://www.agrolink.com.br/cotacoes/graos/soja/'},
@@ -211,11 +215,11 @@ def varrer(driver):
     df_full = pd.read_html( str(table) ) [0]
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 1900);')
-    sleep(2)
-
     infos = df_full.drop(['PREÇO', 'Última Atualização', 'Freq', 'Gráfico'], axis='columns')
 
+
+    driver.execute_script('window.scrollTo(0, 1900);')
+    sleep(2)
     pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]/div')
     sleep(2)
 
@@ -775,7 +779,7 @@ def scrapy_agro():
     driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div[2]/div[2]/div/div[2]/div[1]/div[1]/div/form[1]/div/div[3]/button').click()
 
     
-    for url in urls:
+    for url in urlss:
 
         item = str(url)
         it = item.split(',')
@@ -786,7 +790,7 @@ def scrapy_agro():
         lin = it[1].split("'")
         link = lin[0]
 
-        print(f'Varrendo: {item}')
+        print(f'Varrendo: {link}')
 
 
         driver.get(link)
@@ -1198,8 +1202,8 @@ def scrapy_agro():
         except:
             next
 
-    crawlAlface()
-    crawlRepolho()
+    crawlAlface(driver)
+    crawlRepolho(driver)
 
 
 def scrapy_tabela():
