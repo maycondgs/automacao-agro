@@ -50,6 +50,8 @@ def iniciar_driver():
     return driver
 
 urlss = [
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
+    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
     {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/'}
 ]
 
@@ -64,7 +66,8 @@ urls = [
     {'soja,https://www.agrolink.com.br/cotacoes/graos/soja/'},
     {'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/'},
     {'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/'},
-    {'bovinos,https://www.agrolink.com.br/cotacoes/carnes/bovinos/'},
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
+    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
     {'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/'},
     {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/'},
     {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/'},
