@@ -53,10 +53,10 @@ ulll= [
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/'},
     {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/'},
     {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/'},
+    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'}
 ]
 
 urls = [
-    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'},
     {'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/'},
     {'milho,https://www.agrolink.com.br/cotacoes/graos/milho/'},
     {'soja,https://www.agrolink.com.br/cotacoes/graos/soja/'},
