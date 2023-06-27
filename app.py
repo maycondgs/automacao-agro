@@ -21,7 +21,9 @@ dda = datetime.today()
 da = str(dda).split(' ')
 dataa = da[0].split('-')
 
-
+stt = dataa[2]
+ontem = int(stt) - 1
+data_ontem = f'{ontem}/{dataa[1]}/{dataa[0]}'
 data_hoje = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 
 
@@ -48,7 +50,7 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'},
+    {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/'}
 ]
 
 urls = [
@@ -374,7 +376,7 @@ def crawlAlface(driver):
     data_cotacao = texto.split(' ')
     dia_cotacao = data_cotacao[1]
 
-    if dia_cotacao == data_hoje:
+    if dia_cotacao == data_ontem:
 
         tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
         html_tabela1 = tabela1.get_attribute('outerHTML')
@@ -492,6 +494,8 @@ def crawlAlface(driver):
 
 
 def crawlRepolho(driver):
+
+    print('repolho')
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
 
     texto = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[1]/div').text
@@ -499,7 +503,7 @@ def crawlRepolho(driver):
     dia_cotacao = data_cotacao[1]
 
 
-    if dia_cotacao == data_hoje:
+    if dia_cotacao == data_ontem:
         tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
         html_tabela1 = tabela1.get_attribute('outerHTML')
         sleep(2)
