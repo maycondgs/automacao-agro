@@ -490,7 +490,9 @@ def crawlAlface(driver):
         })
 
         for dado in dados:
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface', data=dado)
+            st = json.dumps(dado)
+
+            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
 
     else:
         next
@@ -605,7 +607,9 @@ def crawlRepolho(driver):
         })
 
         for dado in dados:
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho', data=dado)
+            st = json.dumps(dado)
+
+            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
     else:
         next
 
