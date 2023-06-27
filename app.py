@@ -1207,8 +1207,6 @@ def scrapy_agro():
         except:
             next
 
-    crawlAlface(driver)
-    crawlRepolho(driver)
 
 
 def scrapy_tabela():
