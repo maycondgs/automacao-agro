@@ -855,514 +855,510 @@ def scrapy_agro():
             sleep(2)
             proxpage(driver)
             sleep(2)
+            try:
+                #page3
+                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                proxpage(driver)
+
+                dados3 = varrer(driver)
+                sleep(2)
+
+                for dado in dados3:
+                    st = json.dumps(dado)
+
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                pagini(driver, link)
+                sleep(2)
+                proxpage(driver)
+                sleep(2)
+                proxpage(driver)
+                sleep(2)
+                try:
+                    #page4
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                    proxpage(driver)
+
+                    dados4 = varrer(driver)
+                    sleep(2)
+
+                    for dado in dados4:
+                        st = json.dumps(dado)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                    pagini(driver, link)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                except:
+                    return        
+
+                try:
+                    #page5
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                    proxpage(driver)
+
+                    dados5 = varrer(driver)
+                    sleep(2)
+
+                    for dado in dados5:
+                        st = json.dumps(dado)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                    pagini(driver, link)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    proxpage(driver)
+                    sleep(2)
+                    try:
+                        #page6
+                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                        proxpage(driver)
+
+                        dados6 = varrer(driver)
+                        sleep(2)
+
+                        for dado in dados6:
+                            st = json.dumps(dado)
+
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                        pagini(driver, link)
+                        sleep(2)
+                        proxpage(driver)
+                        sleep(2)
+                        proxpage(driver)
+                        sleep(2)
+                        proxpage(driver)
+                        sleep(2)
+                        proxpage(driver)
+                        sleep(2)
+                        proxpage(driver)
+                        sleep(2)
+                        try:
+                            #page7
+                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                            proxpage(driver)
+
+                            dados7 = varrer(driver)
+                            sleep(2)
+
+                            for dado in dados7:
+                                st = json.dumps(dado)
+
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                            pagini(driver, link)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+                            proxpage(driver)
+                            sleep(2)
+
+                            try:
+                                #page8
+                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                proxpage(driver)
+
+                                dados8 = varrer(driver)
+                                sleep(2)
+
+                                for dado in dados8:
+                                    st = json.dumps(dado)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                pagini(driver, link)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                proxpage(driver)
+                                sleep(2)
+                                try:
+                                    #page9
+                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                    proxpage(driver)
+
+                                    dados9 = varrer(driver)
+                                    sleep(2)
+
+                                    for dado in dados9:
+                                        st = json.dumps(dado)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                    pagini(driver, link)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+                                    proxpage(driver)
+                                    sleep(2)
+
+                                    try:
+                                        #page10
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                        proxpage(driver)
+
+                                        dados10 = varrer(driver)
+                                        sleep(2)
+
+                                        for dado in dados10:
+                                            st = json.dumps(dado)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                        pagini(driver, link)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+                                        proxpage(driver)
+                                        sleep(2)
+
+                                        try:
+                                            #page11
+                                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                            proxpage(driver)
+
+                                            dados11 = varrer(driver)
+                                            sleep(2)
+
+                                            for dado in dados11:
+                                                st = json.dumps(dado)
+
+                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                            pagini(driver, link)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+                                            proxpage(driver)
+                                            sleep(2)
+
+                                            try:
+                                                #page12
+                                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                proxpage(driver)
+
+                                                dados12 = varrer(driver)
+                                                sleep(2)
+
+                                                for dado in dados12:
+                                                    st = json.dumps(dado)
+
+                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                                pagini(driver, link)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+                                                proxpage(driver)
+                                                sleep(2)
+
+                                                try:
+                                                    #page13
+                                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                    proxpage(driver)
+
+                                                    dados13 = varrer(driver)
+                                                    sleep(2)
+
+                                                    for dado in dados13:
+                                                        st = json.dumps(dado)
+
+                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                                    pagini(driver, link)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    proxpage(driver)
+                                                    sleep(2)
+                                                    try:
+                                                        #page14
+                                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                        proxpage(driver)
+
+                                                        dados14 = varrer(driver)
+                                                        sleep(2)
+
+                                                        for dado in dados14:
+                                                            st = json.dumps(dado)
+
+                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                                        pagini(driver, link)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+                                                        proxpage(driver)
+                                                        sleep(2)
+
+                                                        try:
+                                                            #page15
+                                                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                            proxpage(driver)
+
+                                                            dados15 = varrer(driver)
+                                                            sleep(2)
+
+                                                            for dado in dados15:
+                                                                st = json.dumps(dado)
+
+                                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                                            pagini(driver, link)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+                                                            proxpage(driver)
+                                                            sleep(2)
+
+                                                            try:
+                                                                #page16
+                                                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                                proxpage(driver)
+
+                                                                dados16 = varrer(driver)
+                                                                sleep(2)
+
+                                                                for dado in dados16:
+                                                                    st = json.dumps(dado)
+
+                                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
+
+                                                                pagini(driver, link)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+                                                                proxpage(driver)
+                                                                sleep(2)
+
+                                                                try:
+                                                                    #page17
+                                                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                                    proxpage(driver)
+
+                                                                    dados17 = varrer(driver)
+                                                                    sleep(2)
+
+                                                                    for dado in dados17:
+                                                                        st = json.dumps(dado)
+
+                                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
+
+                                                                except:
+                                                                    return
+                                                            except:
+                                                                return
+                                                        except:
+                                                            return
+                                                    except:
+                                                        return
+                                                except:
+                                                    return
+                                            except:
+                                                return
+                                        except:
+                                            return
+                                    except:
+                                        return
+                                except:
+                                    return
+                            except:
+                                return
+                        except:
+                            return
+                    except:
+                        return
+                except:
+                    return
+            except:
+                return
         except:
            return
 
-        try:
-            #page3
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados3 = varrer(driver)
-            sleep(2)
-
-            for dado in dados3:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-        #page4
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados4 = varrer(driver)
-            sleep(2)
-
-            for dado in dados4:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return        
-
-        try:
-            #page5
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados5 = varrer(driver)
-            sleep(2)
-
-            for dado in dados5:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page6
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados6 = varrer(driver)
-            sleep(2)
-
-            for dado in dados6:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page7
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados7 = varrer(driver)
-            sleep(2)
-
-            for dado in dados7:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
         
-        try:
-            #page8
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados8 = varrer(driver)
-            sleep(2)
-
-            for dado in dados8:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page9
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados9 = varrer(driver)
-            sleep(2)
-
-            for dado in dados9:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-        
-        try:
-            #page10
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados10 = varrer(driver)
-            sleep(2)
-
-            for dado in dados10:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page11
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados11 = varrer(driver)
-            sleep(2)
-
-            for dado in dados11:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page12
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados12 = varrer(driver)
-            sleep(2)
-
-            for dado in dados12:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page13
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados13 = varrer(driver)
-            sleep(2)
-
-            for dado in dados13:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page14
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados14 = varrer(driver)
-            sleep(2)
-
-            for dado in dados14:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page15
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados15 = varrer(driver)
-            sleep(2)
-
-            for dado in dados15:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page16
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados16 = varrer(driver)
-            sleep(2)
-
-            for dado in dados16:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-            pagini(driver, link)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-            proxpage(driver)
-            sleep(2)
-        except:
-            return
-
-        try:
-            #page17
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-            proxpage(driver)
-
-            dados17 = varrer(driver)
-            sleep(2)
-
-            for dado in dados17:
-                st = json.dumps(dado)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
-
-        except:
-            return
 
 
         
