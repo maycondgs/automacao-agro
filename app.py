@@ -50,6 +50,7 @@ def iniciar_driver():
     return driver
 
 urlss = [
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
     {'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/'}
 ]
 
@@ -346,7 +347,7 @@ def varrer(driver):
 
         itens.append({
             "Produto": produto,
-            "Estado": estado,
+            "Estado": "TESTE",
             "Preco": preco,
             "Data": data_hoje
         })
