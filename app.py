@@ -843,7 +843,9 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
            return
 
@@ -861,8 +863,11 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -880,9 +885,13 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return        
 
@@ -900,10 +909,15 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -921,11 +935,17 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -943,12 +963,19 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
         
@@ -966,13 +993,21 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -990,14 +1025,23 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
         
@@ -1015,15 +1059,25 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1041,16 +1095,27 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1068,17 +1133,29 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1096,18 +1173,31 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1125,19 +1215,33 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1155,20 +1259,35 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
@@ -1186,21 +1305,37 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
             proxpage(driver)
+            sleep(1)
         except:
             return
 
