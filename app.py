@@ -836,6 +836,7 @@ def scrapy_agro():
             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
         pagini(driver, link)
+        sleep(1)
 
         try:
             #page2
@@ -851,9 +852,9 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
            return
 
@@ -863,7 +864,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados3 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados3:
                 st = json.dumps(dado)
@@ -871,11 +872,11 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -885,7 +886,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados4 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados4:
                 st = json.dumps(dado)
@@ -893,13 +894,13 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return        
 
@@ -909,7 +910,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados5 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados5:
                 st = json.dumps(dado)
@@ -917,15 +918,15 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -935,7 +936,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados6 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados6:
                 st = json.dumps(dado)
@@ -943,17 +944,17 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -963,7 +964,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados7 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados7:
                 st = json.dumps(dado)
@@ -971,19 +972,19 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
         
@@ -993,7 +994,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados8 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados8:
                 st = json.dumps(dado)
@@ -1001,21 +1002,21 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1025,7 +1026,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados9 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados9:
                 st = json.dumps(dado)
@@ -1033,23 +1034,23 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
         
@@ -1059,7 +1060,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados10 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados10:
                 st = json.dumps(dado)
@@ -1067,25 +1068,25 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1095,7 +1096,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados11 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados11:
                 st = json.dumps(dado)
@@ -1103,27 +1104,27 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1133,7 +1134,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados12 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados12:
                 st = json.dumps(dado)
@@ -1141,29 +1142,29 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1173,7 +1174,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados13 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados13:
                 st = json.dumps(dado)
@@ -1181,31 +1182,31 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1215,7 +1216,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados14 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados14:
                 st = json.dumps(dado)
@@ -1223,33 +1224,33 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1259,7 +1260,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados15 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados15:
                 st = json.dumps(dado)
@@ -1267,35 +1268,35 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1305,7 +1306,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados16 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados16:
                 st = json.dumps(dado)
@@ -1313,37 +1314,37 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
             pagini(driver, link)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
             proxpage(driver)
-            sleep(1)
+            sleep(2)
         except:
             return
 
@@ -1353,7 +1354,7 @@ def scrapy_agro():
             proxpage(driver)
 
             dados17 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados17:
                 st = json.dumps(dado)
