@@ -845,7 +845,7 @@ def scrapy_agro():
             pagini(driver, link)
             proxpage(driver)
         except:
-            break
+           return
 
         try:
             #page3
@@ -864,7 +864,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
         #page4
@@ -884,7 +884,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break        
+            return        
 
         try:
             #page5
@@ -905,7 +905,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page6
@@ -927,7 +927,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page7
@@ -950,7 +950,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
         
         try:
             #page8
@@ -974,7 +974,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page9
@@ -999,7 +999,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
         
         try:
             #page10
@@ -1025,7 +1025,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page11
@@ -1052,7 +1052,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page12
@@ -1080,7 +1080,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page13
@@ -1109,7 +1109,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page14
@@ -1139,7 +1139,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page15
@@ -1170,7 +1170,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page16
@@ -1202,7 +1202,7 @@ def scrapy_agro():
             proxpage(driver)
             proxpage(driver)
         except:
-            break
+            return
 
         try:
             #page17
@@ -1218,7 +1218,7 @@ def scrapy_agro():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
 
         except:
-            break
+            return
 
 
         
