@@ -351,7 +351,7 @@ def pagini(driver, link):
     driver.get(link)
     sleep(5)
 
-    driver.execute_script('window.scrollTo(0, 430);')
+    driver.execute_script('window.scrollTo(0, 350);')
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(5)
