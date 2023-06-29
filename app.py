@@ -49,6 +49,9 @@ def iniciar_driver():
 
     return driver
 
+urlss = [
+    {'milho,https://www.agrolink.com.br/cotacoes/graos/milho/'}
+]
 
 urls = [
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
@@ -299,8 +302,6 @@ def varrer(driver):
 
         imagem = cv2.imread("tag.png")
 
-        
-
         pre = pytesseract.image_to_string(imagem)
         prec = pre.split('\n')
         preco = prec[0]
@@ -327,13 +328,8 @@ def varrer(driver):
 
         estad = esta.split('   ')
         estadd = estad[1].split(')')
-        estaddd = estadd[0] + ')'
-        nn = estaddd.count("'")
-        if nn >= 1: 
-            estado = estaddd.replace("'", "")
-            
-        else:
-            estado = estaddd
+        estado = estadd[0] + ')'
+        
 
         prec = pre.split('   ')
         precc = prec[1].split()
@@ -343,7 +339,7 @@ def varrer(driver):
 
         itens.append({
             "Produto": produto,
-            "Estado": "TESTE",
+            "Estado": estado,
             "Preco": preco,
             "Data": data_hoje
         })
@@ -789,7 +785,7 @@ def scrapy_agro():
     driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div[2]/div[2]/div/div[2]/div[1]/div[1]/div/form[1]/div/div[3]/button').click()
 
     
-    for url in urls:
+    for url in urlss:
 
         item = str(url)
         it = item.split(',')
@@ -833,7 +829,7 @@ def scrapy_agro():
             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
         pagini(driver, link)
-        sleep(1)
+        sleep(2)
 
         try:
             #page2
@@ -841,13 +837,14 @@ def scrapy_agro():
             proxpage(driver)
 
             dados2 = varrer(driver)
-            sleep(1)
+            sleep(2)
 
             for dado in dados2:
                 st = json.dumps(dado)
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
+                
+            sleep(1)
             pagini(driver, link)
             sleep(2)
             proxpage(driver)
@@ -865,6 +862,7 @@ def scrapy_agro():
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                sleep(1)
                 pagini(driver, link)
                 sleep(2)
                 proxpage(driver)
@@ -884,6 +882,7 @@ def scrapy_agro():
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                    sleep(1)
                     pagini(driver, link)
                     sleep(2)
                     proxpage(driver)
@@ -891,46 +890,22 @@ def scrapy_agro():
                     proxpage(driver)
                     sleep(2)
                     proxpage(driver)
-                    sleep(2)
-                except:
-                    return        
+                    sleep(2)       
 
-                try:
-                    #page5
-                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
-                    proxpage(driver)
-
-                    dados5 = varrer(driver)
-                    sleep(2)
-
-                    for dado in dados5:
-                        st = json.dumps(dado)
-
-                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
-
-                    pagini(driver, link)
-                    sleep(2)
-                    proxpage(driver)
-                    sleep(2)
-                    proxpage(driver)
-                    sleep(2)
-                    proxpage(driver)
-                    sleep(2)
-                    proxpage(driver)
-                    sleep(2)
                     try:
-                        #page6
+                        #page5
                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                         proxpage(driver)
 
-                        dados6 = varrer(driver)
+                        dados5 = varrer(driver)
                         sleep(2)
 
-                        for dado in dados6:
+                        for dado in dados5:
                             st = json.dumps(dado)
 
                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                        sleep(1)
                         pagini(driver, link)
                         sleep(2)
                         proxpage(driver)
@@ -941,21 +916,20 @@ def scrapy_agro():
                         sleep(2)
                         proxpage(driver)
                         sleep(2)
-                        proxpage(driver)
-                        sleep(2)
                         try:
-                            #page7
+                            #page6
                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                             proxpage(driver)
 
-                            dados7 = varrer(driver)
+                            dados6 = varrer(driver)
                             sleep(2)
 
-                            for dado in dados7:
+                            for dado in dados6:
                                 st = json.dumps(dado)
 
                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                            sleep(1)
                             pagini(driver, link)
                             sleep(2)
                             proxpage(driver)
@@ -968,18 +942,15 @@ def scrapy_agro():
                             sleep(2)
                             proxpage(driver)
                             sleep(2)
-                            proxpage(driver)
-                            sleep(2)
-
                             try:
-                                #page8
+                                #page7
                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                 proxpage(driver)
 
-                                dados8 = varrer(driver)
+                                dados7 = varrer(driver)
                                 sleep(2)
 
-                                for dado in dados8:
+                                for dado in dados7:
                                     st = json.dumps(dado)
 
                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -998,21 +969,21 @@ def scrapy_agro():
                                 sleep(2)
                                 proxpage(driver)
                                 sleep(2)
-                                proxpage(driver)
-                                sleep(2)
+
                                 try:
-                                    #page9
+                                    #page8
                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                     proxpage(driver)
 
-                                    dados9 = varrer(driver)
+                                    dados8 = varrer(driver)
                                     sleep(2)
 
-                                    for dado in dados9:
+                                    for dado in dados8:
                                         st = json.dumps(dado)
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                    sleep(1)
                                     pagini(driver, link)
                                     sleep(2)
                                     proxpage(driver)
@@ -1029,25 +1000,21 @@ def scrapy_agro():
                                     sleep(2)
                                     proxpage(driver)
                                     sleep(2)
-                                    proxpage(driver)
-                                    sleep(2)
-
                                     try:
-                                        #page10
+                                        #page9
                                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                         proxpage(driver)
 
-                                        dados10 = varrer(driver)
+                                        dados9 = varrer(driver)
                                         sleep(2)
 
-                                        for dado in dados10:
+                                        for dado in dados9:
                                             st = json.dumps(dado)
 
                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                        sleep(1)
                                         pagini(driver, link)
-                                        sleep(2)
-                                        proxpage(driver)
                                         sleep(2)
                                         proxpage(driver)
                                         sleep(2)
@@ -1067,21 +1034,20 @@ def scrapy_agro():
                                         sleep(2)
 
                                         try:
-                                            #page11
+                                            #page10
                                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                             proxpage(driver)
 
-                                            dados11 = varrer(driver)
+                                            dados10 = varrer(driver)
                                             sleep(2)
 
-                                            for dado in dados11:
+                                            for dado in dados10:
                                                 st = json.dumps(dado)
 
                                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                            sleep(1)
                                             pagini(driver, link)
-                                            sleep(2)
-                                            proxpage(driver)
                                             sleep(2)
                                             proxpage(driver)
                                             sleep(2)
@@ -1103,21 +1069,20 @@ def scrapy_agro():
                                             sleep(2)
 
                                             try:
-                                                #page12
+                                                #page11
                                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                 proxpage(driver)
 
-                                                dados12 = varrer(driver)
+                                                dados11 = varrer(driver)
                                                 sleep(2)
 
-                                                for dado in dados12:
+                                                for dado in dados11:
                                                     st = json.dumps(dado)
 
                                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                sleep(1)
                                                 pagini(driver, link)
-                                                sleep(2)
-                                                proxpage(driver)
                                                 sleep(2)
                                                 proxpage(driver)
                                                 sleep(2)
@@ -1141,18 +1106,19 @@ def scrapy_agro():
                                                 sleep(2)
 
                                                 try:
-                                                    #page13
+                                                    #page12
                                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                     proxpage(driver)
 
-                                                    dados13 = varrer(driver)
+                                                    dados12 = varrer(driver)
                                                     sleep(2)
 
-                                                    for dado in dados13:
+                                                    for dado in dados12:
                                                         st = json.dumps(dado)
 
                                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                    sleep(1)
                                                     pagini(driver, link)
                                                     sleep(2)
                                                     proxpage(driver)
@@ -1177,21 +1143,21 @@ def scrapy_agro():
                                                     sleep(2)
                                                     proxpage(driver)
                                                     sleep(2)
-                                                    proxpage(driver)
-                                                    sleep(2)
+
                                                     try:
-                                                        #page14
+                                                        #page13
                                                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                         proxpage(driver)
 
-                                                        dados14 = varrer(driver)
+                                                        dados13 = varrer(driver)
                                                         sleep(2)
 
-                                                        for dado in dados14:
+                                                        for dado in dados13:
                                                             st = json.dumps(dado)
 
                                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                        sleep(1)
                                                         pagini(driver, link)
                                                         sleep(2)
                                                         proxpage(driver)
@@ -1218,25 +1184,21 @@ def scrapy_agro():
                                                         sleep(2)
                                                         proxpage(driver)
                                                         sleep(2)
-                                                        proxpage(driver)
-                                                        sleep(2)
-
                                                         try:
-                                                            #page15
+                                                            #page14
                                                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                             proxpage(driver)
 
-                                                            dados15 = varrer(driver)
+                                                            dados14 = varrer(driver)
                                                             sleep(2)
 
-                                                            for dado in dados15:
+                                                            for dado in dados14:
                                                                 st = json.dumps(dado)
 
                                                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                            sleep(1)
                                                             pagini(driver, link)
-                                                            sleep(2)
-                                                            proxpage(driver)
                                                             sleep(2)
                                                             proxpage(driver)
                                                             sleep(2)
@@ -1266,21 +1228,20 @@ def scrapy_agro():
                                                             sleep(2)
 
                                                             try:
-                                                                #page16
+                                                                #page15
                                                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                                 proxpage(driver)
 
-                                                                dados16 = varrer(driver)
+                                                                dados15 = varrer(driver)
                                                                 sleep(2)
 
-                                                                for dado in dados16:
+                                                                for dado in dados15:
                                                                     st = json.dumps(dado)
 
                                                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                                sleep(1)
                                                                 pagini(driver, link)
-                                                                sleep(2)
-                                                                proxpage(driver)
                                                                 sleep(2)
                                                                 proxpage(driver)
                                                                 sleep(2)
@@ -1312,18 +1273,67 @@ def scrapy_agro():
                                                                 sleep(2)
 
                                                                 try:
-                                                                    #page17
+                                                                    #page16
                                                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                                     proxpage(driver)
 
-                                                                    dados17 = varrer(driver)
+                                                                    dados16 = varrer(driver)
                                                                     sleep(2)
 
-                                                                    for dado in dados17:
+                                                                    for dado in dados16:
                                                                         st = json.dumps(dado)
 
-                                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
+                                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
 
+                                                                    sleep(1)
+                                                                    pagini(driver, link)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+                                                                    proxpage(driver)
+                                                                    sleep(2)
+
+                                                                    try:
+                                                                        #page17
+                                                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
+                                                                        proxpage(driver)
+
+                                                                        dados17 = varrer(driver)
+                                                                        sleep(2)
+
+                                                                        for dado in dados17:
+                                                                            st = json.dumps(dado)
+
+                                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
+                                                                    
+                                                                    except:
+                                                                        next
                                                                 except:
                                                                     next
                                                             except:
@@ -1353,7 +1363,7 @@ def scrapy_agro():
             except:
                 next
         except:
-           next
+            next
         
         sleep(2)
 
