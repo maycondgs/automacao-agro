@@ -329,7 +329,7 @@ def varrer(driver):
         estad = esta.split('   ')
         estadd = estad[1].split(')')
         estado = estadd[0] + ')'
-
+        estado = estado.replace("'", "")
         
 
         prec = pre.split('   ')
