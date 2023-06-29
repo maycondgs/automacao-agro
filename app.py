@@ -822,12 +822,11 @@ def scrapy_agro():
         sleep(1)
 
         for dado in dados:
-            print(dado['Estado'])
 
-            if "'" not in dado['Estado']:
+            if "'" in dado['Estado']:
                 print(dado['Estado'])
             else:
-                print('Adicionar')
+                print('Proximo')
 
             st = json.dumps(dado)
 
@@ -835,8 +834,6 @@ def scrapy_agro():
 
         pagini(driver, link)
         sleep(2)
-        break
-    
 
         try:
             #page2
