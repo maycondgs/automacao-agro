@@ -329,7 +329,6 @@ def varrer(driver):
         estad = esta.split('   ')
         estadd = estad[1].split(')')
         estado = estadd[0] + ')'
-        estado = estado.replace("'", "")
         
 
         prec = pre.split('   ')
@@ -823,6 +822,8 @@ def scrapy_agro():
         sleep(1)
 
         for dado in dados:
+            print(dado)
+            print(dado['Estado'])
             st = json.dumps(dado)
 
             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
