@@ -328,9 +328,8 @@ def varrer(driver):
 
         estad = esta.split('   ')
         estadd = estad[1].split(')')
-        estaddd = estadd[0] + ')'
+        estado = estadd[0] + ')'
 
-        estadooo = 'estado-boi'
         
 
         prec = pre.split('   ')
@@ -341,7 +340,7 @@ def varrer(driver):
 
         itens.append({
             "Produto": produto,
-            "Estado": estadooo,
+            "Estado": estado,
             "Preco": preco,
             "Data": data_hoje
         })
