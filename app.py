@@ -50,7 +50,7 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg/'}
+    {'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/'}
 ]
 urls = [
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
@@ -823,9 +823,6 @@ def scrapy_agro():
 
         for dado in dados:
 
-            if "'" in dado['Estado']:
-                
-               return
             
             st = json.dumps(dado)
 
@@ -844,9 +841,6 @@ def scrapy_agro():
 
             for dado in dados2:
                 
-                if "'" in dado['Estado']:
-                    
-                    return
                 st = json.dumps(dado)
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -865,10 +859,7 @@ def scrapy_agro():
                 sleep(2)
 
                 for dado in dados3:
-                    
-                    if "'" in dado['Estado']:
-                        
-                        return
+
                     st = json.dumps(dado)
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -890,9 +881,6 @@ def scrapy_agro():
 
                     for dado in dados4:
                         
-                        if "'" in dado['Estado']:
-                            
-                            return
                         st = json.dumps(dado)
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
