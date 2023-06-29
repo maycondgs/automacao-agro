@@ -824,9 +824,9 @@ def scrapy_agro():
         for dado in dados:
 
             if "'" in dado['Estado']:
-                print(dado['Estado'])
-            else:
-                print('Proximo')
+                
+                estd = str(dado['Estado']).replace("'", "")
+                dado['Estado'] = estd
 
             st = json.dumps(dado)
 
@@ -844,6 +844,12 @@ def scrapy_agro():
             sleep(2)
 
             for dado in dados2:
+
+                if "'" in dado['Estado']:
+                    
+                    estd = str(dado['Estado']).replace("'", "")
+                    dado['Estado'] = estd
+
                 st = json.dumps(dado)
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -862,6 +868,12 @@ def scrapy_agro():
                 sleep(2)
 
                 for dado in dados3:
+                    
+                    if "'" in dado['Estado']:
+                        
+                        estd = str(dado['Estado']).replace("'", "")
+                        dado['Estado'] = estd
+
                     st = json.dumps(dado)
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -882,6 +894,12 @@ def scrapy_agro():
                     sleep(2)
 
                     for dado in dados4:
+                        
+                        if "'" in dado['Estado']:
+                            
+                            estd = str(dado['Estado']).replace("'", "")
+                            dado['Estado'] = estd
+
                         st = json.dumps(dado)
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -905,6 +923,12 @@ def scrapy_agro():
                         sleep(2)
 
                         for dado in dados5:
+                            
+                            if "'" in dado['Estado']:
+                                
+                                estd = str(dado['Estado']).replace("'", "")
+                                dado['Estado'] = estd
+
                             st = json.dumps(dado)
 
                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -929,6 +953,12 @@ def scrapy_agro():
                             sleep(2)
 
                             for dado in dados6:
+                                                    
+                                if "'" in dado['Estado']:
+                                    
+                                    estd = str(dado['Estado']).replace("'", "")
+                                    dado['Estado'] = estd
+
                                 st = json.dumps(dado)
 
                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -955,6 +985,12 @@ def scrapy_agro():
                                 sleep(2)
 
                                 for dado in dados7:
+                                    
+                                    if "'" in dado['Estado']:
+                                        
+                                        estd = str(dado['Estado']).replace("'", "")
+                                        dado['Estado'] = estd
+
                                     st = json.dumps(dado)
 
                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -983,6 +1019,11 @@ def scrapy_agro():
                                     sleep(2)
 
                                     for dado in dados8:
+                                        if "'" in dado['Estado']:
+                                            
+                                            estd = str(dado['Estado']).replace("'", "")
+                                            dado['Estado'] = estd  
+
                                         st = json.dumps(dado)
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1013,6 +1054,11 @@ def scrapy_agro():
                                         sleep(2)
 
                                         for dado in dados9:
+                                            if "'" in dado['Estado']:
+                                                
+                                                estd = str(dado['Estado']).replace("'", "")
+                                                dado['Estado'] = estd
+
                                             st = json.dumps(dado)
 
                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1046,6 +1092,12 @@ def scrapy_agro():
                                             sleep(2)
 
                                             for dado in dados10:
+
+                                                if "'" in dado['Estado']:
+                                                    
+                                                    estd = str(dado['Estado']).replace("'", "")
+                                                    dado['Estado'] = estd
+
                                                 st = json.dumps(dado)
 
                                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1081,6 +1133,12 @@ def scrapy_agro():
                                                 sleep(2)
 
                                                 for dado in dados11:
+
+                                                    if "'" in dado['Estado']:
+                                                        
+                                                        estd = str(dado['Estado']).replace("'", "")
+                                                        dado['Estado'] = estd
+
                                                     st = json.dumps(dado)
 
                                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1118,6 +1176,12 @@ def scrapy_agro():
                                                     sleep(2)
 
                                                     for dado in dados12:
+
+                                                        if "'" in dado['Estado']:
+                                                            
+                                                            estd = str(dado['Estado']).replace("'", "")
+                                                            dado['Estado'] = estd
+
                                                         st = json.dumps(dado)
 
                                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1157,6 +1221,12 @@ def scrapy_agro():
                                                         sleep(2)
 
                                                         for dado in dados13:
+
+                                                            if "'" in dado['Estado']:
+                                                                
+                                                                estd = str(dado['Estado']).replace("'", "")
+                                                                dado['Estado'] = estd
+
                                                             st = json.dumps(dado)
 
                                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1197,6 +1267,12 @@ def scrapy_agro():
                                                             sleep(2)
 
                                                             for dado in dados14:
+
+                                                                if "'" in dado['Estado']:
+                                                                    
+                                                                    estd = str(dado['Estado']).replace("'", "")
+                                                                    dado['Estado'] = estd
+
                                                                 st = json.dumps(dado)
 
                                                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1240,6 +1316,11 @@ def scrapy_agro():
                                                                 sleep(2)
 
                                                                 for dado in dados15:
+                                                                    if "'" in dado['Estado']:
+                                                                        
+                                                                        estd = str(dado['Estado']).replace("'", "")
+                                                                        dado['Estado'] = estd
+
                                                                     st = json.dumps(dado)
 
                                                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1285,6 +1366,12 @@ def scrapy_agro():
                                                                     sleep(2)
 
                                                                     for dado in dados16:
+
+                                                                        if "'" in dado['Estado']:
+                                                                            
+                                                                            estd = str(dado['Estado']).replace("'", "")
+                                                                            dado['Estado'] = estd
+
                                                                         st = json.dumps(dado)
 
                                                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
@@ -1332,6 +1419,12 @@ def scrapy_agro():
                                                                         sleep(2)
 
                                                                         for dado in dados17:
+
+                                                                            if "'" in dado['Estado']:
+                                                                                
+                                                                                estd = str(dado['Estado']).replace("'", "")
+                                                                                dado['Estado'] = estd
+
                                                                             st = json.dumps(dado)
 
                                                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st) 
