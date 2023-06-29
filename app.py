@@ -203,6 +203,8 @@ def scraping(tipo, itemrq):
 
 def varrer(driver):
 
+    itens = []
+
     tabela = driver.find_element(By.XPATH,'//*[@id="agks-cont-tb1"]/table')
     html_tabela = tabela.get_attribute('outerHTML')
     sleep(2)
@@ -310,7 +312,6 @@ def varrer(driver):
 
     dados = infos.assign(preco=precos)
 
-    itens = []
 
     for i, preco in enumerate(dados['preco']):
         prod = dados.loc[i, "Produto"]
@@ -329,7 +330,7 @@ def varrer(driver):
         estadd = estad[1].split(')')
         estaddd = estadd[0] + ')'
 
-        estado = 'estado-boi'
+        estadooo = 'estado-boi'
         
 
         prec = pre.split('   ')
@@ -340,13 +341,11 @@ def varrer(driver):
 
         itens.append({
             "Produto": produto,
-            "Estado": estado,
+            "Estado": estadooo,
             "Preco": preco,
             "Data": data_hoje
         })
         
-
-
     return itens
 
 def pagini(driver, link):
