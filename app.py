@@ -50,7 +50,6 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/'},
     {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'}
 ]
 urls = [
@@ -330,7 +329,7 @@ def varrer(driver):
         estadd = estad[1].split(')')
         estaddd = estadd[0] + ')'
 
-        estado = 'estado'
+        estado = 'estado-boi'
         
 
         prec = pre.split('   ')
