@@ -330,10 +330,7 @@ def varrer(driver):
         estadd = estad[1].split(')')
         estaddd = estadd[0] + ')'
 
-        if "'" in estaddd:
-            estado = estaddd.strip("'")
-        else:
-            estado = estaddd
+        estado = 'estado'
         
 
         prec = pre.split('   ')
