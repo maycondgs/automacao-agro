@@ -50,10 +50,12 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/'},
-    {'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/'},
-    {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/'},
-    {'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/'}
+    {'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/'},
+    {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/'},
+    {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/'},
+    {'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/'},
+    {'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/'},
+    {'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/'}
 ]
 
 urls = [
