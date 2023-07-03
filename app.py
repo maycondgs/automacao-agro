@@ -840,6 +840,7 @@ def scrapy_agro():
             #page2
             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
             proxpage(driver)
+            sleep(2)
 
             dados2 = varrer(driver)
             sleep(2)
@@ -859,6 +860,7 @@ def scrapy_agro():
                 #page3
                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                 proxpage(driver)
+                sleep(2)
 
                 dados3 = varrer(driver)
                 sleep(2)
@@ -880,6 +882,7 @@ def scrapy_agro():
                     #page4
                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                     proxpage(driver)
+                    sleep(2)
 
                     dados4 = varrer(driver)
                     sleep(2)
@@ -904,6 +907,7 @@ def scrapy_agro():
                         #page5
                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                         proxpage(driver)
+                        sleep(2)
 
                         dados5 = varrer(driver)
                         sleep(2)
@@ -928,6 +932,7 @@ def scrapy_agro():
                             #page6
                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                             proxpage(driver)
+                            sleep(2)
 
                             dados6 = varrer(driver)
                             sleep(2)
@@ -954,6 +959,7 @@ def scrapy_agro():
                                 #page7
                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                 proxpage(driver)
+                                sleep(2)
 
                                 dados7 = varrer(driver)
                                 sleep(2)
@@ -982,6 +988,7 @@ def scrapy_agro():
                                     #page8
                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                     proxpage(driver)
+                                    sleep(2)
 
                                     dados8 = varrer(driver)
                                     sleep(2)
@@ -1012,6 +1019,7 @@ def scrapy_agro():
                                         #page9
                                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                         proxpage(driver)
+                                        sleep(2)
 
                                         dados9 = varrer(driver)
                                         sleep(2)
@@ -1045,6 +1053,7 @@ def scrapy_agro():
                                             #page10
                                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                             proxpage(driver)
+                                            sleep(2)
 
                                             dados10 = varrer(driver)
                                             sleep(2)
@@ -1080,6 +1089,7 @@ def scrapy_agro():
                                                 #page11
                                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                 proxpage(driver)
+                                                sleep(2)
 
                                                 dados11 = varrer(driver)
                                                 sleep(2)
@@ -1117,6 +1127,7 @@ def scrapy_agro():
                                                     #page12
                                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                     proxpage(driver)
+                                                    sleep(2)
 
                                                     dados12 = varrer(driver)
                                                     sleep(2)
@@ -1156,6 +1167,7 @@ def scrapy_agro():
                                                         #page13
                                                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                         proxpage(driver)
+                                                        sleep(2)
 
                                                         dados13 = varrer(driver)
                                                         sleep(2)
@@ -1196,6 +1208,7 @@ def scrapy_agro():
                                                             #page14
                                                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                             proxpage(driver)
+                                                            sleep(2)
 
                                                             dados14 = varrer(driver)
                                                             sleep(2)
@@ -1239,6 +1252,7 @@ def scrapy_agro():
                                                                 #page15
                                                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                                 proxpage(driver)
+                                                                sleep(2)
 
                                                                 dados15 = varrer(driver)
                                                                 sleep(2)
@@ -1284,6 +1298,7 @@ def scrapy_agro():
                                                                     #page16
                                                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                                     proxpage(driver)
+                                                                    sleep(2)
 
                                                                     dados16 = varrer(driver)
                                                                     sleep(2)
@@ -1331,6 +1346,7 @@ def scrapy_agro():
                                                                         #page17
                                                                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                                                         proxpage(driver)
+                                                                        sleep(2)
 
                                                                         dados17 = varrer(driver)
                                                                         sleep(2)
