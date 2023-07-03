@@ -49,9 +49,6 @@ def iniciar_driver():
 
     return driver
 
-urlss = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'}
-]
 
 urls = [
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/'},
@@ -789,7 +786,7 @@ def scrapy_agro():
     driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div[2]/div[2]/div/div[2]/div[1]/div[1]/div/form[1]/div/div[3]/button').click()
 
     
-    for url in urlss:
+    for url in urls:
 
         item = str(url)
         it = item.split(',')
