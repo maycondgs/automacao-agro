@@ -16,7 +16,7 @@ import threading
 import json
 import os
 
-    
+
 dda = datetime.today()
 da = str(dda).split(' ')
 dataa = da[0].split('-')
@@ -50,9 +50,7 @@ def iniciar_driver():
     return driver
 
 urlss = [
-    {'soja,https://www.agrolink.com.br/cotacoes/graos/soja/'},
-    {'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/'},
-    {'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/'}
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'}
 ]
 
 urls = [
@@ -331,7 +329,12 @@ def varrer(driver):
 
         estad = esta.split('   ')
         estadd = estad[1].split(')')
-        estado = estadd[0] + ')'
+        estadoo = estadd[0] + ')'
+
+        if "'" in estadoo:
+            estado = estadoo.replace("'", "")
+        else:
+            estado = estadoo
         
 
         prec = pre.split('   ')
@@ -826,7 +829,6 @@ def scrapy_agro():
 
         for dado in dados:
 
-            
             st = json.dumps(dado)
 
             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}',headers=header, data=st)
