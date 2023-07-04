@@ -33,7 +33,7 @@ option = Options()
 def iniciar_driver():
     chrome_options = Options()
 
-    arguments = ['--window-size=800,600',
+    arguments = ['--window-size=1200,1000',
                  '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
 
     for argument in arguments:
