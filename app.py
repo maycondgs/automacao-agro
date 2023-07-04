@@ -52,9 +52,6 @@ def iniciar_driver():
 
 
 urls= [
-    {'milho,https://www.agrolink.com.br/cotacoes/graos/,Milho,Todos'},
-    {'soja,https://www.agrolink.com.br/cotacoes/graos/,Soja,Todos'},
-    {'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/,Cenoura,Todos'},
     {'boi,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Boi Gordo 15Kg'},
     {'vaca,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Vaca Gorda 15Kg'}
 ]
