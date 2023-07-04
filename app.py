@@ -222,7 +222,7 @@ def varre(driver, uf, link, tipo1, tipo2):
 
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 100);')
+    driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
@@ -561,7 +561,7 @@ def varree(driver):
 def pagini(driver, uf, link, tipo1, tipo2):
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 100);')
+    driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
