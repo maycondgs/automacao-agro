@@ -52,25 +52,8 @@ def iniciar_driver():
 
 
 urls= [
-    {'arroz,https://www.agrolink.com.br/cotacoes/graos/,Arroz,Todos'},
-    {'algodao,https://www.agrolink.com.br/cotacoes/diversos/,Algodão,Todos'},
-    {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/,Amendoim,Todos'},
-    {'cafe,https://www.agrolink.com.br/cotacoes/graos/,Café,Todos'},
-    {'cana,https://www.agrolink.com.br/cotacoes/diversos/,Cana-de-açúcar,Todos'},
-    {'feijao,https://www.agrolink.com.br/cotacoes/graos/,Feijão,Todos'},
     {'milho,https://www.agrolink.com.br/cotacoes/graos/,Milho,Todos'},
     {'soja,https://www.agrolink.com.br/cotacoes/graos/,Soja,Todos'},
-    {'sorgo,https://www.agrolink.com.br/cotacoes/graos/,Sorgo,Todos'},
-    {'trigo,https://www.agrolink.com.br/cotacoes/graos/,Trigo,Todos'},
-    {'suinos,https://www.agrolink.com.br/cotacoes/carnes/,Suínos,Todos'},
-    {'aves,https://www.agrolink.com.br/cotacoes/carnes/,Aves,Todos'},
-    {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/,Caprinos,Todos'},
-    {'ovinos,https://www.agrolink.com.br/cotacoes/carnes/,Ovinos,Todos'},
-    {'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/,Beterraba,Todos'},
-    {'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/,Tomate,Todos'},
-    {'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/,Pimentão,Todos'},
-    {'cebola,https://www.agrolink.com.br/cotacoes/diversos/,Cebola,Todos'},
-    {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/,Couve,Todos'},
     {'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/,Cenoura,Todos'},
     {'boi,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Boi Gordo 15Kg'},
     {'vaca,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Vaca Gorda 15Kg'}
