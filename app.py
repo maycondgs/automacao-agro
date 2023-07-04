@@ -33,7 +33,7 @@ option = Options()
 def iniciar_driver():
     chrome_options = Options()
 
-    arguments = ['--window-size=1200,1000',
+    arguments = ['--window-size=800,600',
                  '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
 
     for argument in arguments:
@@ -222,7 +222,7 @@ def varre(driver, uf, link, tipo1, tipo2):
 
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 290);')
+    driver.execute_script('window.scrollTo(0, 240);')
     sleep(2)
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
@@ -558,7 +558,7 @@ def varree(driver):
 def pagini(driver, uf, link, tipo1, tipo2):
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 290);')
+    driver.execute_script('window.scrollTo(0, 240);')
     sleep(2)
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
