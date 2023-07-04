@@ -227,18 +227,21 @@ def varre(driver, uf, link, tipo1, tipo2):
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
     els = Select(el)
+    sleep(2)
 
     els.select_by_visible_text(tipo1)
     sleep(1)
 
     ti = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
     tipos = Select(ti)
+    sleep(2)
 
     tipos.select_by_visible_text(tipo2)
     sleep(1)
 
     est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
     estados = Select(est)
+    sleep(2)
 
     estados.select_by_visible_text(uf)
     sleep(1)
@@ -563,18 +566,21 @@ def pagini(driver, uf, link, tipo1, tipo2):
 
     el = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
     els = Select(el)
+    sleep(2)
 
     els.select_by_visible_text(tipo1)
     sleep(1)
 
     ti = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
     tipos = Select(ti)
+    sleep(2)
 
     tipos.select_by_visible_text(tipo2)
     sleep(1)
 
     est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
     estados = Select(est)
+    sleep(2)
 
     estados.select_by_visible_text(uf)
     sleep(1)
