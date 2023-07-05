@@ -1610,49 +1610,49 @@ def crawlAgro2():
                                                                     
                                                 
                                                                                 except:
-                                                                                    next
+                                                                                    return
                                                                             except:
-                                                                                next
+                                                                                return
                                                                         except:
-                                                                            next
+                                                                            return
                                                                     except:
-                                                                        next
+                                                                        return
                                                                 except:
-                                                                    next
+                                                                    return
                                                             except:
-                                                                next
+                                                                return
                                                         except:
-                                                            next
+                                                            return
                                                     except:
-                                                        next
+                                                        return
 
                                                 except:
-                                                    next
+                                                    return
 
                                             except:
-                                                next
+                                                return
 
                                         except:
-                                            next
+                                            return
                                     except:
-                                        next
+                                        return
 
                                 except:
-                                    next
+                                    return
                             except:
-                                next
+                                return
 
                         except:
-                            next
+                            return
 
                     except:
-                        next
+                        return
                 except:
-                    next
+                    return
             except:
-                next
+                return
         except:
-            next
+            return
             
         print(f'Finalizei:{nome}')
 
