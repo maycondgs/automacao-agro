@@ -1600,9 +1600,9 @@ def crawlAgro2():
                                                                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                                                                                     sleep(1)
 
-                                                                                    dados20 = varree2(driver)
+                                                                                    dadosvinte = varree2(driver)
 
-                                                                                    for item in dados20:
+                                                                                    for item in dadosvinte:
 
                                                                                         st = json.dumps(item)
 
