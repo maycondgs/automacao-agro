@@ -674,9 +674,9 @@ def crawlAgro1():
 
                             for item in dados5:
 
-        st = json.dumps(item)
+                                st = json.dumps(item)
 
-        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                             pagini(driver, uf, link, tipo1, tipo2)
                             sleep(1)
@@ -1701,7 +1701,7 @@ def crawlAgro2():
                                                                     
                                                 
         except:
-            print(f'Finalizei:{nome},pag-19')
+            print(f'Finalizei:{nome}pag-19')
             return
 
         
