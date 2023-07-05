@@ -1877,21 +1877,14 @@ def scrapy_noticias():
 
 def scrapy_precos():
     crawlAgro1()
-    crawlAgro2()
-    crawlAlface()
-    crawlRepolho()
-
-
-def run_threaded(job):
-    job_thread = threading.Thread(target=job)
-    job_thread.start()
-
-schedule.every().monday.do(run_threaded, scrapy_tabela)
-schedule.every().day.at("02:00").do(run_threaded, scrapy_precos)
-schedule.every().day.at("09:30").do(run_threaded, scrapy_precos)
-
-
-
-while 1:
-    schedule.run_pending()
     sleep(1)
+    crawlAgro2()
+    sleep(1)
+    crawlAlface()
+    sleep(1)
+    crawlRepolho()
+    sleep(1)
+
+
+
+scrapy_precos()
