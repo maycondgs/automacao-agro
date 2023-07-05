@@ -1585,68 +1585,58 @@ def crawlAgro2():
                                                                 
                                                             except:
                                                                 print(f'Finalizei:{nome},pag-14')
-                                                                break
+                                                                next
                                                             
                                                         except:
                                                             print(f'Finalizei:{nome},pag-13')
-                                                            break
+                                                            next
 
                                                     except:
                                                         print(f'Finalizei:{nome},pag-12')
-                                                        break
+                                                        next
                                                 except:
                                                     print(f'Finalizei:{nome},pag-11')
-                                                    break
+                                                    next
                                                 
                                             except:
                                                 print(f'Finalizei:{nome},pag-10')
-                                                break
+                                                next
 
                                         except:
                                             print(f'Finalizei:{nome},pag-9')
-                                            break
+                                            next
 
                                     except:
                                             print(f'Finalizei:{nome},pag-8')
-                                            break
+                                            next
 
                                 except:
                                     print(f'Finalizei:{nome},pag-7')
-                                    break
+                                    next
 
                             except:
                                 print(f'Finalizei:{nome},pag-6')
-                                break
+                                next
 
                         except:
                             print(f'Finalizei:{nome},pag-5')
-                            break
+                            next
 
                     except:
                         print(f'Finalizei:{nome},pag-4')
-                        break
+                        next
 
                 except:
                     print(f'Finalizei:{nome},pag-3')
-                    break
+                    next
 
             except:
                 print(f'Finalizei:{nome},pag-2')
-                break
-            
-            
-
-
-
-            
-
-            
-
-            
+                next
 
         except:
             print(f'Finalizei:{nome},pag-1')
-            break
+            next
         
         
 
@@ -2179,6 +2169,7 @@ def scrapy_precos():
     crawlAgro2()
     sleep(1)
     crawlAgro1()
+
 
 
 
