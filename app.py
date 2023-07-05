@@ -92,6 +92,9 @@ header = {
 ufs = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI',
     'PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
 
+ufs1 = ['PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+ufs2 = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA',]
+
 tipos_algodao = ['/algodao-em-caroco-15kg','/algodao-em-pluma-15kg']
 tipos_arroz = ['/arroz-em-casca-irrigado-sc-60kg', '/arroz-em-casca-longo-fino-sc-60kg', '/arroz-em-casca-sc-60kg', '/arroz-irrigado-em-casca-sc-50kg', '/arroz-sequeiro-cultivar-primavera-sc-60kg','/arroz-sequeiro-tipo-1-sc-60kg']
 tipos_amendoim = ['/amendoim-com-casca-1kg', '/amendoim-com-casca-sc-25kg', '/amendoim-sc-10kg']
@@ -594,7 +597,174 @@ def crawlAgro1():
 
 
 
-        for uf in ufs:
+        for uf in ufs1:
+
+            print(f'Varrendo: {nome} no {uf}')
+
+            dados = varre(driver, uf, link, tipo1, tipo2)
+
+            for item in dados:
+
+                st = json.dumps(item)
+
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+            pagini(driver, uf, link, tipo1, tipo2)
+            sleep(1)
+
+            try:
+                #page2
+                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                sleep(1)
+
+                dados2 = varree(driver)
+
+                for item in dados2:
+
+                    st = json.dumps(item)
+
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                pagini(driver, uf, link, tipo1, tipo2)
+                sleep(1)
+                proxpage(driver)
+
+                try:
+                    #page3
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                    sleep(1)
+
+                    dados3 = varree(driver)
+
+                    for item in dados3:
+
+                        st = json.dumps(item)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                    pagini(driver, uf, link, tipo1, tipo2)
+                    sleep(1)
+                    proxpage(driver)
+                    proxpage(driver)
+
+                    try:
+                        #page4
+                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                        sleep(1)
+
+                        dados4 = varree(driver)
+
+                        for item in dados4:
+
+                            st = json.dumps(item)
+
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                        pagini(driver, uf, link, tipo1, tipo2)
+                        sleep(1)
+                        proxpage(driver)
+                        proxpage(driver)
+                        proxpage(driver)
+
+                        try:
+                            #page5
+                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                            sleep(1)
+
+                            dados5 = varree(driver)
+
+                            for item in dados5:
+
+                                st = json.dumps(item)
+
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                            pagini(driver, uf, link, tipo1, tipo2)
+                            sleep(1)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+
+                            try:
+                                #page6
+                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                sleep(1)
+
+                                dados6 = varree(driver)
+
+                                for item in dados6:
+
+                                    st = json.dumps(item)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                pagini(driver, uf, link, tipo1, tipo2)
+                                sleep(1)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+
+                                try:
+                                    #page7
+                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                    sleep(1)
+
+                                    dados7 = varree(driver)
+
+                                    for item in dados7:
+
+                                        st = json.dumps(item)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                    
+                                    pagini(driver, uf, link, tipo1, tipo2)
+                                    sleep(1)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+
+                                    try:
+                                        #page8
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                        sleep(1)
+
+                                        dados8 = varree(driver)
+
+                                        for item in dados8:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                    except:
+                                        next
+
+                                except:
+                                    next
+
+
+                            except:
+                                next
+
+                        except:
+                            next
+
+                    except:
+                        next
+                except:
+                    next
+            except:
+                next
+            
+            print(f'Finalizei:{uf}')
+
+        for uf in ufs2:
 
             print(f'Varrendo: {nome} no {uf}')
 
@@ -1153,7 +1323,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-1')
-            return
+            break
         
         try:
             #page3
@@ -1175,7 +1345,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-2')
-            return
+            break
         
         try:
             #page4
@@ -1199,7 +1369,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-3')
-            return
+            break
         
         try:
             #page5
@@ -1224,7 +1394,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-4')
-            return
+            break
                      
 
         try:
@@ -1251,7 +1421,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-5')
-            return
+            break
         
         
         try:
@@ -1279,7 +1449,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-6')
-            return
+            break
 
         try:
             #page8
@@ -1307,7 +1477,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-7')
-            return
+            break
 
         try:
             #page9
@@ -1336,7 +1506,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-8')
-            return
+            break
         
         try:
             #page10
@@ -1366,7 +1536,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-9')
-            return
+            break
         
         try:
             #page11
@@ -1397,7 +1567,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-10')
-            return
+            break
 
 
         try:
@@ -1430,7 +1600,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-11')
-            return
+            break
         
         try:
             #page13
@@ -1463,7 +1633,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-12')
-            return
+            break
         
         try:
             #page14
@@ -1497,7 +1667,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-13')
-            return
+            break
 
         try:
             #page15
@@ -1532,7 +1702,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-14')
-            return
+            break
         
         try:
             #page16
@@ -1567,7 +1737,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-15')
-            return
+            break
         
         
         try:
@@ -1605,7 +1775,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-16')
-            return
+            break
         
         try:
             #page18
@@ -1643,7 +1813,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-17')
-            return
+            break
         
         try:
             #page19
@@ -1682,7 +1852,7 @@ def crawlAgro2():
 
         except:
             print(f'Finalizei:{nome},pag-18')
-            return
+            break
         
         try:
             #page20
@@ -1700,7 +1870,7 @@ def crawlAgro2():
                                                 
         except:
             print(f'Finalizei:{nome}pag-19')
-            return
+            break
 
         
 
