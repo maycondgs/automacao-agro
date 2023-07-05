@@ -1888,8 +1888,7 @@ def run_threaded(job):
 
 schedule.every().monday.do(run_threaded, scrapy_tabela)
 schedule.every().day.at("02:00").do(run_threaded, scrapy_precos)
-schedule.every().day.at("09:20").do(run_threaded, scrapy_precos)
-schedule.every(1).minutes.do(run_threaded, scrapy_noticias)
+schedule.every().day.at("09:30").do(run_threaded, scrapy_precos)
 
 
 
