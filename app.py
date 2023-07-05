@@ -60,7 +60,6 @@ urls1= [
 
 
 urls2 = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
     {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
     {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao'},
