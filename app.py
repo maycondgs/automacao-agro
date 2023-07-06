@@ -556,6 +556,7 @@ def pagini(driver, uf, link, grupo, especie):
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
 
+
     est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
     estados = Select(est)
     sleep(2)
@@ -566,8 +567,13 @@ def pagini(driver, uf, link, grupo, especie):
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(2)
         
-    driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
-    sleep(3)
+    try:
+        driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
+        sleep(3)
+
+    except:
+        return
+
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
@@ -601,7 +607,9 @@ def crawlAgro1():
 
             print(f'Varrendo: {nome} no {uf}')
 
-            dados = varre(driver, uf, link, grup, especie)
+            pagini()
+
+            dados = varree(driver)
 
             for item in dados:
 
