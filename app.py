@@ -89,8 +89,8 @@ header = {
     'Content-Type': 'application/json'
     }
 
-ufs = ['MT','PA','PB','PE','PI',
-    'PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+ufs = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT','PA',
+    'PB','PE','PI', 'PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
 
 
 tipos_algodao = ['/algodao-em-caroco-15kg','/algodao-em-pluma-15kg']
