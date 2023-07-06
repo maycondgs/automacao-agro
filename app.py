@@ -201,11 +201,15 @@ def varre(driver, uf, link, grupo, especie):
     tipo.select_by_visible_text('Bovinos')
     sleep(4)
 
-    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
-    product = Select(prodct)
-    sleep(2)
-    product.select_by_visible_text('Boi Gordo 15Kg')
-    sleep(2)
+    try:
+
+        prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+        product = Select(prodct)
+        sleep(2)
+        product.select_by_visible_text('Boi Gordo 15Kg')
+        sleep(2)
+    except:
+        print('Nao selecionei')
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
     sleep(2)
@@ -541,13 +545,18 @@ def pagini(driver, uf, link, grupo, especie):
     tipo = Select(tip)
     sleep(2)
     tipo.select_by_visible_text('Bovinos')
-    sleep(2)
+    sleep(4)
 
-    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
-    product = Select(prodct)
-    sleep(2)
-    product.select_by_visible_text('Boi Gordo 15Kg')
-    sleep(2)
+    try:
+    
+        prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+        product = Select(prodct)
+        sleep(2)
+        product.select_by_visible_text('Boi Gordo 15Kg')
+        sleep(2)
+    except:
+        print('Nao selecionei')
+    
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
     sleep(2)
