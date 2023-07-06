@@ -55,8 +55,7 @@ def iniciar_driver():
 
 
 urls = [
-    {'boi,https://www.agrolink.com.br/cotacoes/,Bovinos,Boi Gordo 15Kg'},
-    {'vaca,https://www.agrolink.com.br/cotacoes/,Bovinos,Vaca Gorda 15Kg'}
+    {'boi,https://www.agrolink.com.br/cotacoes/,Bovinos,Boi Gordo 15Kg'}
 ]
 
 urls2 = [
@@ -199,13 +198,13 @@ def varre(driver, uf, link, grupo, especie):
     tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
     tipo = Select(tip)
     sleep(2)
-    tipo.select_by_visible_text(grupo)
-    sleep(2)
+    tipo.select_by_visible_text('Bovinos')
+    sleep(4)
 
     prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
     product = Select(prodct)
     sleep(2)
-    product.select_by_visible_text(especie)
+    product.select_by_visible_text('Boi Gordo 15Kg')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
@@ -541,13 +540,13 @@ def pagini(driver, uf, link, grupo, especie):
     tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
     tipo = Select(tip)
     sleep(2)
-    tipo.select_by_visible_text(grupo)
+    tipo.select_by_visible_text('Bovinos')
     sleep(2)
 
     prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
     product = Select(prodct)
     sleep(2)
-    product.select_by_visible_text(especie)
+    product.select_by_visible_text('Boi Gordo 15Kg')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
