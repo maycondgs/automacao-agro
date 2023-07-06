@@ -1431,10 +1431,6 @@ def crawlAgro2():
             next
         
 
- 
-crawlAgro1()
-        
-
 
 
 def crawlAlface(driver):
@@ -1959,3 +1955,7 @@ def scrapy_precos():
 
 
 
+
+ 
+crawlAgro1()
+        
