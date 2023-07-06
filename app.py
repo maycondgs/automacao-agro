@@ -195,28 +195,26 @@ def varre(driver, uf, link, grupo, especie):
     driver.get(link)
     sleep(1)
 
-    try:
+    driver.execute_script('window.scrollTo(0, 50);')
+    sleep(2)
 
-        tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
-        tipo = Select(tip)
-        sleep(2)
-        tipo.select_by_visible_text('Bovinos')
-        sleep(4)
+    tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
+    tipo = Select(tip)
+    sleep(2)
+    tipo.select_by_visible_text('Bovinos')
+    sleep(4)
 
-        prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
-        product = Select(prodct)
-        sleep(2)
-        product.select_by_visible_text('Boi Gordo 15Kg')
-        sleep(2)
-    except:
-        print('Nao selecionei')
+    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+    product = Select(prodct)
+    sleep(2)
+    product.select_by_visible_text('Boi Gordo 15Kg')
+    sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
     sleep(2)
 
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
-
 
     est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
     estados = Select(est)
@@ -541,22 +539,21 @@ def pagini(driver, uf, link, grupo, especie):
     driver.get(link)
     sleep(1)
 
+    driver.execute_script('window.scrollTo(0, 50);')
+    sleep(2)
+
     tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
     tipo = Select(tip)
     sleep(2)
     tipo.select_by_visible_text('Bovinos')
     sleep(4)
 
-    try:
-    
-        prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
-        product = Select(prodct)
-        sleep(2)
-        product.select_by_visible_text('Boi Gordo 15Kg')
-        sleep(2)
-    except:
-        print('Nao selecionei')
-    
+    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+    product = Select(prodct)
+    sleep(2)
+    product.select_by_visible_text('Boi Gordo 15Kg')
+    sleep(2)
+
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
     sleep(2)
