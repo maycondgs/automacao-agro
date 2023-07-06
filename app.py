@@ -55,7 +55,7 @@ def iniciar_driver():
 
 
 urls = [
-    {'boi,https://www.agrolink.com.br/cotacoes/,Bovinos,Boi Gordo 15Kg'}
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg,Bovinos,Boi Gordo 15Kg'}
 ]
 
 urls2 = [
@@ -195,13 +195,13 @@ def varre(driver, uf, link, grupo, especie):
     driver.get(link)
     sleep(1)
 
-    tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
-    tipo = Select(tip)
-    sleep(2)
-    tipo.select_by_visible_text('Bovinos')
-    sleep(4)
-
     try:
+
+        tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
+        tipo = Select(tip)
+        sleep(2)
+        tipo.select_by_visible_text('Bovinos')
+        sleep(4)
 
         prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
         product = Select(prodct)
