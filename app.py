@@ -2167,11 +2167,12 @@ def scrapy_noticias():
 
 def scrapy_precos():
 
-    crawlAgro2()
-    sleep(1)
     crawlAgro1()
+    sleep(1)
+    crawlAgro2()
 
 
 
 
-crawlAgro1()
+
+scrapy_precos()
