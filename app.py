@@ -614,8 +614,9 @@ def crawlAgro1():
 
             try:
                 #page2
-                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                 sleep(1)
+                proxpage(driver)
 
                 dados2 = varree(driver)
 
@@ -624,15 +625,17 @@ def crawlAgro1():
                     st = json.dumps(item)
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
+                
                 pagini(driver, uf, link, grup, especie)
                 sleep(1)
                 proxpage(driver)
 
                 try:
                     #page3
-                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                     sleep(1)
+                    proxpage(driver)
+
 
                     dados3 = varree(driver)
 
@@ -649,8 +652,9 @@ def crawlAgro1():
 
                     try:
                         #page4
-                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                         sleep(1)
+                        proxpage(driver)
 
                         dados4 = varree(driver)
 
@@ -668,8 +672,9 @@ def crawlAgro1():
 
                         try:
                             #page5
-                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                             sleep(1)
+                            proxpage(driver)
 
                             dados5 = varree(driver)
 
@@ -688,8 +693,9 @@ def crawlAgro1():
 
                             try:
                                 #page6
-                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                 sleep(1)
+                                proxpage(driver)
 
                                 dados6 = varree(driver)
 
@@ -709,8 +715,9 @@ def crawlAgro1():
 
                                 try:
                                     #page7
-                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                     sleep(1)
+                                    proxpage(driver)
 
                                     dados7 = varree(driver)
 
@@ -731,8 +738,9 @@ def crawlAgro1():
 
                                     try:
                                         #page8
-                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]')
                                         sleep(1)
+                                        proxpage(driver)
 
                                         dados8 = varree(driver)
 
