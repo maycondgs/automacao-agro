@@ -55,8 +55,8 @@ def iniciar_driver():
 
 
 urls = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'},
-    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'}
+    {'boi,https://www.agrolink.com.br/cotacoes/,Bovinos,Boi Gordo 15Kg'},
+    {'vaca,https://www.agrolink.com.br/cotacoes/,Bovinos,Vaca Gorda 15Kg'}
 ]
 
 urls2 = [
@@ -91,9 +91,6 @@ header = {
 
 ufs = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI',
     'PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
-
-ufs1 = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA',]
-ufs2 = ['PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
 
 
 tipos_algodao = ['/algodao-em-caroco-15kg','/algodao-em-pluma-15kg']
@@ -192,11 +189,27 @@ def scrap(tipo, itemrq):
                     
 
 
-def varre(driver, uf, link):
+def varre(driver, uf, link, grupo, especie):
 
     itens = []
 
     driver.get(link)
+    sleep(1)
+
+    tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
+    tipo = Select(tip)
+    sleep(2)
+    tipo.select_by_visible_text(grupo)
+    sleep(2)
+
+    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+    product = Select(prodct)
+    sleep(2)
+    product.select_by_visible_text(especie)
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
+    sleep(2)
 
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
@@ -520,8 +533,25 @@ def varree(driver):
 
     return itens
 
-def pagini(driver, uf, link):
+def pagini(driver, uf, link, grupo, especie):
+
     driver.get(link)
+    sleep(1)
+
+    tip = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')
+    tipo = Select(tip)
+    sleep(2)
+    tipo.select_by_visible_text(grupo)
+    sleep(2)
+
+    prodct = driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]')
+    product = Select(prodct)
+    sleep(2)
+    product.select_by_visible_text(especie)
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5234"]').click()
+    sleep(2)
 
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
@@ -544,7 +574,6 @@ def pagini(driver, uf, link):
 
     driver.execute_script('window.scrollTo(0, 1900);')
 
-
 def crawlAgro1():
 
     driver = iniciar_driver()
@@ -560,15 +589,19 @@ def crawlAgro1():
         nom = it[0].split("'")
         nome = nom[1]
 
-        lin = it[1].split("'")
-        link = lin[0]
+        link = it[1]
+
+        grup = it[2]
+
+        esp = it[3].split("'")
+        especie = esp[0]
 
 
-        for uf in ufs1:
+        for uf in ufs:
 
             print(f'Varrendo: {nome} no {uf}')
 
-            dados = varre(driver, uf, link)
+            dados = varre(driver, uf, link, grup, especie)
 
             for item in dados:
 
@@ -576,7 +609,7 @@ def crawlAgro1():
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-            pagini(driver, uf, link)
+            pagini(driver, uf, link, grup, especie)
             sleep(1)
 
             try:
@@ -592,7 +625,7 @@ def crawlAgro1():
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                pagini(driver, uf, link)
+                pagini(driver, uf, link, grup, especie)
                 sleep(1)
                 proxpage(driver)
 
@@ -609,7 +642,7 @@ def crawlAgro1():
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                    pagini(driver, uf, link)
+                    pagini(driver, uf, link, grup, especie)
                     sleep(1)
                     proxpage(driver)
                     proxpage(driver)
@@ -627,7 +660,7 @@ def crawlAgro1():
 
                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                        pagini(driver, uf, link)
+                        pagini(driver, uf, link, grup, especie)
                         sleep(1)
                         proxpage(driver)
                         proxpage(driver)
@@ -646,7 +679,7 @@ def crawlAgro1():
 
                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                            pagini(driver, uf, link)
+                            pagini(driver, uf, link, grup, especie)
                             sleep(1)
                             proxpage(driver)
                             proxpage(driver)
@@ -666,7 +699,7 @@ def crawlAgro1():
 
                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                pagini(driver, uf, link)
+                                pagini(driver, uf, link, grup, especie)
                                 sleep(1)
                                 proxpage(driver)
                                 proxpage(driver)
@@ -687,7 +720,7 @@ def crawlAgro1():
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
                                     
-                                    pagini(driver, uf, link)
+                                    pagini(driver, uf, link, grup, especie)
                                     sleep(1)
                                     proxpage(driver)
                                     proxpage(driver)
@@ -730,174 +763,6 @@ def crawlAgro1():
                 next
             
             print(f'Finalizei:{uf}')
-
-        for uf in ufs2:
-
-            print(f'Varrendo: {nome} no {uf}')
-
-            dados = varre(driver, uf, link)
-
-            for item in dados:
-
-                st = json.dumps(item)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-            pagini(driver, uf, link)
-            sleep(1)
-
-            try:
-                #page2
-                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                sleep(1)
-
-                dados2 = varree(driver)
-
-                for item in dados2:
-
-                    st = json.dumps(item)
-
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                pagini(driver, uf, link)
-                sleep(1)
-                proxpage(driver)
-
-                try:
-                    #page3
-                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                    sleep(1)
-
-                    dados3 = varree(driver)
-
-                    for item in dados3:
-
-                        st = json.dumps(item)
-
-                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                    pagini(driver, uf, link)
-                    sleep(1)
-                    proxpage(driver)
-                    proxpage(driver)
-
-                    try:
-                        #page4
-                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                        sleep(1)
-
-                        dados4 = varree(driver)
-
-                        for item in dados4:
-
-                            st = json.dumps(item)
-
-                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                        pagini(driver, uf, link)
-                        sleep(1)
-                        proxpage(driver)
-                        proxpage(driver)
-                        proxpage(driver)
-
-                        try:
-                            #page5
-                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                            sleep(1)
-
-                            dados5 = varree(driver)
-
-                            for item in dados5:
-
-                                st = json.dumps(item)
-
-                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                            pagini(driver, uf, link)
-                            sleep(1)
-                            proxpage(driver)
-                            proxpage(driver)
-                            proxpage(driver)
-                            proxpage(driver)
-
-                            try:
-                                #page6
-                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                                sleep(1)
-
-                                dados6 = varree(driver)
-
-                                for item in dados6:
-
-                                    st = json.dumps(item)
-
-                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                                pagini(driver, uf, link)
-                                sleep(1)
-                                proxpage(driver)
-                                proxpage(driver)
-                                proxpage(driver)
-                                proxpage(driver)
-                                proxpage(driver)
-
-                                try:
-                                    #page7
-                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                                    sleep(1)
-
-                                    dados7 = varree(driver)
-
-                                    for item in dados7:
-
-                                        st = json.dumps(item)
-
-                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-                                    
-                                    pagini(driver, uf, link)
-                                    sleep(1)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-
-                                    try:
-                                        #page8
-                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                                        sleep(1)
-
-                                        dados8 = varree(driver)
-
-                                        for item in dados8:
-
-                                            st = json.dumps(item)
-
-                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                                    except:
-                                        next
-
-                                except:
-                                    next
-
-
-                            except:
-                                next
-
-                        except:
-                            next
-
-                    except:
-                        next
-                except:
-                    next
-            except:
-                next
-            
-            print(f'Finalizei:{uf}')
-
 
 
 def varre2(driver, link):
@@ -1639,8 +1504,9 @@ def crawlAgro2():
             print(f'Finalizei:{nome},pag-1')
             next
         
-        
 
+ 
+crawlAgro1()
         
 
 
@@ -2000,56 +1866,49 @@ def crawlNoticiasAgrolink():
                 requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
     
 def crawlNoticiasCanalRural():
-      
+            
     referencia = 'Canal Rural'
 
-    page = requests.get('https://www.canalrural.com.br/noticias')
+    driver = iniciar_driver()
 
-    soup = BeautifulSoup(page.content, 'html.parser')
+    driver.get('https://www.canalrural.com.br/noticias/')
+    sleep(2)
+    
+    itens = driver.find_elements(By.XPATH,'//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]')
 
-    dom = etree.HTML(str(soup))
+    dados = []
 
-    titulo = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]/h2/a/text()'))
-    link = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]/h2/a/@href'))
-    dat = (dom.xpath('//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div[5]/div/div[2]/div/text()'))
-    data = []
-    hora = []
+    for item in itens:
+        link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
+        titulo = item.find_element(By.TAG_NAME, 'a').text
+        dat = item.find_element(By.TAG_NAME, 'div').text
 
-    for dat in dat:
         datt = str(dat).split(' às ')
         horraa = datt[1]
         horaa = horraa.split('h')
-        datta = datt[0].split('\n')
         minuto = horaa[1].split('\n')
+        hora = f'{horaa[0]}:{minuto[0]}'
 
-        data.append(datta[1])
-        hora.append(f'{horaa[0]}:{minuto[0]}')
-
-    novos = []
-    
-    for titulo, link, data, hora in zip(titulo, link, data, hora):
-        novos.append([titulo, link, hora, data, referencia, referencia])
-        
+        dados.append([titulo, link, hora, data_hoje, referencia, referencia])
 
     bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/canalrural')
 
     tb = json.loads(bd.content)
 
-    for novo in novos:
-            if novo not in tb:
-                payl = {
-                    "Titulo": novo[0],
-                    "Link": novo[1],
-                    "Hora": novo[2],
-                    "Data": novo[3],
-                    "Referencia": novo[4],
-                    "Categoria" : novo[5]
-                }
+    for novo in dados:
+        if novo not in tb:
+            payl = {
+                "Titulo": novo[0],
+                "Link": novo[1],
+                "Hora": novo[2],
+                "Data": novo[3],
+                "Referencia": novo[4],
+                 "Categoria" : novo[5]
+            }
 
-                st = json.dumps(payl)
+            st = json.dumps(payl)
             
-                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
-         
+            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
 
 
 
