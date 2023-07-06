@@ -607,9 +607,8 @@ def crawlAgro1():
 
             print(f'Varrendo: {nome} no {uf}')
 
-            pagini(driver, uf, link, grup, especie)
 
-            dados = varree(driver)
+            dados = varre(driver, uf, link, grup, especie)
 
             for item in dados:
 
