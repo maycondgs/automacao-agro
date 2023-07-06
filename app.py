@@ -92,8 +92,9 @@ header = {
 ufs = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI',
     'PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
 
-ufs1 = ['PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
-ufs2 = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA',]
+ufs1 = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA',]
+ufs2 = ['PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
+
 
 tipos_algodao = ['/algodao-em-caroco-15kg','/algodao-em-pluma-15kg']
 tipos_arroz = ['/arroz-em-casca-irrigado-sc-60kg', '/arroz-em-casca-longo-fino-sc-60kg', '/arroz-em-casca-sc-60kg', '/arroz-irrigado-em-casca-sc-50kg', '/arroz-sequeiro-cultivar-primavera-sc-60kg','/arroz-sequeiro-tipo-1-sc-60kg']
@@ -2173,4 +2174,4 @@ def scrapy_precos():
 
 
 
-    crawlAgro1()
+crawlAgro1()
