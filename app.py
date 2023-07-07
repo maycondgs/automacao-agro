@@ -55,7 +55,6 @@ def iniciar_driver():
 
 
 boi = [
-    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
     {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg,Bovinos,Boi Gordo 15Kg'}
 ]
 
