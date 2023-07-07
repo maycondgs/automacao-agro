@@ -211,10 +211,7 @@ def varre(driver, uf, link, grupo, especie):
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
     sleep(2)
 
-    if grupo == 'Bovinos':
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
-    else:
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
+    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
 
     sleep(3)
         
