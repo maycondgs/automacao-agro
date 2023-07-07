@@ -201,12 +201,67 @@ def varre(driver, uf, link, grupo, especie):
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
 
-    est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
-    estados = Select(est)
+    driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
     sleep(2)
 
-    estados.select_by_visible_text(uf)
-    sleep(1)
+    if i == 1:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
+    elif i == 2:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[2]').click()
+    elif i == 3:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
+    elif i == 4:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[4]').click()
+    elif i == 5:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[5]').click()
+    elif i == 6:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[6]').click()
+    elif i == 7:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[7]').click()
+    elif i == 8:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[8]').click()
+    elif i == 9:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[9]').click()
+    elif i == 10:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[10]').click()
+    elif i == 11:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[11]').click()
+    elif i == 12:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[12]').click()
+    elif i == 13:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[13]').click()
+    elif i == 14:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[14]').click()
+    elif i == 15:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[15]').click()
+    elif i == 16:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[16]').click()
+    elif i == 17:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[17]').click()
+    elif i == 18:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[18]').click()
+    elif i == 19:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[19]').click()
+    elif i == 20:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[20]').click()
+    elif i == 21:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[21]').click()
+    elif i == 22:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[22]').click()
+    elif i == 23:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[23]').click()
+    elif i == 24:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[24]').click()
+    elif i == 25:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[25]').click()
+    elif i == 26:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[26]').click()
+    elif i == 27:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[27]').click()
+    elif i == 28:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[28]').click()
+
+    sleep(3)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
     sleep(2)
@@ -544,13 +599,67 @@ def pagini(driver, uf, link, grupo, especie):
     driver.execute_script('window.scrollTo(0, 50);')
     sleep(2)
 
-
-    est = driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]')
-    estados = Select(est)
+    driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
     sleep(2)
 
-    estados.select_by_visible_text(uf)
-    sleep(1)
+    if i == 1:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
+    elif i == 2:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[2]').click()
+    elif i == 3:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
+    elif i == 4:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[4]').click()
+    elif i == 5:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[5]').click()
+    elif i == 6:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[6]').click()
+    elif i == 7:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[7]').click()
+    elif i == 8:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[8]').click()
+    elif i == 9:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[9]').click()
+    elif i == 10:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[10]').click()
+    elif i == 11:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[11]').click()
+    elif i == 12:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[12]').click()
+    elif i == 13:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[13]').click()
+    elif i == 14:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[14]').click()
+    elif i == 15:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[15]').click()
+    elif i == 16:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[16]').click()
+    elif i == 17:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[17]').click()
+    elif i == 18:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[18]').click()
+    elif i == 19:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[19]').click()
+    elif i == 20:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[20]').click()
+    elif i == 21:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[21]').click()
+    elif i == 22:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[22]').click()
+    elif i == 23:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[23]').click()
+    elif i == 24:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[24]').click()
+    elif i == 25:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[25]').click()
+    elif i == 26:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[26]').click()
+    elif i == 27:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[27]').click()
+    elif i == 28:
+        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[28]').click()
+
+    sleep(3)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
     sleep(2)
@@ -608,12 +717,13 @@ def crawlAgro():
         especie = esp[0]
 
 
-        for uf in ufs:
+        for i in range(28):
+            i = i+1
 
-            print(f'Varrendo: {nome} no {uf}')
+            print(f'Varrendo: {nome} no {i}')
 
 
-            dados = varre(driver, uf, link, grup, especie)
+            dados = varre(driver, i, link, grup, especie)
 
             for item in dados:
 
@@ -621,7 +731,7 @@ def crawlAgro():
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-            pagini(driver, uf, link, grup, especie)
+            pagini(driver, i, link, grup, especie)
             sleep(1)
 
             try:
@@ -637,7 +747,7 @@ def crawlAgro():
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                pagini(driver, uf, link, grup, especie)
+                pagini(driver, i, link, grup, especie)
                 sleep(1)
                 proxpage(driver)
 
@@ -654,7 +764,7 @@ def crawlAgro():
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                    pagini(driver, uf, link, grup, especie)
+                    pagini(driver, i, link, grup, especie)
                     sleep(1)
                     proxpage(driver)
                     proxpage(driver)
@@ -672,7 +782,7 @@ def crawlAgro():
 
                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                        pagini(driver, uf, link, grup, especie)
+                        pagini(driver, i, link, grup, especie)
                         sleep(1)
                         proxpage(driver)
                         proxpage(driver)
@@ -691,7 +801,7 @@ def crawlAgro():
 
                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                            pagini(driver, uf, link, grup, especie)
+                            pagini(driver, i, link, grup, especie)
                             sleep(1)
                             proxpage(driver)
                             proxpage(driver)
@@ -711,7 +821,7 @@ def crawlAgro():
 
                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                pagini(driver, uf, link, grup, especie)
+                                pagini(driver, i, link, grup, especie)
                                 sleep(1)
                                 proxpage(driver)
                                 proxpage(driver)
@@ -732,7 +842,7 @@ def crawlAgro():
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                    pagini(driver, uf, link, grup, especie)
+                                    pagini(driver, i, link, grup, especie)
                                     sleep(1)
                                     proxpage(driver)
                                     proxpage(driver)
@@ -755,35 +865,37 @@ def crawlAgro():
                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                                         sleep(1)
-                                        print(f'Finalizei:{uf}8')
+                                        print(f'Finalizei:{i}8')
                                         
                                     except:
-                                        print(f'Finalizei:{uf}7')
+                                        print(f'Finalizei:{i}7')
                                         next
 
                                 except:
-                                    print(f'Finalizei:{uf}6')
+                                    print(f'Finalizei:{i}6')
                                     next
 
                             except:
-                                print(f'Finalizei:{uf}5')
+                                print(f'Finalizei:{i}5')
                                 next
 
                         except:
-                            print(f'Finalizei:{uf}4')
+                            print(f'Finalizei:{i}4')
                             next
 
                     except:
-                        print(f'Finalizei:{uf}3')
+                        print(f'Finalizei:{i}3')
                         next
                     
                 except:
-                    print(f'Finalizei:{uf}2')
+                    print(f'Finalizei:{i}2')
                     next
                 
             except:
-                print(f'Finalizei:{uf}2')
+                print(f'Finalizei:{i}1')
                 next
+
+            i = i+1
 
       
             
