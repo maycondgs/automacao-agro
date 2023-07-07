@@ -2248,7 +2248,7 @@ def scrapy_precos():
 
 
 
-
- 
-crawlAgro()
+crawlAgro2()
+crawlAlface()
+crawlRepolho() 
         
