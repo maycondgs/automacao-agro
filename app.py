@@ -769,16 +769,15 @@ def crawlAgro():
         i = 1
 
         for uf in ufs:
+
+            itens = []
              
             print(f'Varrendo: {nome} em {uf}{i}')
 
             dados = varre(driver, i, link, especie)
 
             for item in dados:
-
-                st = json.dumps(item)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                itens.append(item)
 
             pagini(driver, i, link, especie)
             sleep(1)
@@ -791,10 +790,7 @@ def crawlAgro():
                 dados2 = varree(driver)
 
                 for item in dados2:
-
-                    st = json.dumps(item)
-
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                    itens.append(item)
 
                 pagini(driver, i, link, especie)
                 sleep(1)
@@ -808,10 +804,7 @@ def crawlAgro():
                     dados3 = varree(driver)
 
                     for item in dados3:
-
-                        st = json.dumps(item)
-
-                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                        itens.append(item)
 
                     pagini(driver, i, link, especie)
                     sleep(1)
@@ -826,10 +819,7 @@ def crawlAgro():
                         dados4 = varree(driver)
 
                         for item in dados4:
-
-                            st = json.dumps(item)
-
-                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                            itens.append(item)
 
                         pagini(driver, i, link, especie)
                         sleep(1)
@@ -845,10 +835,7 @@ def crawlAgro():
                             dados5 = varree(driver)
 
                             for item in dados5:
-
-                                st = json.dumps(item)
-
-                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                itens.append(item)
 
                             pagini(driver, i, link, especie)
                             sleep(1)
@@ -865,10 +852,7 @@ def crawlAgro():
                                 dados6 = varree(driver)
 
                                 for item in dados6:
-
-                                    st = json.dumps(item)
-
-                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                    itens.append(item)
 
                                 pagini(driver, i, link, especie)
                                 sleep(1)
@@ -886,10 +870,7 @@ def crawlAgro():
                                     dados7 = varree(driver)
 
                                     for item in dados7:
-
-                                        st = json.dumps(item)
-
-                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                        itens.append(item)
 
                                     pagini(driver, i, link, especie)
                                     sleep(1)
@@ -908,44 +889,95 @@ def crawlAgro():
                                         dados8 = varree(driver)
 
                                         for item in dados8:
+                                            itens.append(item)
+
+                                        for item in itens:
 
                                             st = json.dumps(item)
 
                                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-                                        
+
+                                        i=i+1
+                                        print(f'Finalizei:8')
+
                                     except:
+                                        for item in itens:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                        i=i+1
                                         print(f'Finalizei:7')
                                         next
 
                                 except:
+                                    for item in itens:
+
+                                        st = json.dumps(item)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                    i=i+1                                    
                                     print(f'Finalizei:6')
                                     next
 
                             except:
+                                for item in itens:
+
+                                    st = json.dumps(item)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                i=i+1
+
                                 print(f'Finalizei:5')
                                 next
 
                         except:
+                            for item in itens:
+
+                                st = json.dumps(item)
+
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                            i=i+1                            
                             print(f'Finalizei:4')
                             next
 
                     except:
+                        for item in itens:
+
+                            st = json.dumps(item)
+
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                        i=i+1                        
                         print(f'Finalizei:3')
                         next
                         
                 except:
+                    for item in itens:
+
+                        st = json.dumps(item)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                    i=i+1                    
                     print(f'Finalizei:2')
                     next
                     
             except:
+                for item in itens:
+
+                    st = json.dumps(item)
+
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                i=i+1
                 print(f'Finalizei:1')
                 next
 
-
-
-            i=i+1
-
-        print('final1')
 
 
       
