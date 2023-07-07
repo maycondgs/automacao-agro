@@ -220,6 +220,7 @@ def varre(driver, uf, link):
         return
 
 
+
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
 
@@ -765,12 +766,10 @@ def crawlAgroVaca():
 
 
     for uf in ufs:
-
         print(f'Varrendo: {nome} no {uf}')
 
-        pagini(driver, uf, link)
 
-        dados = varree(driver)
+        dados = varre(driver, uf, link)
 
         for item in dados:
 
