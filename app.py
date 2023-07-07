@@ -770,7 +770,7 @@ def crawlAgro():
 
         for uf in ufs:
              
-            print(f'Varrendo: {nome} em {uf}')
+            print(f'Varrendo: {nome} em {uf}{i}')
 
             dados = varre(driver, i, link, especie)
 
