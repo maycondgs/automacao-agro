@@ -25,7 +25,8 @@ dataa = da[0].split('-')
 stt = dataa[2]
 ontem = int(stt) - 1
 data_ontem = f'{ontem}/{dataa[1]}/{dataa[0]}'
-data_hoje = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
+
+data_hoje = da[0]
 
 
 
@@ -1997,7 +1998,8 @@ def crawlNoticiasAgricolas():
 
         for item in itens:
             link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
-            hora = item.find_element(By.TAG_NAME, 'span').text
+            hor = item.find_element(By.TAG_NAME, 'span').text
+            hora = hor + ':00'
             titulo = item.find_element(By.TAG_NAME, 'h2').text
 
             dados.append([titulo, link, hora, data_hoje, referencia, referencia])
@@ -2051,6 +2053,7 @@ def crawlNoticiasAgrolink():
         for da in datt:
             dattt = da.split(' ')
             data.append(dattt[0])
+            hor = dattt[1] + ':00'
             hora.append(dattt[1])
 
         for lnk in links2:
@@ -2102,7 +2105,7 @@ def crawlNoticiasCanalRural():
         horraa = datt[1]
         horaa = horraa.split('h')
         minuto = horaa[1].split('\n')
-        hora = f'{horaa[0]}:{minuto[0]}'
+        hora = f'{horaa[0]}:{minuto[0]}:00'
 
         dados.append([titulo, link, hora, data_hoje, referencia, referencia])
 
@@ -2239,16 +2242,18 @@ def scrapy_noticias():
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
 
+
 def scrapy_precos():
 
-    crawlAgro1()
+    crawlAgro()
     sleep(1)
     crawlAgro2()
+    sleep(1)
+    scrapy_tabela()
+    sleep(1)
+    crawlAlface()
+    sleep(1)
+    crawlRepolho() 
 
 
-
-
-crawlAgro2()
-crawlAlface()
-crawlRepolho() 
-        
+scrapy_precos()
