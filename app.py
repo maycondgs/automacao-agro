@@ -2249,8 +2249,6 @@ def scrapy_precos():
     sleep(1)
     crawlAgro2()
     sleep(1)
-    scrapy_tabela()
-    sleep(1)
     crawlAlface()
     sleep(1)
     crawlRepolho() 
