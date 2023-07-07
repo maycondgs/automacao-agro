@@ -626,7 +626,7 @@ def pagini(driver, i, link, especie):
 
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
-    sleep(2)
+    sleep(3)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
     
