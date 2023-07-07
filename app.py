@@ -209,16 +209,17 @@ def varre(driver, uf, link, grupo, especie):
     sleep(1)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
-    sleep(1)
+    sleep(2)
 
     if grupo == 'Bovinos':
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
     else:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
 
-    sleep(1)
+    sleep(3)
         
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]').click()
+    sleep(2)
     
     if especie == 'Boi Gordo 15Kg':
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[5]').click()
@@ -555,16 +556,17 @@ def pagini(driver, uf, link, grupo, especie):
     sleep(1)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
-    sleep(1)
+    sleep(2)
 
     if grupo == 'Bovinos':
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
     else:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
 
-    sleep(1)
+    sleep(3)
         
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]').click()
+    sleep(2)
     
     if especie == 'Boi Gordo 15Kg':
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[5]').click()
