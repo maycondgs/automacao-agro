@@ -204,61 +204,61 @@ def varre(driver, uf, link, grupo, especie):
     driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
     sleep(2)
 
-    if i == 1:
+    if uf == 1:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
-    elif i == 2:
+    elif uf == 2:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[2]').click()
-    elif i == 3:
+    elif uf == 3:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
-    elif i == 4:
+    elif uf == 4:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[4]').click()
-    elif i == 5:
+    elif uf == 5:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[5]').click()
-    elif i == 6:
+    elif uf == 6:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[6]').click()
-    elif i == 7:
+    elif uf == 7:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[7]').click()
-    elif i == 8:
+    elif uf == 8:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[8]').click()
-    elif i == 9:
+    elif uf == 9:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[9]').click()
-    elif i == 10:
+    elif uf == 10:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[10]').click()
-    elif i == 11:
+    elif uf == 11:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[11]').click()
-    elif i == 12:
+    elif uf == 12:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[12]').click()
-    elif i == 13:
+    elif uf == 13:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[13]').click()
-    elif i == 14:
+    elif uf == 14:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[14]').click()
-    elif i == 15:
+    elif uf == 15:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[15]').click()
-    elif i == 16:
+    elif uf == 16:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[16]').click()
-    elif i == 17:
+    elif uf == 17:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[17]').click()
-    elif i == 18:
+    elif uf == 18:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[18]').click()
-    elif i == 19:
+    elif uf == 19:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[19]').click()
-    elif i == 20:
+    elif uf == 20:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[20]').click()
-    elif i == 21:
+    elif uf == 21:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[21]').click()
-    elif i == 22:
+    elif uf == 22:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[22]').click()
-    elif i == 23:
+    elif uf == 23:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[23]').click()
-    elif i == 24:
+    elif uf == 24:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[24]').click()
-    elif i == 25:
+    elif uf == 25:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[25]').click()
-    elif i == 26:
+    elif uf == 26:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[26]').click()
-    elif i == 27:
+    elif uf == 27:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[27]').click()
-    elif i == 28:
+    elif uf == 28:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[28]').click()
 
     sleep(3)
@@ -602,61 +602,61 @@ def pagini(driver, uf, link, grupo, especie):
     driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
     sleep(2)
 
-    if i == 1:
+    if uf == 1:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[1]').click()
-    elif i == 2:
+    elif uf == 2:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[2]').click()
-    elif i == 3:
+    elif uf == 3:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
-    elif i == 4:
+    elif uf == 4:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[4]').click()
-    elif i == 5:
+    elif uf == 5:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[5]').click()
-    elif i == 6:
+    elif uf == 6:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[6]').click()
-    elif i == 7:
+    elif uf == 7:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[7]').click()
-    elif i == 8:
+    elif uf == 8:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[8]').click()
-    elif i == 9:
+    elif uf == 9:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[9]').click()
-    elif i == 10:
+    elif uf == 10:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[10]').click()
-    elif i == 11:
+    elif uf == 11:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[11]').click()
-    elif i == 12:
+    elif uf == 12:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[12]').click()
-    elif i == 13:
+    elif uf == 13:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[13]').click()
-    elif i == 14:
+    elif uf == 14:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[14]').click()
-    elif i == 15:
+    elif uf == 15:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[15]').click()
-    elif i == 16:
+    elif uf == 16:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[16]').click()
-    elif i == 17:
+    elif uf == 17:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[17]').click()
-    elif i == 18:
+    elif uf == 18:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[18]').click()
-    elif i == 19:
+    elif uf == 19:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[19]').click()
-    elif i == 20:
+    elif uf == 20:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[20]').click()
-    elif i == 21:
+    elif uf == 21:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[21]').click()
-    elif i == 22:
+    elif uf == 22:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[22]').click()
-    elif i == 23:
+    elif uf == 23:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[23]').click()
-    elif i == 24:
+    elif uf == 24:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[24]').click()
-    elif i == 25:
+    elif uf == 25:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[25]').click()
-    elif i == 26:
+    elif uf == 26:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[26]').click()
-    elif i == 27:
+    elif uf == 27:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[27]').click()
-    elif i == 28:
+    elif uf == 28:
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[28]').click()
 
     sleep(3)
