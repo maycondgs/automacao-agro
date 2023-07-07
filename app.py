@@ -55,8 +55,7 @@ def iniciar_driver():
 
 
 urls = [
-    {'boi,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Boi Gordo 15Kg'},
-    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Vaca Gorda 15Kg'},
+    {'boi,https://www.agrolink.com.br/cotacoes/carnes/,Bovinos,Boi Gordo 15Kg'}
 ]
 
 
@@ -1048,7 +1047,7 @@ def crawlAgro():
                                                                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
                                                                                     
                                                                                 print(f'Finalizei:19')  
-                                                                                  
+
                                                                             except:
                                                                                 print(f'Finalizei:18')
                                                                                 next
