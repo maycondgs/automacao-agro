@@ -568,12 +568,9 @@ def crawlAgroBoi():
         nom = it[0].split("'")
         nome = nom[1]
 
-        link = it[1]
+        lin = it[1].split("'")
+        link = lin[0]
 
-        grup = it[2]
-
-        esp = it[3].split("'")
-        especie = esp[0]
 
 
         for uf in ufs:
