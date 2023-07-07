@@ -737,36 +737,388 @@ def crawlAgro():
                                         st = json.dumps(item)
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                    
 
+                                    pagini(driver, link, especie)
                                     sleep(1)
-                                    print(f'Finalizei:{i}8')
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+
+                                    try:
+                                        #page9
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                        sleep(1)
+
+                                        dados9 = varree(driver)
+
+                                        for item in dados9:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
                                         
+                                        pagini(driver, link, especie)
+                                        sleep(1)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+                                        proxpage(driver)
+
+                                        try:
+                                            #page10
+                                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                            sleep(1)
+
+                                            dados10 = varree(driver)
+
+                                            for item in dados10:
+
+                                                st = json.dumps(item)
+
+                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                
+                                            pagini(driver, link, especie)
+                                            sleep(1)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+                                            proxpage(driver)
+
+                                            try:
+                                                #page11
+                                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                sleep(1)
+
+                                                dados11 = varree(driver)
+
+                                                for item in dados11:
+
+                                                    st = json.dumps(item)
+
+                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                    
+                                                pagini(driver, link, especie)
+                                                sleep(1)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+                                                proxpage(driver)
+
+                                                try:
+                                                    #page12
+                                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                    sleep(1)
+
+                                                    dados12 = varree(driver)
+
+                                                    for item in dados12:
+
+                                                        st = json.dumps(item)
+
+                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                        
+                                                    pagini(driver, link, especie)
+                                                    sleep(1)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+                                                    proxpage(driver)
+
+                                                    try:
+                                                        #page13
+                                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                        sleep(1)
+
+                                                        dados13 = varree(driver)
+
+                                                        for item in dados13:
+
+                                                            st = json.dumps(item)
+
+                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                            
+                                                        pagini(driver, link, especie)
+                                                        sleep(1)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+                                                        proxpage(driver)
+
+                                                        try:
+                                                            #page14
+                                                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                            sleep(1)
+
+                                                            dados14 = varree(driver)
+
+                                                            for item in dados14:
+
+                                                                st = json.dumps(item)
+
+                                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                
+                                                            pagini(driver, link, especie)
+                                                            sleep(1)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+                                                            proxpage(driver)
+
+                                                            try:
+                                                                #page15
+                                                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                                sleep(1)
+
+                                                                dados15 = varree(driver)
+
+                                                                for item in dados15:
+
+                                                                    st = json.dumps(item)
+
+                                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                    
+                                                                pagini(driver, link, especie)
+                                                                sleep(1)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+                                                                proxpage(driver)
+
+                                                                try:
+                                                                    #page16
+                                                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                                    sleep(1)
+
+                                                                    dados16 = varree(driver)
+
+                                                                    for item in dados16:
+
+                                                                        st = json.dumps(item)
+
+                                                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                        
+                                                                    pagini(driver, link, especie)
+                                                                    sleep(1)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+                                                                    proxpage(driver)
+
+                                                                    try:
+                                                                        #page17
+                                                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                                        sleep(1)
+
+                                                                        dados17 = varree(driver)
+
+                                                                        for item in dados17:
+
+                                                                            st = json.dumps(item)
+
+                                                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                            
+                                                                        pagini(driver, link, especie)
+                                                                        sleep(1)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+                                                                        proxpage(driver)
+
+                                                                        try:
+                                                                            #page18
+                                                                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                                            sleep(1)
+
+                                                                            dados18 = varree(driver)
+
+                                                                            for item in dados18:
+
+                                                                                st = json.dumps(item)
+
+                                                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                                
+                                                                            pagini(driver, link, especie)
+                                                                            sleep(1)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+                                                                            proxpage(driver)
+
+                                                                            try:
+                                                                                #page19
+                                                                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                                                                sleep(1)
+
+                                                                                dados18 = varree(driver)
+
+                                                                                for item in dados18:
+
+                                                                                    st = json.dumps(item)
+
+                                                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                                                    
+                                                                                print(f'Finalizei:19')  
+                                                                                  
+                                                                            except:
+                                                                                print(f'Finalizei:18')
+                                                                                next
+
+                                                                        except:
+                                                                            print(f'Finalizei:17')
+                                                                            next
+
+                                                                    except:
+                                                                        print(f'Finalizei:16')
+                                                                        next
+
+
+                                                                except:
+                                                                    print(f'Finalizei:15')
+                                                                    next
+
+                                                            except:
+                                                                print(f'Finalizei:14')
+                                                                next
+
+                                                        except:
+                                                            print(f'Finalizei:13')
+                                                            next
+
+                                                    except:
+                                                        print(f'Finalizei:12')
+                                                        next
+
+                                                except:
+                                                    print(f'Finalizei:11')
+                                                    next
+
+                                            except:
+                                                print(f'Finalizei:10')
+                                                next
+
+                                        except:
+                                            print(f'Finalizei:9')
+                                            next
+
+                                    except:
+                                        print(f'Finalizei:8')
+                                        next
                                 except:
-                                    print(f'Finalizei:{i}7')
+                                    print(f'Finalizei:7')
                                     next
 
                             except:
-                                print(f'Finalizei:{i}6')
+                                print(f'Finalizei:6')
                                 next
 
                         except:
-                            print(f'Finalizei:{i}5')
+                            print(f'Finalizei:5')
                             next
 
                     except:
-                        print(f'Finalizei:{i}4')
+                        print(f'Finalizei:4')
                         next
 
                 except:
-                    print(f'Finalizei:{i}3')
+                    print(f'Finalizei:3')
                     next
                     
             except:
-                print(f'Finalizei:{i}2')
+                print(f'Finalizei:2')
                 next
                 
         except:
-            print(f'Finalizei:{i}1')
+            print(f'Finalizei:1')
             next
 
 
