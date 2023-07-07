@@ -201,14 +201,13 @@ def varre(driver, i, link, especie):
     sleep(1)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
-    sleep(2)
+    sleep(1)
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
-
-    sleep(3)
+    sleep(5)
         
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]').click()
-    sleep(2)
+    sleep(1)
     
     if especie == 'Boi Gordo 15Kg':
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[5]').click()
@@ -615,7 +614,7 @@ def varree(driver):
 
     return itens
 
-def pagini(driver, link, especie):
+def pagini(driver, i, link, especie):
 
     driver.get(link)
     sleep(1)
@@ -640,6 +639,94 @@ def pagini(driver, link, especie):
         driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[18]').click()
 
     sleep(1)
+
+    
+    driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
+    sleep(1)
+
+    if i == 1:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[2]').click()
+
+    if i == 2:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[3]').click()
+
+    if i == 3:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[4]').click()
+
+    if i == 4:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[5]').click()
+
+    if i == 5:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[6]').click()
+
+    if i == 6:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[7]').click()
+
+    if i == 7:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[8]').click()
+
+    if i == 8:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[9]').click()
+
+    if i == 9:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[10]').click()
+
+    if i == 10:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[11]').click()
+
+    if i == 11:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[12]').click()
+
+    if i == 12:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[13]').click()
+
+    if i == 13:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[14]').click()
+
+    if i == 14:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[15]').click()
+
+    if i == 15:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[16]').click()
+
+    if i == 16:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[17]').click()
+
+    if i == 17:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[18]').click()
+
+    if i == 18:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[19]').click()
+
+    if i == 19:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[20]').click()
+
+    if i == 20:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[21]').click()
+
+    if i == 21:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[22]').click()
+
+    if i == 22:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[23]').click()
+
+    if i == 23:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[24]').click()
+
+    if i == 24:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[25]').click()
+
+    if i == 25:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[26]').click()
+
+    if i == 26:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[27]').click()
+
+    if i == 27:
+        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[28]').click()
+
+
+    sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(2)
@@ -693,8 +780,168 @@ def crawlAgro():
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-            pagini(driver, link, especie)
+            pagini(driver, i, link, especie)
             sleep(1)
+                
+            try:
+                #page2
+                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                sleep(1)
+
+                dados2 = varree(driver)
+
+                for item in dados2:
+
+                    st = json.dumps(item)
+
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                pagini(driver, i, link, especie)
+                sleep(1)
+                proxpage(driver)
+
+                try:
+                    #page3
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                    sleep(1)
+
+                    dados3 = varree(driver)
+
+                    for item in dados3:
+
+                        st = json.dumps(item)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                    pagini(driver, i, link, especie)
+                    sleep(1)
+                    proxpage(driver)
+                    proxpage(driver)
+
+                    try:
+                        #page4
+                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                        sleep(1)
+
+                        dados4 = varree(driver)
+
+                        for item in dados4:
+
+                            st = json.dumps(item)
+
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                        pagini(driver, i, link, especie)
+                        sleep(1)
+                        proxpage(driver)
+                        proxpage(driver)
+                        proxpage(driver)
+
+                        try:
+                            #page5
+                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                            sleep(1)
+
+                            dados5 = varree(driver)
+
+                            for item in dados5:
+
+                                st = json.dumps(item)
+
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                            pagini(driver, i, link, especie)
+                            sleep(1)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+
+                            try:
+                                #page6
+                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                sleep(1)
+
+                                dados6 = varree(driver)
+
+                                for item in dados6:
+
+                                    st = json.dumps(item)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                pagini(driver, i, link, especie)
+                                sleep(1)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+
+                                try:
+                                    #page7
+                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                    sleep(1)
+
+                                    dados7 = varree(driver)
+
+                                    for item in dados7:
+
+                                        st = json.dumps(item)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                    pagini(driver, i, link, especie)
+                                    sleep(1)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+
+                                    try:
+                                        #page8
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                        sleep(1)
+
+                                        dados8 = varree(driver)
+
+                                        for item in dados8:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                        
+                                    except:
+                                        print(f'Finalizei:7')
+                                        next
+
+                                except:
+                                    print(f'Finalizei:6')
+                                    next
+
+                            except:
+                                print(f'Finalizei:5')
+                                next
+
+                        except:
+                            print(f'Finalizei:4')
+                            next
+
+                    except:
+                        print(f'Finalizei:3')
+                        next
+                        
+                except:
+                    print(f'Finalizei:2')
+                    next
+                    
+            except:
+                print(f'Finalizei:1')
+                next
+
+
 
             i=i+1
 
