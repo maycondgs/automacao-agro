@@ -220,7 +220,6 @@ def varre(driver, uf, link):
         return
 
 
-
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
 
@@ -761,26 +760,35 @@ def crawlAgroVaca():
     login(driver)
     sleep(1)
 
-    for url in vaca:
-
-        item = str(url)
-        it = item.split(',')
-
-        nom = it[0].split("'")
-        nome = nom[1]
-
-        lin = it[1].split("'")
-        link = lin[0]
+    nome = 'vaca'
+    link = 'https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'
 
 
-        for uf in ufs:
+    for uf in ufs:
 
-            print(f'Varrendo: {nome} no {uf}')
+        print(f'Varrendo: {nome} no {uf}')
 
+        pagini(driver, uf, link)
 
-            dados = varre(driver, uf, link)
+        dados = varree(driver)
 
-            for item in dados:
+        for item in dados:
+
+            st = json.dumps(item)
+
+            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+        pagini(driver, uf, link)
+        sleep(1)
+
+        try:
+            #page2
+            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+            sleep(1)
+
+            dados2 = varree(driver)
+
+            for item in dados2:
 
                 st = json.dumps(item)
 
@@ -788,15 +796,16 @@ def crawlAgroVaca():
 
             pagini(driver, uf, link)
             sleep(1)
+            proxpage(driver)
 
             try:
-                #page2
+                #page3
                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                 sleep(1)
 
-                dados2 = varree(driver)
+                dados3 = varree(driver)
 
-                for item in dados2:
+                for item in dados3:
 
                     st = json.dumps(item)
 
@@ -805,15 +814,16 @@ def crawlAgroVaca():
                 pagini(driver, uf, link)
                 sleep(1)
                 proxpage(driver)
+                proxpage(driver)
 
                 try:
-                    #page3
+                    #page4
                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                     sleep(1)
 
-                    dados3 = varree(driver)
+                    dados4 = varree(driver)
 
-                    for item in dados3:
+                    for item in dados4:
 
                         st = json.dumps(item)
 
@@ -823,15 +833,16 @@ def crawlAgroVaca():
                     sleep(1)
                     proxpage(driver)
                     proxpage(driver)
+                    proxpage(driver)
 
                     try:
-                        #page4
+                        #page5
                         driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                         sleep(1)
 
-                        dados4 = varree(driver)
+                        dados5 = varree(driver)
 
-                        for item in dados4:
+                        for item in dados5:
 
                             st = json.dumps(item)
 
@@ -842,15 +853,16 @@ def crawlAgroVaca():
                         proxpage(driver)
                         proxpage(driver)
                         proxpage(driver)
+                        proxpage(driver)
 
                         try:
-                            #page5
+                            #page6
                             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                             sleep(1)
 
-                            dados5 = varree(driver)
+                            dados6 = varree(driver)
 
-                            for item in dados5:
+                            for item in dados6:
 
                                 st = json.dumps(item)
 
@@ -862,15 +874,16 @@ def crawlAgroVaca():
                             proxpage(driver)
                             proxpage(driver)
                             proxpage(driver)
+                            proxpage(driver)
 
                             try:
-                                #page6
+                                #page7
                                 driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                                 sleep(1)
 
-                                dados6 = varree(driver)
+                                dados7 = varree(driver)
 
-                                for item in dados6:
+                                for item in dados7:
 
                                     st = json.dumps(item)
 
@@ -883,72 +896,51 @@ def crawlAgroVaca():
                                 proxpage(driver)
                                 proxpage(driver)
                                 proxpage(driver)
+                                proxpage(driver)
 
                                 try:
-                                    #page7
+                                    #page8
                                     driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
                                     sleep(1)
 
-                                    dados7 = varree(driver)
+                                    dados8 = varree(driver)
 
-                                    for item in dados7:
+                                    for item in dados8:
 
                                         st = json.dumps(item)
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                    pagini(driver, uf, link)
                                     sleep(1)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-                                    proxpage(driver)
-
-                                    try:
-                                        #page8
-                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-                                        sleep(1)
-
-                                        dados8 = varree(driver)
-
-                                        for item in dados8:
-
-                                            st = json.dumps(item)
-
-                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
-
-                                        sleep(1)
-                                        print(f'Finalizei:{uf}8')
+                                    print(f'Finalizei:{uf}8')
                                         
-                                    except:
-                                        print(f'Finalizei:{uf}7')
-                                        next
-
                                 except:
-                                    print(f'Finalizei:{uf}6')
+                                    print(f'Finalizei:{uf}7')
                                     next
 
                             except:
-                                print(f'Finalizei:{uf}5')
+                                print(f'Finalizei:{uf}6')
                                 next
 
                         except:
-                            print(f'Finalizei:{uf}4')
+                            print(f'Finalizei:{uf}5')
                             next
 
                     except:
-                        print(f'Finalizei:{uf}3')
+                        print(f'Finalizei:{uf}4')
                         next
-                    
+
                 except:
-                    print(f'Finalizei:{uf}2')
+                    print(f'Finalizei:{uf}3')
                     next
-                
+                    
             except:
                 print(f'Finalizei:{uf}2')
                 next
+                
+        except:
+            print(f'Finalizei:{uf}2')
+            next
 
             
             
