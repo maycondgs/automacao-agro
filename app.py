@@ -55,6 +55,7 @@ def iniciar_driver():
 
 
 boi = [
+    {'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'},
     {'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg,Bovinos,Boi Gordo 15Kg'}
 ]
 
@@ -580,7 +581,7 @@ def crawlAgroBoi():
             print(f'Varrendo: {nome} no {uf}')
 
 
-            dados = varre(driver, uf, link, grup, especie)
+            dados = varre(driver, uf, link)
 
             for item in dados:
 
@@ -588,7 +589,7 @@ def crawlAgroBoi():
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-            pagini(driver, uf, link, grup, especie)
+            pagini(driver, uf, link)
             sleep(1)
 
             try:
@@ -604,7 +605,7 @@ def crawlAgroBoi():
 
                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                pagini(driver, uf, link, grup, especie)
+                pagini(driver, uf, link)
                 sleep(1)
                 proxpage(driver)
 
@@ -621,7 +622,7 @@ def crawlAgroBoi():
 
                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                    pagini(driver, uf, link, grup, especie)
+                    pagini(driver, uf, link)
                     sleep(1)
                     proxpage(driver)
                     proxpage(driver)
@@ -639,7 +640,7 @@ def crawlAgroBoi():
 
                             requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                        pagini(driver, uf, link, grup, especie)
+                        pagini(driver, uf, link)
                         sleep(1)
                         proxpage(driver)
                         proxpage(driver)
@@ -658,7 +659,7 @@ def crawlAgroBoi():
 
                                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                            pagini(driver, uf, link, grup, especie)
+                            pagini(driver, uf, link)
                             sleep(1)
                             proxpage(driver)
                             proxpage(driver)
@@ -678,7 +679,7 @@ def crawlAgroBoi():
 
                                     requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                pagini(driver, uf, link, grup, especie)
+                                pagini(driver, uf, link)
                                 sleep(1)
                                 proxpage(driver)
                                 proxpage(driver)
@@ -699,7 +700,7 @@ def crawlAgroBoi():
 
                                         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-                                    pagini(driver, uf, link, grup, especie)
+                                    pagini(driver, uf, link)
                                     sleep(1)
                                     proxpage(driver)
                                     proxpage(driver)
@@ -2211,5 +2212,5 @@ def scrapy_precos():
 
 
  
-crawlAgroVaca()
+crawlAgroBoi()
         
