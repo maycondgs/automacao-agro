@@ -2246,13 +2246,11 @@ def scrapy_noticias():
 
 def scrapy_precos():
 
-    crawlAgro()
+    driver = iniciar_driver()
+    crawlAlface(driver)
     sleep(1)
-    crawlAgro2()
-    sleep(1)
-    crawlAlface()
-    sleep(1)
-    crawlRepolho() 
+    crawlRepolho(driver) 
+    scrapy_noticias()
 
 
 scrapy_precos()
