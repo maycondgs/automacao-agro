@@ -2053,8 +2053,8 @@ def crawlNoticiasAgrolink():
 
         for da in datt:
             dattt = da.split(' ')
-            data.append(dattt[0])
-            hor = dattt[1] + ':00'
+            datt = str(dattt[0]).split('/')
+            data.append(f'{datt[2]}-{datt[1]}-{datt[0]}')
             hora.append(dattt[1])
 
         for lnk in links2:
