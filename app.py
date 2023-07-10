@@ -21,11 +21,7 @@ import os
 dda = datetime.today()
 da = str(dda).split(' ')
 dataa = da[0].split('-')
-
-stt = dataa[2]
-ontem = int(stt) - 1
-data_ontem = f'{ontem}/{dataa[1]}/{dataa[0]}'
-
+data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
 
@@ -605,7 +601,6 @@ def varree(driver):
         preco = precc[0]
 
 
-
         itens.append({
             "Produto": produto,
             "Estado": estado,
@@ -1126,9 +1121,9 @@ def varre2(driver, link):
             esta = str(esta)
             pre = str(pr)
 
+
             produ = prod.split('   ')
-            produt = produ[1].split('Kg')
-            produto = produt[0] + 'kg'
+            produt = produ[1].split('\n')
 
             estad = esta.split('   ')
             estadd = estad[1].split(')')
@@ -1138,6 +1133,16 @@ def varre2(driver, link):
                 estado = estadoo.replace("'", "")
             else:
                 estado = estadoo
+            
+
+            if estadoo in produt[0]:
+                producto = produt[0].split(estadoo)
+                produto = producto[0]
+            else:
+                produto = produt[0]
+                if 'Kg ' in produto:
+                    proto = produto.split('Kg ')
+                    produto = proto[0] + 'Kg'
             
 
             prec = pre.split('   ')
@@ -1275,9 +1280,9 @@ def varree2(driver):
         esta = str(esta)
         pre = str(pr)
 
+
         produ = prod.split('   ')
-        produt = produ[1].split('Kg')
-        produto = produt[0] + 'kg'
+        produt = produ[1].split('\n')
 
         estad = esta.split('   ')
         estadd = estad[1].split(')')
@@ -1287,7 +1292,17 @@ def varree2(driver):
             estado = estadoo.replace("'", "")
         else:
             estado = estadoo
-            
+
+
+        if estadoo in produt[0]:
+            producto = produt[0].split(estadoo)
+            produto = producto[0]
+        else:
+            produto = produt[0]
+            if 'Kg ' in produto:
+                proto = produto.split('Kg ')
+                produto = proto[0] + 'Kg'
+
 
         prec = pre.split('   ')
         precc = prec[1].split()
@@ -1850,9 +1865,6 @@ def crawlAlface(driver):
 
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
 
-
-
-
 def crawlRepolho(driver):
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
@@ -1987,7 +1999,7 @@ def crawlNoticiasAgricolas():
 
     dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
 
-    if dia_cotacao == data_hoje:
+    if dia_cotacao == data:
 
         itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
 
@@ -2005,9 +2017,14 @@ def crawlNoticiasAgricolas():
 
         tb = json.loads(bd.content)
 
-        
+        ext = []
+
+        for it in tb:
+            ctd = it[2]
+            ext.append(ctd)
+
         for novo in dados:
-           if novo not in tb:
+            if novo[2] not in ext:
                 payl = {
                     "Titulo": novo[0],
                     "Link": novo[1],
@@ -2023,8 +2040,7 @@ def crawlNoticiasAgricolas():
 
 def crawlNoticiasAgrolink():
         
-    links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/politica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista',]
-
+    links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/politica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista']
 
     for link in links:
         lnnk = link.split('/')
@@ -2065,8 +2081,14 @@ def crawlNoticiasAgrolink():
 
         tb = json.loads(bd.content)
 
+        ext = []
+
+        for it in tb:
+            ctd = it[2]
+            ext.append(ctd)
+
         for novo in novos:
-            if novo not in tb:
+            if novo[2] not in ext:
                 payl = {
                     "Titulo": novo[0],
                     "Link": novo[1],
@@ -2079,7 +2101,7 @@ def crawlNoticiasAgrolink():
                 st = json.dumps(payl)
             
                 requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
-    
+
 def crawlNoticiasCanalRural():
             
     referencia = 'Canal Rural'
@@ -2089,7 +2111,7 @@ def crawlNoticiasCanalRural():
     driver.get('https://www.canalrural.com.br/noticias/')
     sleep(2)
     
-    itens = driver.find_elements(By.XPATH,'//*[@id="mobile"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div/div[2]')
+    itens = driver.find_elements(By.XPATH,'//*[@id="desktop"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div[5]/div/div[2]')
 
     dados = []
 
@@ -2110,15 +2132,21 @@ def crawlNoticiasCanalRural():
 
     tb = json.loads(bd.content)
 
+    ext = []
+
+    for it in tb:
+        ctd = it[2]
+        ext.append(ctd)
+
     for novo in dados:
-        if novo not in tb:
+        if novo[2] not in ext:
             payl = {
                 "Titulo": novo[0],
                 "Link": novo[1],
                 "Hora": novo[2],
                 "Data": novo[3],
                 "Referencia": novo[4],
-                 "Categoria" : novo[5]
+                "Categoria" : novo[5]
             }
 
             st = json.dumps(payl)
