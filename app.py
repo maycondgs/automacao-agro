@@ -1729,245 +1729,242 @@ def crawlAgro2():
 
 
 def crawlAlface(driver):
+
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/alface-ceasas')
 
     texto = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[1]/div').text
     data_cotacao = texto.split(' ')
-    dia_cotacao = data_cotacao[1]
+    dia_c = data_cotacao[1]
+    dia_cotacao = f'{dia_c[2]}-{dia_c[1]}-{dia_c[0]}'
 
-    if dia_cotacao == data_ontem:
+    tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
+    html_tabela1 = tabela1.get_attribute('outerHTML')
+    sleep(2)
 
-        tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
-        html_tabela1 = tabela1.get_attribute('outerHTML')
-        sleep(2)
+    soup1 = BeautifulSoup(html_tabela1, 'html.parser')
+    table1 = soup1.find(name='table')
 
-        soup1 = BeautifulSoup(html_tabela1, 'html.parser')
-        table1 = soup1.find(name='table')
+    df_alface = pd.read_html( str(table1) ) [0]
+    sleep(1)
 
-        df_alface = pd.read_html( str(table1) ) [0]
-        sleep(1)
+    itens = []
 
-        itens = []
-
-        for i, item in enumerate(df_alface['Tipo / Unidade medida']):
-            produto = df_alface.loc[i, "Tipo / Unidade medida"]
-            prec = df_alface.loc[i, "Preço"]
-            if prec == '***':
-                preco = 0
-            else:
-                preco = int(prec)
-
-            
-            itens.append({
-                "item": produto, 
-                "valor": preco
-                })
+    for i, item in enumerate(df_alface['Tipo / Unidade medida']):
+        produto = df_alface.loc[i, "Tipo / Unidade medida"]
+        prec = df_alface.loc[i, "Preço"]
+        if prec == '***':
+            preco = 0
+        else:
+            preco = int(prec)
 
             
-        linha1 = itens[0]
-        linha2 = itens[1]
-        linha3 = itens[2]
-        linha4 = itens[3]
-        linha5 = itens[4]
-        linha6 = itens[5]
-        linha7 = itens[6]
-        linha8 = itens[7]
-        linha9 = itens[8]
+        itens.append({
+            "item": produto, 
+            "valor": preco
+            })
 
-        dados= []
+            
+    linha1 = itens[0]
+    linha2 = itens[1]
+    linha3 = itens[2]
+    linha4 = itens[3]
+    linha5 = itens[4]
+    linha6 = itens[5]
+    linha7 = itens[6]
+    linha8 = itens[7]
+    linha9 = itens[8]
 
-
-        estado1 = linha1['item']
-
-        item1 = linha2['item']
-        preco1 = linha2['valor']
-
-        item2 = linha3['item']
-        preco2 = linha3['valor']
-
-        dados.append({
-            "Produto": item1,
-            "Estado": estado1,
-            "Preco": preco1,
-            "Data": data_hoje
-        })
-
-        dados.append({
-            "Produto": item2,
-            "Estado": estado1,
-            "Preco": preco2,
-            "Data": data_hoje
-        })
+    dados= []
 
 
-        estado2 = linha4['item']
+    estado1 = linha1['item']
 
-        item3 = linha5['item']
-        preco3 = linha5['valor']
+    item1 = linha2['item']
+    preco1 = linha2['valor']
 
-        item4 = linha6['item']
-        preco4 = linha6['valor']
+    item2 = linha3['item']
+    preco2 = linha3['valor']
 
-        dados.append({
-            "Produto": item3,
-            "Estado": estado2,
-            "Preco": preco3,
-            "Data": data_hoje
-        })
+    dados.append({
+        "Produto": item1,
+        "Estado": estado1,
+        "Preco": preco1,
+        "Data": dia_cotacao
+    })
 
-        dados.append({
-            "Produto": item4,
-            "Estado": estado2,
-            "Preco": preco4,
-            "Data": data_hoje
-        })
+    dados.append({
+        "Produto": item2,
+        "Estado": estado1,
+        "Preco": preco2,
+        "Data": dia_cotacao
+    })
 
 
-        estado3 = linha7['item']
+    estado2 = linha4['item']
 
-        item5 = linha8['item']
-        preco5 = linha8['valor']
+    item3 = linha5['item']
+    preco3 = linha5['valor']
 
-        item6 = linha9['item']
-        preco6 = linha9['valor']
+    item4 = linha6['item']
+    preco4 = linha6['valor']
 
-        dados.append({
-            "Produto": item6,
-            "Estado": estado3,
-            "Preco": preco6,
-            "Data": data_hoje
-        })
+    dados.append({
+        "Produto": item3,
+        "Estado": estado2,
+        "Preco": preco3,
+        "Data": dia_cotacao
+    })
 
-        dados.append({
-            "Produto": item5,
-            "Estado": estado3,
-            "Preco": preco5,
-            "Data": data_hoje
-        })
+    dados.append({
+        "Produto": item4,
+        "Estado": estado2,
+        "Preco": preco4,
+        "Data": dia_cotacao
+    })
 
-        for dado in dados:
-            st = json.dumps(dado)
 
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
+    estado3 = linha7['item']
 
-    else:
-        next
+    item5 = linha8['item']
+    preco5 = linha8['valor']
+
+    item6 = linha9['item']
+    preco6 = linha9['valor']
+
+    dados.append({
+        "Produto": item6,
+        "Estado": estado3,
+        "Preco": preco6,
+        "Data": dia_cotacao
+    })
+
+    dados.append({
+        "Produto": item5,
+        "Estado": estado3,
+        "Preco": preco5,
+        "Data": dia_cotacao
+    })
+
+    for dado in dados:
+        st = json.dumps(dado)
+
+        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
+
+
 
 
 def crawlRepolho(driver):
 
-    print('repolho')
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
 
     texto = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[1]/div').text
     data_cotacao = texto.split(' ')
-    dia_cotacao = data_cotacao[1]
+    dia_c = data_cotacao[1]
+    dia_cotacao = f'{dia_c[2]}-{dia_c[1]}-{dia_c[0]}'
 
 
-    if dia_cotacao == data_ontem:
-        tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
-        html_tabela1 = tabela1.get_attribute('outerHTML')
-        sleep(2)
+    tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
+    html_tabela1 = tabela1.get_attribute('outerHTML')
+    sleep(2)
 
-        soup1 = BeautifulSoup(html_tabela1, 'html.parser')
-        table1 = soup1.find(name='table')
+    soup1 = BeautifulSoup(html_tabela1, 'html.parser')
+    table1 = soup1.find(name='table')
 
-        df_repolho = pd.read_html( str(table1) ) [0]
-        sleep(1)
+    df_repolho = pd.read_html( str(table1) ) [0]
+    sleep(1)
 
-        itens = []
+    itens = []
 
-        for i, item in enumerate(df_repolho['Tipo / Unidade medida']):
-            produto = df_repolho.loc[i, "Tipo / Unidade medida"]
-            prec = df_repolho.loc[i, "Preço"]
-            if prec == '***':
-                preco = 0
-            else:
-                preco = int(prec)
-
-            
-            itens.append({
-                "item": produto, 
-                "valor": preco
-                })
+    for i, item in enumerate(df_repolho['Tipo / Unidade medida']):
+        produto = df_repolho.loc[i, "Tipo / Unidade medida"]
+        prec = df_repolho.loc[i, "Preço"]
+        if prec == '***':
+            preco = 0
+        else:
+            preco = int(prec)
 
             
-        linha1 = itens[0]
-        linha2 = itens[1]
-        linha3 = itens[2]
-        linha4 = itens[3]
-        linha5 = itens[4]
-        linha6 = itens[5]
-        linha7 = itens[6]
-        linha8 = itens[7]
-
-        dados= []
-
-
-        estado1 = linha1['item']
-
-        item1 = linha2['item']
-        preco1 = linha2['valor']
-
-        item2 = linha3['item']
-        preco2 = linha3['valor']
-
-        dados.append({
-            "Produto": item1,
-            "Estado": estado1,
-            "Preco": preco1,
-            "Data": data_hoje
+        itens.append({
+            "item": produto, 
+            "valor": preco
         })
 
-        dados.append({
-            "Produto": item2,
-            "Estado": estado1,
-            "Preco": preco2,
-            "Data": data_hoje
-        })
+            
+    linha1 = itens[0]
+    linha2 = itens[1]
+    linha3 = itens[2]
+    linha4 = itens[3]
+    linha5 = itens[4]
+    linha6 = itens[5]
+    linha7 = itens[6]
+    linha8 = itens[7]
+
+    dados= []
 
 
-        estado2 = linha4['item']
+    estado1 = linha1['item']
 
-        item3 = linha5['item']
-        preco3 = linha5['valor']
+    item1 = linha2['item']
+    preco1 = linha2['valor']
 
-        dados.append({
-            "Produto": item3,
-            "Estado": estado2,
-            "Preco": preco3,
-            "Data": data_hoje
-        })
+    item2 = linha3['item']
+    preco2 = linha3['valor']
+
+    dados.append({
+        "Produto": item1,
+        "Estado": estado1,
+        "Preco": preco1,
+        "Data": dia_cotacao
+    })
+
+    dados.append({
+        "Produto": item2,
+        "Estado": estado1,
+        "Preco": preco2,
+        "Data": dia_cotacao
+    })
 
 
-        estado3 = linha7['item']
+    estado2 = linha4['item']
 
-        item4 = linha6['item']
-        preco4 = linha6['valor']
+    item3 = linha5['item']
+    preco3 = linha5['valor']
 
-        item5 = linha8['item']
-        preco5 = linha8['valor']
+    dados.append({
+        "Produto": item3,
+        "Estado": estado2,
+        "Preco": preco3,
+        "Data": dia_cotacao
+    })
 
-        dados.append({
-            "Produto": item4,
-            "Estado": estado3,
-            "Preco": preco4,
-            "Data": data_hoje
-        })
 
-        dados.append({
-            "Produto": item5,
-            "Estado": estado3,
-            "Preco": preco5,
-            "Data": data_hoje
-        })
+    estado3 = linha7['item']
 
-        for dado in dados:
-            st = json.dumps(dado)
+    item4 = linha6['item']
+    preco4 = linha6['valor']
 
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
-    else:
-        next
+    item5 = linha8['item']
+    preco5 = linha8['valor']
+    
+    dados.append({
+        "Produto": item4,
+        "Estado": estado3,
+        "Preco": preco4,
+        "Data": dia_cotacao
+    })
+
+    dados.append({
+        "Produto": item5,
+        "Estado": estado3,
+        "Preco": preco5,
+        "Data": dia_cotacao
+    })
+
+    for dado in dados:
+        st = json.dumps(dado)
+        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
+
+
 
 
 
@@ -1989,7 +1986,6 @@ def crawlNoticiasAgricolas():
     sleep(2)
 
     dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
-
 
     if dia_cotacao == data_hoje:
 
@@ -2245,12 +2241,14 @@ def scrapy_noticias():
 
 
 def scrapy_precos():
-
+    crawlAgro()
+    sleep(1)
+    crawlAgro2()
+    sleep(1)
     driver = iniciar_driver()
     crawlAlface(driver)
     sleep(1)
     crawlRepolho(driver) 
-    scrapy_noticias()
 
 
 scrapy_precos()
