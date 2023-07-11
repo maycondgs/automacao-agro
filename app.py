@@ -132,7 +132,6 @@ def login(driver):
     driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div[2]/div[2]/div/div[2]/div[1]/div[1]/div/form[1]/div/div[3]/button').click()
 
 
-
 def scrap(tipo, itemrq):
 
     for uf in ufs:
@@ -1743,7 +1742,8 @@ def crawlAgro2():
 
 
 
-def crawlAlface(driver):
+def crawlAlface():
+    driver = iniciar_driver()
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/alface-ceasas')
 
@@ -1879,7 +1879,8 @@ def crawlAlface(driver):
 
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
 
-def crawlRepolho(driver):
+def crawlRepolho():
+    driver = iniciar_driver()
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
 
@@ -2179,6 +2180,7 @@ def crawlNoticiasCanalRural():
 
 
 def scrapy_tabela():
+    print('SCRAPING TABELA')
 
     for tipo in tipos_arroz:
 
@@ -2286,20 +2288,32 @@ def scrapy_tabela():
         scrap(tipo, itemrq)        
 
 def scrapy_noticias():
+    print('SCRAPING TABELA')
     crawlNoticiasAgricolas()
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
 
 
 def scrapy_precos():
+    print('SCRAPING TABELA')
     crawlAgro()
     sleep(1)
     crawlAgro2()
     sleep(1)
-    driver = iniciar_driver()
-    crawlAlface(driver)
+    crawlAlface()
     sleep(1)
-    crawlRepolho(driver) 
+    crawlRepolho() 
+
+def run(job):
+    threaded = threading.Thread(target=job)
+    threaded.start()
 
 
-scrapy_precos()
+schedule.every(1).minute.do(run, scrapy_noticias)
+schedule.every().day.at("01:00").do(run, scrapy_precos)
+schedule.every().monday.do(run, scrapy_tabela)
+
+
+while 1:
+    schedule.run_pending()
+    sleep(1)
