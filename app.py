@@ -1770,7 +1770,20 @@ def crawlAlface(driver):
         if prec == '***':
             preco = 0
         else:
-            preco = int(prec)
+            if len(prec) == 3:
+                x = slice(1)
+                y = slice(1,3)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+            else:
+                x = slice(2)
+                y = slice(2,4)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
 
             
         itens.append({
@@ -1804,14 +1817,14 @@ def crawlAlface(driver):
         "Produto": item1,
         "Estado": estado1,
         "Preco": preco1,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     dados.append({
         "Produto": item2,
         "Estado": estado1,
         "Preco": preco2,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
 
@@ -1827,14 +1840,14 @@ def crawlAlface(driver):
         "Produto": item3,
         "Estado": estado2,
         "Preco": preco3,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     dados.append({
         "Produto": item4,
         "Estado": estado2,
         "Preco": preco4,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
 
@@ -1850,17 +1863,18 @@ def crawlAlface(driver):
         "Produto": item6,
         "Estado": estado3,
         "Preco": preco6,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     dados.append({
         "Produto": item5,
         "Estado": estado3,
         "Preco": preco5,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     for dado in dados:
+        print(dado)
         st = json.dumps(dado)
 
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
@@ -1868,11 +1882,6 @@ def crawlAlface(driver):
 def crawlRepolho(driver):
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
-
-    texto = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[1]/div').text
-    data_cotacao = texto.split(' ')
-    dia_c = data_cotacao[1]
-    dia_cotacao = f'{dia_c[2]}-{dia_c[1]}-{dia_c[0]}'
 
 
     tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
@@ -1893,7 +1902,20 @@ def crawlRepolho(driver):
         if prec == '***':
             preco = 0
         else:
-            preco = int(prec)
+            if len(prec) == 3:
+                x = slice(1)
+                y = slice(1,3)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+            else:
+                x = slice(2)
+                y = slice(2,4)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
 
             
         itens.append({
@@ -1926,14 +1948,14 @@ def crawlRepolho(driver):
         "Produto": item1,
         "Estado": estado1,
         "Preco": preco1,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     dados.append({
         "Produto": item2,
         "Estado": estado1,
         "Preco": preco2,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
 
@@ -1946,14 +1968,14 @@ def crawlRepolho(driver):
         "Produto": item3,
         "Estado": estado2,
         "Preco": preco3,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
 
-    estado3 = linha7['item']
+    estado3 = linha6['item']
 
-    item4 = linha6['item']
-    preco4 = linha6['valor']
+    item4 = linha7['item']
+    preco4 = linha7['valor']
 
     item5 = linha8['item']
     preco5 = linha8['valor']
@@ -1962,17 +1984,18 @@ def crawlRepolho(driver):
         "Produto": item4,
         "Estado": estado3,
         "Preco": preco4,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     dados.append({
         "Produto": item5,
         "Estado": estado3,
         "Preco": preco5,
-        "Data": dia_cotacao
+        "Data": data_hoje
     })
 
     for dado in dados:
+        print(dado)
         st = json.dumps(dado)
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
 
