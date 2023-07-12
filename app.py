@@ -2044,11 +2044,11 @@ def crawlNoticiasAgricolas():
         ext = []
 
         for it in tb:
-            ctd = it[2]
+            ctd = it[1]
             ext.append(ctd)
 
         for novo in dados:
-            if novo[2] not in ext:
+            if novo[1] not in ext:
                 payl = {
                     "Titulo": novo[0],
                     "Link": novo[1],
@@ -2108,11 +2108,11 @@ def crawlNoticiasAgrolink():
         ext = []
 
         for it in tb:
-            ctd = it[2]
+            ctd = it[1]
             ext.append(ctd)
 
         for novo in novos:
-            if novo[2] not in ext:
+            if novo[1] not in ext:
                 payl = {
                     "Titulo": novo[0],
                     "Link": novo[1],
@@ -2159,11 +2159,11 @@ def crawlNoticiasCanalRural():
     ext = []
 
     for it in tb:
-        ctd = it[2]
+        ctd = it[1]
         ext.append(ctd)
 
     for novo in dados:
-        if novo[2] not in ext:
+        if novo[1] not in ext:
             payl = {
                 "Titulo": novo[0],
                 "Link": novo[1],
@@ -2304,16 +2304,4 @@ def scrapy_precos():
     sleep(1)
     crawlRepolho() 
 
-def run(job):
-    threaded = threading.Thread(target=job)
-    threaded.start()
-
-
-schedule.every(1).minute.do(run, scrapy_noticias)
-schedule.every().day.at("01:00").do(run, scrapy_precos)
-schedule.every().monday.do(run, scrapy_tabela)
-
-
-while 1:
-    schedule.run_pending()
-    sleep(1)
+scrapy_precos()
