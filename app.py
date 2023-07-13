@@ -2309,7 +2309,7 @@ def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
 
-schedule.every().day.at("10:13").do(run, scrapy_precos)
+schedule.every().day.at("10:25").do(scrapy_precos)
 
 
 while 1:
