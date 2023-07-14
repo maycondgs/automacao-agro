@@ -2313,7 +2313,7 @@ def run(job):
     schedule.every().monday.do(run, scrapy_tabela)
 
 
-scrapy_precos()
+scrapy_noticias()
 
 while 1:
     schedule.run_pending()
