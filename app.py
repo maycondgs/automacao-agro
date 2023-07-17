@@ -2308,12 +2308,12 @@ def scrapy_precos():
 def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
-    schedule.every(1).minute.do(run, scrapy_noticias)
-    schedule.every().day.at("01:00:00",'America/Sao_Paulo').do(run, scrapy_precos)
-    schedule.every().monday.do(run, scrapy_tabela)
 
 
-scrapy_precos()
+schedule.every(1).minute.do(run, scrapy_noticias)
+schedule.every().day.at("01:00",'America/Sao_Paulo').do(run, scrapy_precos)
+schedule.every().monday.do(run, scrapy_tabela)
+
 
 while 1:
     schedule.run_pending()
