@@ -2288,14 +2288,14 @@ def scrapy_tabela():
         scrap(tipo, itemrq)        
 
 def scrapy_noticias():
-    print('SCRAPING TABELA')
+    print('SCRAPING NOTICIAS')
     crawlNoticiasAgricolas()
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
 
 
 def scrapy_precos():
-    print('SCRAPING TABELA')
+    print('SCRAPING PRECOS')
     crawlAgro()
     sleep(1)
     crawlAgro2()
@@ -2313,7 +2313,7 @@ def run(job):
     schedule.every().monday.do(run, scrapy_tabela)
 
 
-scrapy_noticias()
+scrapy_precos()
 
 while 1:
     schedule.run_pending()
