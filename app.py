@@ -2294,7 +2294,6 @@ def scrapy_noticias():
 
 
 def scrapy_precos():
-    print('SCRAPING PRECOS')
     crawlAgro2()
     sleep(1)
     crawlAlface()
@@ -2305,11 +2304,12 @@ def scrapy_precos():
 def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
+    
+    schedule.every(1).minute.do(run, scrapy_noticias)
+    schedule.every().day.at("01:00",'America/Sao_Paulo').do(run, scrapy_precos)
+    schedule.every().monday.do(run, scrapy_tabela)
 
-
-schedule.every(1).minute.do(run, scrapy_noticias)
-schedule.every().day.at("01:00",'America/Sao_Paulo').do(run, scrapy_precos)
-schedule.every().monday.do(run, scrapy_tabela)
+scrapy_precos()
 
 
 while 1:
