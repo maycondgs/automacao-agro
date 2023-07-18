@@ -2288,7 +2288,6 @@ def scrapy_tabela():
         scrap(tipo, itemrq)        
 
 def scrapy_noticias():
-    print('SCRAPING NOTICIAS')
     crawlNoticiasAgricolas()
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
@@ -2296,8 +2295,6 @@ def scrapy_noticias():
 
 def scrapy_precos():
     print('SCRAPING PRECOS')
-    crawlAgro()
-    sleep(1)
     crawlAgro2()
     sleep(1)
     crawlAlface()
