@@ -203,99 +203,102 @@ def varre(driver, i, link, especie):
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
     sleep(5)
         
-    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]').click()
+    produtos = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
+    ufss = Select(produtos)
     sleep(1)
     
     if especie == 'Boi Gordo 15Kg':
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[5]').click()
+        ufss.select_by_value('11')
     elif especie == 'Vaca Gorda 15Kg':
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[18]').click()
+        ufss.select_by_value('1772')
 
     sleep(1)
 
-    driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
+    estados = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    ufsss = Select(estados)
     sleep(1)
+
 
     if i == 1:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[2]').click()
+        ufsss.select_by_value('9822')
 
     if i == 2:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[3]').click()
+        ufsss.select_by_value('9823')
 
     if i == 3:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[4]').click()
+        ufsss.select_by_value('9824')
 
     if i == 4:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[5]').click()
+        ufsss.select_by_value('9825')
 
     if i == 5:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[6]').click()
+        ufsss.select_by_value('9826')
 
     if i == 6:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[7]').click()
+        ufsss.select_by_value('9827')
 
     if i == 7:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[8]').click()
+        ufsss.select_by_value('9828')
 
     if i == 8:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[9]').click()
+        ufsss.select_by_value('9829')
 
     if i == 9:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[10]').click()
+        ufsss.select_by_value('9830')
 
     if i == 10:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[11]').click()
+        ufsss.select_by_value('9831')
 
     if i == 11:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[12]').click()
+        ufsss.select_by_value('9832')
 
     if i == 12:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[13]').click()
+        ufsss.select_by_value('9833')
 
     if i == 13:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[14]').click()
+        ufsss.select_by_value('9834')
 
     if i == 14:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[15]').click()
+        ufsss.select_by_value('9835')
 
     if i == 15:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[16]').click()
+        ufsss.select_by_value('9836')
 
     if i == 16:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[17]').click()
+        ufsss.select_by_value('9837')
 
     if i == 17:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[18]').click()
+        ufsss.select_by_value('9838')
 
     if i == 18:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[19]').click()
+        ufsss.select_by_value('9839')
 
     if i == 19:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[20]').click()
+        ufsss.select_by_value('9840')
 
     if i == 20:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[21]').click()
+        ufsss.select_by_value('9841')
 
     if i == 21:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[22]').click()
+        ufsss.select_by_value('9842')
 
     if i == 22:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[23]').click()
+        ufsss.select_by_value('9843')
 
     if i == 23:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[24]').click()
+        ufsss.select_by_value('9844')
 
     if i == 24:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[25]').click()
+        ufsss.select_by_value('9845')
 
     if i == 25:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[26]').click()
+        ufsss.select_by_value('9846')
 
     if i == 26:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[27]').click()
+        ufsss.select_by_value('9847')
 
     if i == 27:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[28]').click()
+        ufsss.select_by_value('9848')
 
 
     sleep(2)
@@ -624,102 +627,104 @@ def pagini(driver, i, link, especie):
 
     driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
     
-    sleep(3)
-        
-    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]').click()
     sleep(2)
     
-    if especie == 'Boi Gordo 15Kg':
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[5]').click()
-    elif especie == 'Vaca Gorda 15Kg':
-        driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesProduto"]/option[18]').click()
-
+    produtos = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
+    ufss = Select(produtos)
     sleep(1)
-
     
-    driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]').click()
+    if especie == 'Boi Gordo 15Kg':
+        ufss.select_by_value('11')
+    elif especie == 'Vaca Gorda 15Kg':
+        ufss.select_by_value('1772')
+
     sleep(1)
+    
+    estados = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    ufsss = Select(estados)
+    sleep(1)
+
 
     if i == 1:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[2]').click()
+        ufsss.select_by_value('9822')
 
     if i == 2:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[3]').click()
+        ufsss.select_by_value('9823')
 
     if i == 3:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[4]').click()
+        ufsss.select_by_value('9824')
 
     if i == 4:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[5]').click()
+        ufsss.select_by_value('9825')
 
     if i == 5:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[6]').click()
+        ufsss.select_by_value('9826')
 
     if i == 6:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[7]').click()
+        ufsss.select_by_value('9827')
 
     if i == 7:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[8]').click()
+        ufsss.select_by_value('9828')
 
     if i == 8:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[9]').click()
+        ufsss.select_by_value('9829')
 
     if i == 9:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[10]').click()
+        ufsss.select_by_value('9830')
 
     if i == 10:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[11]').click()
+        ufsss.select_by_value('9831')
 
     if i == 11:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[12]').click()
+        ufsss.select_by_value('9832')
 
     if i == 12:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[13]').click()
+        ufsss.select_by_value('9833')
 
     if i == 13:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[14]').click()
+        ufsss.select_by_value('9834')
 
     if i == 14:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[15]').click()
+        ufsss.select_by_value('9835')
 
     if i == 15:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[16]').click()
+        ufsss.select_by_value('9836')
 
     if i == 16:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[17]').click()
+        ufsss.select_by_value('9837')
 
     if i == 17:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[18]').click()
+        ufsss.select_by_value('9838')
 
     if i == 18:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[19]').click()
+        ufsss.select_by_value('9839')
 
     if i == 19:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[20]').click()
+        ufsss.select_by_value('9840')
 
     if i == 20:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[21]').click()
+        ufsss.select_by_value('9841')
 
     if i == 21:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[22]').click()
+        ufsss.select_by_value('9842')
 
     if i == 22:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[23]').click()
+        ufsss.select_by_value('9843')
 
     if i == 23:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[24]').click()
+        ufsss.select_by_value('9844')
 
     if i == 24:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[25]').click()
+        ufsss.select_by_value('9845')
 
     if i == 25:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[26]').click()
+        ufsss.select_by_value('9846')
 
     if i == 26:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[27]').click()
+        ufsss.select_by_value('9847')
 
     if i == 27:
-        driver.find_element(By.XPATH,'//*[@id="FiltroGeoEstado"]/option[28]').click()
+        ufsss.select_by_value('9848')
 
 
     sleep(2)
@@ -1999,7 +2004,6 @@ def crawlRepolho():
         print(dado)
         st = json.dumps(dado)
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
-
 
 
 
