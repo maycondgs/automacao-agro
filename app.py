@@ -58,26 +58,8 @@ urls = [
 
 
 urls2 = [
-    {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
-    {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao'},
-    {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim'},
-    {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe'},
-    {'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar'},
-    {'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao'},
     {'milho,https://www.agrolink.com.br/cotacoes/graos/milho'},
-    {'soja,https://www.agrolink.com.br/cotacoes/graos/soja'},
-    {'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo'},
-    {'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo'},
-    {'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos'},
-    {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves'},
-    {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos'},
-    {'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos'},
-    {'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba'},
-    {'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate'},
-    {'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao'},
-    {'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola'},
-    {'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve'},
-    {'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura'},
+    {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves'}
 ]
 
 
@@ -1151,7 +1133,19 @@ def varre2(driver, link):
 
             prec = pre.split('   ')
             precc = prec[1].split()
-            preco = precc[0]
+
+            if not ',' in precc[0]:
+                pr = precc[0]
+                v = len(pr)
+                if v == 2:
+                    preco = f'{pr[0]}{pr[1]},00'
+                elif v == 3:
+                    preco = f'{pr[0]},{pr[1]}{pr[2]}'
+                    print(preco)
+                elif v == 4:
+                    preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
+            else:
+                preco = precc[0]
 
 
 
@@ -1310,7 +1304,20 @@ def varree2(driver):
 
         prec = pre.split('   ')
         precc = prec[1].split()
-        preco = precc[0]
+
+        if not ',' in precc[0]:
+            pr = precc[0]
+            v = len(pr)
+            if v == 2:
+                preco = f'{pr[0]}{pr[1]},00'
+            elif v == 3:
+                preco = f'{pr[0]},{pr[1]}{pr[2]}'
+                print(preco)
+            elif v == 4:
+                preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
+
+        else:
+            preco = precc[0]
 
 
 
