@@ -1146,13 +1146,13 @@ def varre2(driver, link):
                 elif v == 4:
                     preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
 
-
-            itens.append({
-                "Produto": produto,
-                "Estado": estado,
-                "Preco": preco,
-                "Data": data_hoje
-            })
+            if not preco  == '':
+                itens.append({
+                    "Produto": produto,
+                    "Estado": estado,
+                    "Preco": preco,
+                    "Data": data_hoje
+                })
         
     except:
         next
