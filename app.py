@@ -1134,7 +1134,9 @@ def varre2(driver, link):
             prec = pre.split('   ')
             precc = prec[1].split()
 
-            if not ',' in precc[0]:
+            if ',' in precc[0]:
+                preco = precc[0]
+            else:
                 pr = precc[0]
                 v = len(pr)
                 if v == 2:
@@ -1143,10 +1145,6 @@ def varre2(driver, link):
                     preco = f'{pr[0]},{pr[1]}{pr[2]}'
                 elif v == 4:
                     preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
-            else:
-                preco = precc[0]
-                print(preco)
-
 
 
             itens.append({
