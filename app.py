@@ -2312,10 +2312,8 @@ def run(job):
     threaded.start()
     
 
+scrapy_precos()
 
-schedule.every(1).minute.do(run, scrapy_noticias)
-schedule.every().day.at("01:00",'America/Sao_Paulo').do(run, scrapy_precos)
-schedule.every().monday.do(run, scrapy_tabela)
 
 while 1:
     schedule.run_pending()
