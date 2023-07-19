@@ -953,9 +953,13 @@ def crawlAgro():
             except:
                 for item in itens:
 
-                    st = json.dumps(item)
+            if item['Preco'] == '':
+                print(item)
+            else:
 
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                st = json.dumps(item)
+
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                 i=i+1
                 print(f'Finalizei:1')
@@ -1146,13 +1150,12 @@ def varre2(driver, link):
                 elif v == 4:
                     preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
 
-            if not preco  == '':
-                itens.append({
-                    "Produto": produto,
-                    "Estado": estado,
-                    "Preco": preco,
-                    "Data": data_hoje
-                })
+            itens.append({
+                "Produto": produto,
+                "Estado": estado,
+                "Preco": preco,
+                "Data": data_hoje
+            })
         
     except:
         next
@@ -1372,10 +1375,13 @@ def crawlAgro2():
         dados = varre2(driver, link)
 
         for item in dados:
+            if item['Preco'] == '':
+                print(item)
+            else:
 
-            st = json.dumps(item)
+                st = json.dumps(item)
 
-            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
         pagini2(driver, link)
         sleep(1)
@@ -1388,10 +1394,13 @@ def crawlAgro2():
             dados2 = varree2(driver)
 
             for item in dados2:
+                if item['Preco'] == '':
+                    print(item)
+                else:
 
-                st = json.dumps(item)
+                    st = json.dumps(item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
             pagini2(driver, link)
             sleep(1)
@@ -1406,9 +1415,13 @@ def crawlAgro2():
 
                 for item in dados3:
 
-                    st = json.dumps(item)
+                    if item['Preco'] == '':
+                        print(item)
+                    else:
 
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                        st = json.dumps(item)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                 pagini2(driver, link)
                 sleep(1)
@@ -1423,10 +1436,13 @@ def crawlAgro2():
                     dados4 = varree2(driver)
 
                     for item in dados4:
+                        if item['Preco'] == '':
+                            print(item)
+                        else:
 
-                        st = json.dumps(item)
+                            st = json.dumps(item)
 
-                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                     pagini2(driver, link)
                     sleep(1)
@@ -1443,10 +1459,14 @@ def crawlAgro2():
 
                         for item in dados5:
 
-                            st = json.dumps(item)
+                            if item['Preco'] == '':
+                                print(item)
+                            else:
 
-                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                st = json.dumps(item)
 
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                        
                         pagini2(driver, link)
                         sleep(1)
                         proxpage(driver)
@@ -1463,9 +1483,13 @@ def crawlAgro2():
 
                             for item in dados6:
 
-                                st = json.dumps(item)
+                                if item['Preco'] == '':
+                                    print(item)
+                                else:
 
-                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                    st = json.dumps(item)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                             pagini2(driver, link)
                             sleep(1)
@@ -1485,9 +1509,13 @@ def crawlAgro2():
 
                                 for item in dados7:
 
-                                    st = json.dumps(item)
+                                    if item['Preco'] == '':
+                                        print(item)
+                                    else:
 
-                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                        st = json.dumps(item)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
                                     
                                 pagini2(driver, link)
                                 sleep(1)
@@ -1507,9 +1535,13 @@ def crawlAgro2():
 
                                     for item in dados8:
 
-                                        st = json.dumps(item)
+                                        if item['Preco'] == '':
+                                            print(item)
+                                        else:
 
-                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                                     pagini2(driver, link)
                                     sleep(1)
@@ -1530,9 +1562,13 @@ def crawlAgro2():
 
                                         for item in dados9:
 
-                                            st = json.dumps(item)
+                                            if item['Preco'] == '':
+                                                print(item)
+                                            else:
 
-                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                st = json.dumps(item)
+
+                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
                                                     
                                         pagini2(driver, link)
                                         sleep(1)
@@ -1554,9 +1590,13 @@ def crawlAgro2():
 
                                             for item in dados10:
 
-                                                st = json.dumps(item)
+                                                if item['Preco'] == '':
+                                                    print(item)
+                                                else:
 
-                                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                                                    st = json.dumps(item)
+
+                                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                                             pagini2(driver, link)
                                             sleep(1)
