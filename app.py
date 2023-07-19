@@ -953,13 +953,9 @@ def crawlAgro():
             except:
                 for item in itens:
 
-            if item['Preco'] == '':
-                print(item)
-            else:
+                    st = json.dumps(item)
 
-                st = json.dumps(item)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
                 i=i+1
                 print(f'Finalizei:1')
