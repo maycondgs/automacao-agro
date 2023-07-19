@@ -1141,11 +1141,11 @@ def varre2(driver, link):
                     preco = f'{pr[0]}{pr[1]},00'
                 elif v == 3:
                     preco = f'{pr[0]},{pr[1]}{pr[2]}'
-                    print(preco)
                 elif v == 4:
                     preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
             else:
                 preco = precc[0]
+                print(preco)
 
 
 
