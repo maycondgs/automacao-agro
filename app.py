@@ -2359,9 +2359,9 @@ def scrapy_noticias():
 
 
 def scrapy_precos():
-    crawlAgro2()
-    sleep(1)
     crawlAgro()
+    sleep(1)
+    crawlAgro2()
     sleep(1)
     crawlAlface()
     sleep(1)
