@@ -57,8 +57,8 @@ urls = [
 ]
 
 
-gp= [
-        {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
+urls2 = [
+    {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao'},
     {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim'},
     {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe'},
@@ -68,10 +68,6 @@ gp= [
     {'soja,https://www.agrolink.com.br/cotacoes/graos/soja'},
     {'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo'},
     {'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo'},
-]
-
-urls2 = [
-
     {'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos'},
     {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves'},
     {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos'},
@@ -2378,15 +2374,14 @@ def scrapy_precos():
 def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
-    schedule.every(1).minute.do(run, scrapy_noticias())
-    schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos())
-    schedule.every().monday.do(run, scrapy_tabela())
-
-    while 1:
-        schedule.run_pending()
-        sleep(1)
 
 
 
 
-crawlAgro2()
+schedule.every(1).minute.do(run, scrapy_noticias())
+schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos())
+schedule.every().monday.do(run, scrapy_tabela())
+
+while 1:
+    schedule.run_pending()
+    sleep(1)
