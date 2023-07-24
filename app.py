@@ -57,10 +57,8 @@ urls = [
 ]
 
 
-
-
-urls2 = [
-    {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
+gp= [
+        {'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz'},
     {'algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao'},
     {'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim'},
     {'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe'},
@@ -70,6 +68,10 @@ urls2 = [
     {'soja,https://www.agrolink.com.br/cotacoes/graos/soja'},
     {'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo'},
     {'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo'},
+]
+
+urls2 = [
+
     {'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos'},
     {'aves,https://www.agrolink.com.br/cotacoes/carnes/aves'},
     {'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos'},
@@ -2387,3 +2389,4 @@ def run(job):
 
 
 
+crawlAgro2()
