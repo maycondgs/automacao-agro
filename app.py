@@ -184,7 +184,12 @@ def scrap(tipo, itemrq):
                     "Nacional": novo[4],
                 }
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/mes/{itemrq}', headers=header, data=payl)
+                print(payl)
+
+                st = json.dumps(payl)
+
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/mes/{itemrq}', headers=header, data=st)
+                
                     
 
 
@@ -2371,13 +2376,14 @@ def scrapy_precos():
 def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
-    
+    schedule.every(1).minute.do(run, scrapy_noticias())
+    schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos())
+    schedule.every().monday.do(run, scrapy_tabela())
+
+    while 1:
+        schedule.run_pending()
+        sleep(1)
 
 
-schedule.every(1).minute.do(run, scrapy_noticias())
-schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos())
-schedule.every().monday.do(run, scrapy_tabela())
 
-while 1:
-    schedule.run_pending()
-    sleep(1)
+
