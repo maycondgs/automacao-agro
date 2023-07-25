@@ -32,7 +32,7 @@ option = Options()
 def iniciar_driver():
     chrome_options = Options()
 
-    arguments = ['--window-size=800,600',
+    arguments = ['--window-size=1000,800',
                  '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
 
     for argument in arguments:
@@ -1009,6 +1009,7 @@ def varre2(driver, link):
         sleep(3)
 
     except:
+        print('Sem Dados pra data de Hoje')
         return
 
 
