@@ -27,6 +27,8 @@ data_hoje = da[0]
 
 
 option = Options()
+
+
 def iniciar_driver():
     chrome_options = Options()
 
@@ -43,7 +45,7 @@ def iniciar_driver():
 
     })
     driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager().install()), options=chrome_options)
+        ChromeDriverManager(version="114.0.5735.90").install()), options=chrome_options)
 
     return driver
 
@@ -1397,7 +1399,7 @@ def crawlAgro2():
             if item['Preco'] == '':
                 print(item)
             else:
-
+                
                 st = json.dumps(item)
 
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
@@ -2378,9 +2380,16 @@ def run(job):
 
 
 
-schedule.every(1).minute.do(run, scrapy_noticias)
-schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos)
-schedule.every().monday.do(run, scrapy_tabela)
+    schedule.every(1).minute.do(run, scrapy_noticias)
+    schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos)
+    schedule.every().monday.do(run, scrapy_tabela)
+
+
+def craa():
+    crawlAgro2()
+    crawlAgro()
+
+craa()
 
 while 1:
     schedule.run_pending()
