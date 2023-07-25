@@ -1005,11 +1005,10 @@ def varre2(driver, link):
     sleep(2)
         
     try:
-        driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
+        driver.find_element(By.XPATH,'/html/body/div[7]/div[1]/table/tfoot/tr[1]/th').click()
         sleep(3)
 
     except:
-        print('Sem Dados pra data de Hoje')
         return
 
 
