@@ -1362,7 +1362,7 @@ def pagini2(driver, link):
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(2)
         
-    driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
+    driver.find_element(By.XPATH,'/html/body/div[6]/div[1]/table/tfoot/tr[1]/th').click()
     sleep(3)
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
