@@ -998,7 +998,7 @@ def varre2(driver, link):
 
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 500);')
+    driver.execute_script('window.scrollTo(0, 450);')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
