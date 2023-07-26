@@ -1395,22 +1395,14 @@ def crawlAgro2():
 
         print(f'Varrendo: {nome}')
 
-        dados = varre2(driver, link)
 
-        for item in dados:
-            if item['Preco'] == '':
-                print(item)
-            else:
-                
-                st = json.dumps(item)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
         pagini2(driver, link)
         sleep(2)
         print('data')
        
-        driver.find_element(By.XPATH,'//li[@class="page-item"]/a').click()
+        btn = driver.find_element(By.XPATH,'//li[@class="page-item"]/a')
+        btn.click()
         sleep(1)    
         print('data atual')
 
