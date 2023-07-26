@@ -1407,31 +1407,25 @@ def crawlAgro2():
                 requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
         pagini2(driver, link)
-        sleep(1)
+        sleep(2)
         print('data')
-        try:
-            #page2
-            driver.find_element(By.XPATH,'//i[@class="icon-angle-right"]').click()
-            sleep(1)    
-            print('data atual')
+       
+        driver.find_element(By.XPATH,'//i[@class="icon-angle-right"]').click()
+        sleep(1)    
+        print('data atual')
 
-            dados2 = varree2(driver)
+        dados2 = varree2(driver)
 
-            for item in dados2:
-                if item['Preco'] == '':
-                    print(item)
-                else:
+        for item in dados2:
+            if item['Preco'] == '':
+                print(item)
+            else:
 
-                    st = json.dumps(item)
+                st = json.dumps(item)
 
-                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
 
-            
-
-        except:
-            print(f'Finalizei:{nome},pag-1')
-            next
-        
+       
 
 
 
