@@ -1000,14 +1000,14 @@ def varre2(driver, link):
 
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 270);')
+    driver.execute_script('window.scrollTo(0, 310);')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(2)
         
     try:
-        driver.find_element(By.XPATH,'/html/body/div[6]/div[1]/table/tfoot/tr[1]/th').click()
+        driver.find_element(By.XPATH,'//th[@class="today"]').click()
         sleep(3)
 
     except:
@@ -1358,13 +1358,13 @@ def varree2(driver):
 def pagini2(driver, link):
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 270);')
+    driver.execute_script('window.scrollTo(0, 310);')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
     sleep(2)
         
-    driver.find_element(By.XPATH,'/html/body/div[6]/div[1]/table/tfoot/tr[1]/th').click()
+    driver.find_element(By.XPATH,'//th[@class="today"]').click()
     sleep(3)
 
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
