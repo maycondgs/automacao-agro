@@ -53,7 +53,7 @@ def pagini2(driver, link):
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 1900);')
+    driver.execute_script('window.scrollTo(0, 2200);')
     sleep(200)
 
 driver = iniciar_driver()
