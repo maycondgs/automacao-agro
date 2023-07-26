@@ -45,7 +45,7 @@ def pagini2(driver, link):
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
-    sleep(2)
+    sleep(3)
         
     driver.find_element(By.XPATH,'//th[@class="today"]').click()
     sleep(3)
@@ -56,13 +56,13 @@ def pagini2(driver, link):
     driver.execute_script('window.scrollTo(0, 2200);')
     sleep(2)
 
-    try:
-        #page2
-        driver.find_element(By.XPATH,'//i[@class="icon-angle-right"]').click()
-        sleep(1)    
-        print('data atual')
-    except:
-        print('negative')
+    btns = driver.find_element(By.XPATH,'')
+    
+    print(btns)
+    print(type(btns))
+    for btn in btns:
+        print(btn)
+
 
 driver = iniciar_driver()
 link = 'https://www.agrolink.com.br/cotacoes/graos/arroz/'
