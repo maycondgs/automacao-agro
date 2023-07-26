@@ -1408,10 +1408,10 @@ def crawlAgro2():
 
         pagini2(driver, link)
         sleep(1)
-
+        print('data')
         try:
             #page2
-            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+            driver.find_element(By.XPATH,'//i[@class="icon-angle-right"]').click()
             sleep(1)    
             print('data atual')
 
