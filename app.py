@@ -225,87 +225,87 @@ def varre(driver, i, link, especie):
     ufsss = Select(estados)
     sleep(1)
 
+    match i:
+        case 1:
+            ufsss.select_by_value('9822')
+    
+        case 2:
+            ufsss.select_by_value('9823')
 
-    if i == 1:
-        ufsss.select_by_value('9822')
+        case 3:
+            ufsss.select_by_value('9824')
 
-    if i == 2:
-        ufsss.select_by_value('9823')
+        case 4:
+            ufsss.select_by_value('9825')
 
-    if i == 3:
-        ufsss.select_by_value('9824')
+        case 5:
+            ufsss.select_by_value('9826')
 
-    if i == 4:
-        ufsss.select_by_value('9825')
+        case 6:
+            ufsss.select_by_value('9827')
 
-    if i == 5:
-        ufsss.select_by_value('9826')
+        case 7:
+            ufsss.select_by_value('9828')
 
-    if i == 6:
-        ufsss.select_by_value('9827')
+        case 8:
+            ufsss.select_by_value('9829')
 
-    if i == 7:
-        ufsss.select_by_value('9828')
+        case 9:
+            ufsss.select_by_value('9830')
 
-    if i == 8:
-        ufsss.select_by_value('9829')
+        case 10:
+            ufsss.select_by_value('9831')
 
-    if i == 9:
-        ufsss.select_by_value('9830')
+        case 11:
+            ufsss.select_by_value('9832')
 
-    if i == 10:
-        ufsss.select_by_value('9831')
+        case    12:
+            ufsss.select_by_value('9833')
 
-    if i == 11:
-        ufsss.select_by_value('9832')
+        case 13:
+            ufsss.select_by_value('9834')
 
-    if i == 12:
-        ufsss.select_by_value('9833')
+        case 14:
+            ufsss.select_by_value('9835')
 
-    if i == 13:
-        ufsss.select_by_value('9834')
+        case 15:
+            ufsss.select_by_value('9836')
 
-    if i == 14:
-        ufsss.select_by_value('9835')
+        case 16:
+            ufsss.select_by_value('9837')
 
-    if i == 15:
-        ufsss.select_by_value('9836')
+        case 17:
+            ufsss.select_by_value('9838')
 
-    if i == 16:
-        ufsss.select_by_value('9837')
+        case 18:
+            ufsss.select_by_value('9839')
 
-    if i == 17:
-        ufsss.select_by_value('9838')
+        case 19:
+            ufsss.select_by_value('9840')
 
-    if i == 18:
-        ufsss.select_by_value('9839')
+        case 20:
+            ufsss.select_by_value('9841')
 
-    if i == 19:
-        ufsss.select_by_value('9840')
+        case 21:
+            ufsss.select_by_value('9842')
 
-    if i == 20:
-        ufsss.select_by_value('9841')
+        case 22:
+            ufsss.select_by_value('9843')
 
-    if i == 21:
-        ufsss.select_by_value('9842')
+        case 23:
+            ufsss.select_by_value('9844')
 
-    if i == 22:
-        ufsss.select_by_value('9843')
+        case 24:
+            ufsss.select_by_value('9845')
 
-    if i == 23:
-        ufsss.select_by_value('9844')
+        case 25:
+            ufsss.select_by_value('9846')
 
-    if i == 24:
-        ufsss.select_by_value('9845')
+        case 26:
+            ufsss.select_by_value('9847')
 
-    if i == 25:
-        ufsss.select_by_value('9846')
-
-    if i == 26:
-        ufsss.select_by_value('9847')
-
-    if i == 27:
-        ufsss.select_by_value('9848')
+        case 27:
+            ufsss.select_by_value('9848')
 
 
     sleep(2)
@@ -652,86 +652,88 @@ def pagini(driver, i, link, especie):
     sleep(1)
 
 
-    if i == 1:
-        ufsss.select_by_value('9822')
+    match i:
+        case 1:
+            ufsss.select_by_value('9822')
+    
+        case 2:
+            ufsss.select_by_value('9823')
 
-    if i == 2:
-        ufsss.select_by_value('9823')
+        case 3:
+            ufsss.select_by_value('9824')
 
-    if i == 3:
-        ufsss.select_by_value('9824')
+        case 4:
+            ufsss.select_by_value('9825')
 
-    if i == 4:
-        ufsss.select_by_value('9825')
+        case 5:
+            ufsss.select_by_value('9826')
 
-    if i == 5:
-        ufsss.select_by_value('9826')
+        case 6:
+            ufsss.select_by_value('9827')
 
-    if i == 6:
-        ufsss.select_by_value('9827')
+        case 7:
+            ufsss.select_by_value('9828')
 
-    if i == 7:
-        ufsss.select_by_value('9828')
+        case 8:
+            ufsss.select_by_value('9829')
 
-    if i == 8:
-        ufsss.select_by_value('9829')
+        case 9:
+            ufsss.select_by_value('9830')
 
-    if i == 9:
-        ufsss.select_by_value('9830')
+        case 10:
+            ufsss.select_by_value('9831')
 
-    if i == 10:
-        ufsss.select_by_value('9831')
+        case 11:
+            ufsss.select_by_value('9832')
 
-    if i == 11:
-        ufsss.select_by_value('9832')
+        case    12:
+            ufsss.select_by_value('9833')
 
-    if i == 12:
-        ufsss.select_by_value('9833')
+        case 13:
+            ufsss.select_by_value('9834')
 
-    if i == 13:
-        ufsss.select_by_value('9834')
+        case 14:
+            ufsss.select_by_value('9835')
 
-    if i == 14:
-        ufsss.select_by_value('9835')
+        case 15:
+            ufsss.select_by_value('9836')
 
-    if i == 15:
-        ufsss.select_by_value('9836')
+        case 16:
+            ufsss.select_by_value('9837')
 
-    if i == 16:
-        ufsss.select_by_value('9837')
+        case 17:
+            ufsss.select_by_value('9838')
 
-    if i == 17:
-        ufsss.select_by_value('9838')
+        case 18:
+            ufsss.select_by_value('9839')
 
-    if i == 18:
-        ufsss.select_by_value('9839')
+        case 19:
+            ufsss.select_by_value('9840')
 
-    if i == 19:
-        ufsss.select_by_value('9840')
+        case 20:
+            ufsss.select_by_value('9841')
 
-    if i == 20:
-        ufsss.select_by_value('9841')
+        case 21:
+            ufsss.select_by_value('9842')
 
-    if i == 21:
-        ufsss.select_by_value('9842')
+        case 22:
+            ufsss.select_by_value('9843')
 
-    if i == 22:
-        ufsss.select_by_value('9843')
+        case 23:
+            ufsss.select_by_value('9844')
 
-    if i == 23:
-        ufsss.select_by_value('9844')
+        case 24:
+            ufsss.select_by_value('9845')
 
-    if i == 24:
-        ufsss.select_by_value('9845')
+        case 25:
+            ufsss.select_by_value('9846')
 
-    if i == 25:
-        ufsss.select_by_value('9846')
+        case 26:
+            ufsss.select_by_value('9847')
 
-    if i == 26:
-        ufsss.select_by_value('9847')
+        case 27:
+            ufsss.select_by_value('9848')
 
-    if i == 27:
-        ufsss.select_by_value('9848')
 
 
     sleep(2)
@@ -1356,7 +1358,7 @@ def varree2(driver):
 def pagini2(driver, link):
     driver.get(link)
 
-    driver.execute_script('window.scrollTo(0, 290);')
+    driver.execute_script('window.scrollTo(0, 270);')
     sleep(2)
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
@@ -1365,6 +1367,7 @@ def pagini2(driver, link):
     driver.find_element(By.XPATH,'/html/body/div[6]/div[1]/table/tfoot/tr[1]/th').click()
     sleep(3)
 
+    print('data atual')
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
 
