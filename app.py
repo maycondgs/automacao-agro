@@ -1402,7 +1402,7 @@ def crawlAgro2():
         sleep(2)
         
        
-        btn = driver.find_element(By.XPATH,'//li[@class="page-item"]/a')
+        btn = driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div/div[3]/div[1]/div[6]/div/form/div/div[1]/ul/li[5]/a')
         btn.click()
         sleep(1)    
         print('data atual')
