@@ -1367,7 +1367,6 @@ def pagini2(driver, link):
     driver.find_element(By.XPATH,'/html/body/div[6]/div[1]/table/tfoot/tr[1]/th').click()
     sleep(3)
 
-    print('data atual')
     driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
     sleep(1)
 
@@ -1413,7 +1412,8 @@ def crawlAgro2():
         try:
             #page2
             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
-            sleep(1)
+            sleep(1)    
+            print('data atual')
 
             dados2 = varree2(driver)
 
