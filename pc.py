@@ -50,6 +50,7 @@ def iniciar_driver():
 
     return driver
 
+#DADOS PARA O BOT ABAIXO
 
 header = {
     'Content-Type': 'application/json'
@@ -82,8 +83,7 @@ tipos_couve = ['/couve-flor-1dz']
 tipos_cenoura = ['/cenoura-comum-cx-23-kg-cx-23kg', '/cenoura-cx-20kg', '/cenoura-extra-cx-19kg', '/cenoura-verao-a---atacado-cx-20kg', '/cenoura-verao-a-lavada-beneficiador-cx-20kg', '/cenoura-verao-aaa---beneficiador-cx-20kg', '/cenoura-verao-g---atacado-cx-20kg', '/cenoura-verao-g-lavada---beneficiador-cx-20kg', '/cenoura-verao-suja---produtor-cx-20kg']
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 def iniciar_driver():
     chrome_options = Options()
@@ -177,6 +177,1069 @@ def scrap(tipo, itemrq):
                 
                     
 
+
+def varre(driver, i, link, especie):
+
+    itens = []
+
+    driver.get(link)
+    sleep(1)
+
+
+    driver.execute_script('window.scrollTo(0, 50);')
+    sleep(1)
+
+    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
+    sleep(1)
+
+    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
+    sleep(5)
+        
+    produtos = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
+    ufss = Select(produtos)
+    sleep(1)
+    
+    if especie == 'Boi Gordo 15Kg':
+        ufss.select_by_value('11')
+    elif especie == 'Vaca Gorda 15Kg':
+        ufss.select_by_value('1772')
+
+    sleep(1)
+
+    estados = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    ufsss = Select(estados)
+    sleep(1)
+
+    match i:
+        case 1:
+            ufsss.select_by_value('9822')
+    
+        case 2:
+            ufsss.select_by_value('9823')
+
+        case 3:
+            ufsss.select_by_value('9824')
+
+        case 4:
+            ufsss.select_by_value('9825')
+
+        case 5:
+            ufsss.select_by_value('9826')
+
+        case 6:
+            ufsss.select_by_value('9827')
+
+        case 7:
+            ufsss.select_by_value('9828')
+
+        case 8:
+            ufsss.select_by_value('9829')
+
+        case 9:
+            ufsss.select_by_value('9830')
+
+        case 10:
+            ufsss.select_by_value('9831')
+
+        case 11:
+            ufsss.select_by_value('9832')
+
+        case    12:
+            ufsss.select_by_value('9833')
+
+        case 13:
+            ufsss.select_by_value('9834')
+
+        case 14:
+            ufsss.select_by_value('9835')
+
+        case 15:
+            ufsss.select_by_value('9836')
+
+        case 16:
+            ufsss.select_by_value('9837')
+
+        case 17:
+            ufsss.select_by_value('9838')
+
+        case 18:
+            ufsss.select_by_value('9839')
+
+        case 19:
+            ufsss.select_by_value('9840')
+
+        case 20:
+            ufsss.select_by_value('9841')
+
+        case 21:
+            ufsss.select_by_value('9842')
+
+        case 22:
+            ufsss.select_by_value('9843')
+
+        case 23:
+            ufsss.select_by_value('9844')
+
+        case 24:
+            ufsss.select_by_value('9845')
+
+        case 25:
+            ufsss.select_by_value('9846')
+
+        case 26:
+            ufsss.select_by_value('9847')
+
+        case 27:
+            ufsss.select_by_value('9848')
+
+
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
+    sleep(2)
+        
+    try:
+        driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
+        sleep(3)
+
+    except:
+        return
+
+
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
+    sleep(1)
+
+    driver.execute_script('window.scrollTo(0, 1900);')
+
+    try:
+        tabela = driver.find_element(By.XPATH,'//*[@id="agks-cont-tb1"]/table')
+        html_tabela = tabela.get_attribute('outerHTML')
+        sleep(2)
+
+        soup = BeautifulSoup(html_tabela, 'html.parser')
+        table = soup.find(name='table')
+
+        df_full = pd.read_html( str(table) ) [0]
+        sleep(1)
+
+        infos = df_full.drop(['PREÇO', 'Última Atualização', 'Freq', 'Gráfico'], axis='columns')
+
+        pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]/div')
+        sleep(2)
+
+        links = []
+        widths = []
+        heights = []
+        starts = []
+        ends = []
+
+        precos = []
+
+        for prev in pre:
+            linkpre = prev.get_attribute('style')
+            i = linkpre.strip()
+            addr = i.split('"')
+            linkk = addr[1]
+
+            link2 = addr[2].split(';')
+            wid = link2[2]
+            widt = wid.split(' ')
+            hei = link2[3]
+            heigh = hei.split(' ')
+            ind = link2[4]
+            indices = ind.split(': ')
+            indice = indices[1].split(' ')
+            sta = indice[0]
+            en = indice[1]
+
+            star = sta.split('px')
+            enn = en.split('px')
+
+
+            if star[0] == '0':
+                start = star[0]
+            else:
+                starr = star[0].split('-')
+                start = starr[1]
+
+            if enn[0] == '0':
+                end = enn[0]
+            else:
+                ennn = enn[0].split('-')
+                end = ennn[1]
+            
+            
+            width = widt[2].split('p')
+            height = heigh[2].split('p')
+
+            links.append(linkk)
+            widths.append(width[0])
+            heights.append(height[0])
+            starts.append(start)
+            ends.append(end)
+
+
+        for i in range(len(links)):
+
+            driver.get(links[i])
+            sleep(2)
+
+            image = driver.find_element(By.XPATH,'/html/body/img')
+            sleep(2)
+
+            with open('imagem.png', 'wb') as f:
+                f.write(image.screenshot_as_png)
+
+
+            img = cv2.imread("imagem.png")
+
+            ys = int(ends[i])
+            yf = int(ends[i]) + int(heights[i])
+
+            xs = int(starts[i])
+            xf  = int(starts[i]) + int(widths[i])
+
+
+
+            croped = img[ys:yf, xs:xf]
+
+            cv2.imwrite('tag.png', croped)
+
+            imagem = cv2.imread("tag.png")
+
+            pre = pytesseract.image_to_string(imagem)
+            prec = pre.split('\n')
+            preco = prec[0]
+            
+            precos.append(str(preco))
+
+
+        dados = infos.assign(preco=precos)
+
+
+        for i, preco in enumerate(dados['preco']):
+            prod = dados.loc[i, "Produto"]
+            esta = dados.loc[i, "LOCAL"]
+            pr = dados.loc[i, "preco"]
+
+            prod = str(prod)
+            esta = str(esta)
+            pre = str(pr)
+
+            produ = prod.split('   ')
+            produt = produ[1].split('Kg')
+            produto = produt[0] + 'kg'
+
+            estad = esta.split('   ')
+            estadd = estad[1].split(')')
+            estadoo = estadd[0] + ')'
+
+            if "'" in estadoo:
+                estado = estadoo.replace("'", "")
+            else:
+                estado = estadoo
+            
+
+            prec = pre.split('   ')
+            precc = prec[1].split()
+            preco = precc[0]
+
+
+
+            itens.append({
+                "Produto": produto,
+                "Estado": estado,
+                "Preco": preco,
+                "Data": data_hoje
+            })
+        
+    except:
+        next
+
+    return itens
+
+def varree(driver):
+
+    itens = []
+
+    tabela = driver.find_element(By.XPATH,'//*[@id="agks-cont-tb1"]/table')
+    html_tabela = tabela.get_attribute('outerHTML')
+    sleep(2)
+
+    soup = BeautifulSoup(html_tabela, 'html.parser')
+    table = soup.find(name='table')
+
+    df_full = pd.read_html( str(table) ) [0]
+    sleep(1)
+
+    infos = df_full.drop(['PREÇO', 'Última Atualização', 'Freq', 'Gráfico'], axis='columns')
+
+    pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]/div')
+    sleep(2)
+
+    links = []
+    widths = []
+    heights = []
+    starts = []
+    ends = []
+
+    precos = []
+
+    for prev in pre:
+        linkpre = prev.get_attribute('style')
+        i = linkpre.strip()
+        addr = i.split('"')
+        linkk = addr[1]
+
+        link2 = addr[2].split(';')
+        wid = link2[2]
+        widt = wid.split(' ')
+        hei = link2[3]
+        heigh = hei.split(' ')
+        ind = link2[4]
+        indices = ind.split(': ')
+        indice = indices[1].split(' ')
+        sta = indice[0]
+        en = indice[1]
+
+        star = sta.split('px')
+        enn = en.split('px')
+
+
+        if star[0] == '0':
+            start = star[0]
+        else:
+            starr = star[0].split('-')
+            start = starr[1]
+
+        if enn[0] == '0':
+            end = enn[0]
+        else:
+            ennn = enn[0].split('-')
+            end = ennn[1]
+            
+            
+        width = widt[2].split('p')
+        height = heigh[2].split('p')
+
+        links.append(linkk)
+        widths.append(width[0])
+        heights.append(height[0])
+        starts.append(start)
+        ends.append(end)
+
+
+    for i in range(len(links)):
+
+        driver.get(links[i])
+        sleep(2)
+
+        image = driver.find_element(By.XPATH,'/html/body/img')
+        sleep(2)
+
+        with open('imagem.png', 'wb') as f:
+            f.write(image.screenshot_as_png)
+
+
+        img = cv2.imread("imagem.png")
+
+        ys = int(ends[i])
+        yf = int(ends[i]) + int(heights[i])
+
+        xs = int(starts[i])
+        xf  = int(starts[i]) + int(widths[i])
+
+
+        croped = img[ys:yf, xs:xf]
+
+        cv2.imwrite('tag.png', croped)
+
+        imagem = cv2.imread("tag.png")
+
+        pre = pytesseract.image_to_string(imagem)
+        prec = pre.split('\n')
+        preco = prec[0]
+            
+        precos.append(str(preco))
+
+
+    dados = infos.assign(preco=precos)
+
+
+    for i, preco in enumerate(dados['preco']):
+        prod = dados.loc[i, "Produto"]
+        esta = dados.loc[i, "LOCAL"]
+        pr = dados.loc[i, "preco"]
+
+        prod = str(prod)
+        esta = str(esta)
+        pre = str(pr)
+
+        produ = prod.split('   ')
+        produt = produ[1].split('Kg')
+        produto = produt[0] + 'kg'
+
+        estad = esta.split('   ')
+        estadd = estad[1].split(')')
+        estadoo = estadd[0] + ')'
+
+        if "'" in estadoo:
+            estado = estadoo.replace("'", "")
+        else:
+            estado = estadoo
+            
+
+        prec = pre.split('   ')
+        precc = prec[1].split()
+        preco = precc[0]
+
+
+        itens.append({
+            "Produto": produto,
+            "Estado": estado,
+            "Preco": preco,
+            "Data": data_hoje
+        })
+    
+
+    return itens
+
+def pagini(driver, i, link, especie):
+
+    driver.get(link)
+    sleep(1)
+
+    driver.execute_script('window.scrollTo(0, 50);')
+    sleep(2)
+
+
+    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]').click()
+    sleep(3)
+
+    driver.find_element(By.XPATH,'//*[@id="FiltroCotacoesEspecie"]/option[3]').click()
+    
+    sleep(2)
+    
+    produtos = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
+    ufss = Select(produtos)
+    sleep(1)
+    
+    if especie == 'Boi Gordo 15Kg':
+        ufss.select_by_value('11')
+    elif especie == 'Vaca Gorda 15Kg':
+        ufss.select_by_value('1772')
+
+    sleep(1)
+    
+    estados = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    ufsss = Select(estados)
+    sleep(1)
+
+
+    match i:
+        case 1:
+            ufsss.select_by_value('9822')
+    
+        case 2:
+            ufsss.select_by_value('9823')
+
+        case 3:
+            ufsss.select_by_value('9824')
+
+        case 4:
+            ufsss.select_by_value('9825')
+
+        case 5:
+            ufsss.select_by_value('9826')
+
+        case 6:
+            ufsss.select_by_value('9827')
+
+        case 7:
+            ufsss.select_by_value('9828')
+
+        case 8:
+            ufsss.select_by_value('9829')
+
+        case 9:
+            ufsss.select_by_value('9830')
+
+        case 10:
+            ufsss.select_by_value('9831')
+
+        case 11:
+            ufsss.select_by_value('9832')
+
+        case    12:
+            ufsss.select_by_value('9833')
+
+        case 13:
+            ufsss.select_by_value('9834')
+
+        case 14:
+            ufsss.select_by_value('9835')
+
+        case 15:
+            ufsss.select_by_value('9836')
+
+        case 16:
+            ufsss.select_by_value('9837')
+
+        case 17:
+            ufsss.select_by_value('9838')
+
+        case 18:
+            ufsss.select_by_value('9839')
+
+        case 19:
+            ufsss.select_by_value('9840')
+
+        case 20:
+            ufsss.select_by_value('9841')
+
+        case 21:
+            ufsss.select_by_value('9842')
+
+        case 22:
+            ufsss.select_by_value('9843')
+
+        case 23:
+            ufsss.select_by_value('9844')
+
+        case 24:
+            ufsss.select_by_value('9845')
+
+        case 25:
+            ufsss.select_by_value('9846')
+
+        case 26:
+            ufsss.select_by_value('9847')
+
+        case 27:
+            ufsss.select_by_value('9848')
+
+
+
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
+    sleep(2)
+        
+    try:
+        driver.find_element(By.XPATH,'/html/body/div[5]/div[1]/table/tfoot/tr[1]/th').click()
+        sleep(3)
+
+    except:
+        return
+
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
+    sleep(1)
+
+    driver.execute_script('window.scrollTo(0, 1900);')
+
+def crawlAgro():
+
+    driver = iniciar_driver()
+
+    login(driver)
+    sleep(1)
+
+    for url in urls:
+
+        item = str(url)
+        it = item.split(',')
+
+        nom = it[0].split("'")
+        nome = nom[1]
+
+        link = it[1]
+
+        grup = it[2]
+
+        esp = it[3].split("'")
+        especie = esp[0]
+
+        i = 1
+
+        for uf in ufs:
+
+            itens = []
+             
+            print(f'Varrendo: {nome} em {uf}{i}')
+
+            dados = varre(driver, i, link, especie)
+
+            for item in dados:
+                itens.append(item)
+
+            pagini(driver, i, link, especie)
+            sleep(1)
+                
+            try:
+                #page2
+                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                sleep(1)
+
+                dados2 = varree(driver)
+
+                for item in dados2:
+                    itens.append(item)
+
+                pagini(driver, i, link, especie)
+                sleep(1)
+                proxpage(driver)
+
+                try:
+                    #page3
+                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                    sleep(1)
+
+                    dados3 = varree(driver)
+
+                    for item in dados3:
+                        itens.append(item)
+
+                    pagini(driver, i, link, especie)
+                    sleep(1)
+                    proxpage(driver)
+                    proxpage(driver)
+
+                    try:
+                        #page4
+                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                        sleep(1)
+
+                        dados4 = varree(driver)
+
+                        for item in dados4:
+                            itens.append(item)
+
+                        pagini(driver, i, link, especie)
+                        sleep(1)
+                        proxpage(driver)
+                        proxpage(driver)
+                        proxpage(driver)
+
+                        try:
+                            #page5
+                            driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                            sleep(1)
+
+                            dados5 = varree(driver)
+
+                            for item in dados5:
+                                itens.append(item)
+
+                            pagini(driver, i, link, especie)
+                            sleep(1)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+                            proxpage(driver)
+
+                            try:
+                                #page6
+                                driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                sleep(1)
+
+                                dados6 = varree(driver)
+
+                                for item in dados6:
+                                    itens.append(item)
+
+                                pagini(driver, i, link, especie)
+                                sleep(1)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+                                proxpage(driver)
+
+                                try:
+                                    #page7
+                                    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                    sleep(1)
+
+                                    dados7 = varree(driver)
+
+                                    for item in dados7:
+                                        itens.append(item)
+
+                                    pagini(driver, i, link, especie)
+                                    sleep(1)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+                                    proxpage(driver)
+
+                                    try:
+                                        #page8
+                                        driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+                                        sleep(1)
+
+                                        dados8 = varree(driver)
+
+                                        for item in dados8:
+                                            itens.append(item)
+
+                                        for item in itens:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                        i=i+1
+                                        print(f'Finalizei:8')
+
+                                    except:
+                                        for item in itens:
+
+                                            st = json.dumps(item)
+
+                                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                        i=i+1
+                                        print(f'Finalizei:7')
+                                        next
+
+                                except:
+                                    for item in itens:
+
+                                        st = json.dumps(item)
+
+                                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                    i=i+1                                    
+                                    print(f'Finalizei:6')
+                                    next
+
+                            except:
+                                for item in itens:
+
+                                    st = json.dumps(item)
+
+                                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                                i=i+1
+
+                                print(f'Finalizei:5')
+                                next
+
+                        except:
+                            for item in itens:
+
+                                st = json.dumps(item)
+
+                                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                            i=i+1                            
+                            print(f'Finalizei:4')
+                            next
+
+                    except:
+                        for item in itens:
+
+                            st = json.dumps(item)
+
+                            requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                        i=i+1                        
+                        print(f'Finalizei:3')
+                        next
+                        
+                except:
+                    for item in itens:
+
+                        st = json.dumps(item)
+
+                        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                    i=i+1                    
+                    print(f'Finalizei:2')
+                    next
+                    
+            except:
+                for item in itens:
+
+                    st = json.dumps(item)
+
+                    requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
+                i=i+1
+                print(f'Finalizei:1')
+                next
+
+
+
+      
+      
+            
+
+
+def varre2(driver, link):
+
+    itens = []
+
+    driver.get(link)
+
+    driver.execute_script('window.scrollTo(0, 310);')
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
+    sleep(2)
+        
+    try:
+        driver.find_element(By.XPATH,'//th[@class="today"]').click()
+        sleep(3)
+
+    except:
+        return
+
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
+    sleep(1)
+
+    driver.execute_script('window.scrollTo(0, 2200);')
+
+    
+
+def varree2(driver):
+
+    itens = []
+
+    tabela = driver.find_element(By.XPATH,'//*[@id="agks-cont-tb1"]/table')
+    html_tabela = tabela.get_attribute('outerHTML')
+    sleep(2)
+
+    soup = BeautifulSoup(html_tabela, 'html.parser')
+    table = soup.find(name='table')
+
+    df_full = pd.read_html( str(table) ) [0]
+    sleep(1)
+
+    infos = df_full.drop(['PREÇO', 'Última Atualização', 'Freq', 'Gráfico'], axis='columns')
+
+    pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]/div')
+    sleep(2)
+
+    links = []
+    widths = []
+    heights = []
+    starts = []
+    ends = []
+
+    precos = []
+
+    for prev in pre:
+        linkpre = prev.get_attribute('style')
+        i = linkpre.strip()
+        addr = i.split('"')
+        linkk = addr[1]
+
+        link2 = addr[2].split(';')
+        wid = link2[2]
+        widt = wid.split(' ')
+        hei = link2[3]
+        heigh = hei.split(' ')
+        ind = link2[4]
+        indices = ind.split(': ')
+        indice = indices[1].split(' ')
+        sta = indice[0]
+        en = indice[1]
+
+        star = sta.split('px')
+        enn = en.split('px')
+
+
+        if star[0] == '0':
+            start = star[0]
+        else:
+            starr = star[0].split('-')
+            start = starr[1]
+
+        if enn[0] == '0':
+            end = enn[0]
+        else:
+            ennn = enn[0].split('-')
+            end = ennn[1]
+            
+            
+        width = widt[2].split('p')
+        height = heigh[2].split('p')
+
+        links.append(linkk)
+        widths.append(width[0])
+        heights.append(height[0])
+        starts.append(start)
+        ends.append(end)
+
+
+    for i in range(len(links)):
+
+        driver.get(links[i])
+        sleep(2)
+
+        image = driver.find_element(By.XPATH,'/html/body/img')
+        sleep(2)
+
+        with open('imagem.png', 'wb') as f:
+            f.write(image.screenshot_as_png)
+
+
+        img = cv2.imread("imagem.png")
+
+        ys = int(ends[i])
+        yf = int(ends[i]) + int(heights[i])
+
+        xs = int(starts[i])
+        xf  = int(starts[i]) + int(widths[i])
+
+
+        croped = img[ys:yf, xs:xf]
+
+        cv2.imwrite('tag.png', croped)
+
+        imagem = cv2.imread("tag.png")
+
+        pre = pytesseract.image_to_string(imagem)
+        prec = pre.split('\n')
+        preco = prec[0]
+            
+        precos.append(str(preco))
+
+
+    dados = infos.assign(preco=precos)
+
+
+    for i, preco in enumerate(dados['preco']):
+        prod = dados.loc[i, "Produto"]
+        esta = dados.loc[i, "LOCAL"]
+        pr = dados.loc[i, "preco"]
+
+        prod = str(prod)
+        esta = str(esta)
+        pre = str(pr)
+
+
+        produ = prod.split('   ')
+        produt = produ[1].split('\n')
+
+        estad = esta.split('   ')
+        estadd = estad[1].split(')')
+        estadoo = estadd[0] + ')'
+
+        if "'" in estadoo:
+            estado = estadoo.replace("'", "")
+        else:
+            estado = estadoo
+
+
+        if estadoo in produt[0]:
+            producto = produt[0].split(estadoo)
+            produto = producto[0]
+        else:
+            produto = produt[0]
+            if 'Kg ' in produto:
+                proto = produto.split('Kg ')
+                produto = proto[0] + 'Kg'
+
+
+        prec = pre.split('   ')
+        precc = prec[1].split()
+
+        if not ',' in precc[0]:
+            pr = precc[0]
+            v = len(pr)
+            if v == 2:
+                preco = f'{pr[0]}{pr[1]},00'
+            elif v == 3:
+                preco = f'{pr[0]},{pr[1]}{pr[2]}'
+                print(preco)
+            elif v == 4:
+                preco = f'{pr[0]}{pr[1]},{pr[2]}{pr[3]}'
+
+        else:
+            preco = precc[0]
+
+
+
+        itens.append({
+            "Produto": produto,
+            "Estado": estado,
+            "Preco": preco,
+            "Data": data_hoje
+        })
+    
+
+    return itens
+
+def pagini2(driver, link):
+    driver.get(link)
+
+    driver.execute_script('window.scrollTo(0, 310);')
+    sleep(2)
+
+    driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
+    sleep(2)
+        
+    driver.find_element(By.XPATH,'//th[@class="today"]').click()
+    sleep(3)
+
+    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
+    sleep(1)
+
+    driver.execute_script('window.scrollTo(0, 2200);')
+
+
+def crawlAgro2():
+
+    driver = iniciar_driver()
+
+    login(driver)
+    sleep(1)
+
+
+    for url in urls2:
+
+        item = str(url)
+        it = item.split(',')
+
+        nom = it[0].split("'")
+        nome = nom[1]
+
+        lin = it[1].split("'")
+        link = lin[0]
+
+
+        print(f'Varrendo: {nome}')
+
+
+
+        pagini2(driver, link)
+        print('data')
+        sleep(2)
+        
+       
+        btn = driver.find_element(By.XPATH,'/html/body/div[1]/section/div/div/div[3]/div[1]/div[6]/div/form/div/div[1]/ul/li[5]/a')
+        btn.click()
+        sleep(1)    
+        print('data atual')
+
+        dados2 = varree2(driver)
+
+        for item in dados2:
+            if item['Preco'] == '':
+                print(item)
+            else:
+
+                st = json.dumps(item)
+
+                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{nome}', headers=header, data=st)
+
 def busca(driver, itemgrupo, itemespecie, itemproduto):
 
     driver.get('https://www.agrolink.com.br/cotacoes/busca')
@@ -189,23 +1252,26 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
     grupo = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')
     sleep(1)
     grupos = Select(grupo)
-    sleep(2)
     grupos.select_by_value(itemgrupo)
     sleep(1)
 
     especie = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')
     sleep(1)
     especies = Select(especie)
-    sleep(2)
     especies.select_by_value(itemespecie)
     sleep(1)
 
     produto = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
     sleep(1)
     produtos = Select(produto)
-    sleep(2)
     produtos.select_by_visible_text(itemproduto)
     sleep(1)
+
+    #grupo = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    #sleep(1)
+    #grupos = Select(grupo)
+    #grupos.select_by_visible_text(grupo)
+    #sleep(1)
 
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
@@ -3151,6 +4217,8 @@ def scrap_preco():
         sleep(1)
 
 
+    
+
 
 def crawlAlface():
     driver = iniciar_driver()
@@ -3411,6 +4479,13 @@ def crawlRepolho():
         requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
 
 
+
+
+def proxpage(driver):
+    driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li/a/i[@class="icon-angle-right"]').click()
+    sleep(1)
+    driver.execute_script('window.scrollTo(0, 1900);')
+    sleep(1)
 
 
 
@@ -3693,7 +4768,6 @@ def scrapy_noticias():
     crawlNoticiasAgricolas()
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
-    schedule.every(1).minute.do(run, scrapy_noticias)
 
 
 def scrapy_precos():
@@ -3711,11 +4785,12 @@ def run(job):
 
 
 
-    
+    schedule.every(1).minute.do(run, scrapy_noticias)
+    schedule.every().day.at("01:20", "America/Sao Paulo").do(run, scrapy_precos)
+    schedule.every().monday.do(run, scrapy_tabela)
 
-schedule.every().day.at("01:10", "America/Recife").do(run, scrapy_precos)
-schedule.every().monday.do(run, scrapy_tabela)
 
+crawlNoticiasCanalRural()
 
 
 
