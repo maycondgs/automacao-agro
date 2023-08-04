@@ -29,7 +29,6 @@ data_hoje = da[0]
 
 option = Options()
 
-
 def iniciar_driver():
     chrome_options = Options()
 
@@ -50,6 +49,8 @@ def iniciar_driver():
 
     return driver
 
+
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 header = {
     'Content-Type': 'application/json'
@@ -81,26 +82,6 @@ tipos_cebola = ['/cebola-nacional-sc-20kg','/cebola-pera-classe-3-a-5-sc-20kg', 
 tipos_couve = ['/couve-flor-1dz']
 tipos_cenoura = ['/cenoura-comum-cx-23-kg-cx-23kg', '/cenoura-cx-20kg', '/cenoura-extra-cx-19kg', '/cenoura-verao-a---atacado-cx-20kg', '/cenoura-verao-a-lavada-beneficiador-cx-20kg', '/cenoura-verao-aaa---beneficiador-cx-20kg', '/cenoura-verao-g---atacado-cx-20kg', '/cenoura-verao-g-lavada---beneficiador-cx-20kg', '/cenoura-verao-suja---produtor-cx-20kg']
 
-
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-
-
-def iniciar_driver():
-    chrome_options = Options()
-    arguments = ['--lang=pt-BR', '--window-size=1000,800', '--incognito']
-    for argument in arguments:
-        chrome_options.add_argument(argument)
-
-    chrome_options.add_experimental_option('prefs', {
-        'download.prompt_for_download': False,
-        'profile.default_content_setting_values.notifications': 2,
-        'profile.default_content_setting_values.automatic_downloads': 1,
-
-    })
-    driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager(version="114.0.5735.90").install()), options=chrome_options)
-
-    return driver
 
 
 
@@ -185,27 +166,99 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
     driver.execute_script('window.scrollTo(0, 290);')
     sleep(1)
 
+    grupo = itemgrupo
+
+    match grupo:
+        case 10:
+            grupo = 'Carnes'
+        case 11:
+            grupo = 'Diversos'
+        case 13:
+            'Grãos'
+        case 14:
+            grupo = 'Hortaliças'
+
+
+    especie = itemespecie
+
+    match especie:
+        case 122:
+            especie = 'Aves'
+        case 120:
+            especie = 'Bovinos'
+        case 147:
+            especie = 'Caprinos'
+        case 152:
+            especie = 'Ovinos'
+        case 144:
+            especie = 'Suínos'
+        case 673:
+            especie = 'Açúcar'
+        case 8:
+            especie = 'Algodão'
+        case 30:
+            especie = 'Amendoim'
+        case 92:
+            especie = 'Cana-de-açúcar'
+        case 24:
+            especie = 'Cebola'
+        case 5:
+            especie = 'Arroz'
+        case 7:
+            especie = 'Café'
+        case 46:
+            especie = 'Feijão'
+        case 2:
+            especie = 'Milho'
+        case 1:
+            especie = 'Soja'
+        case 31:
+            especie = 'Sorgo'
+        case 6:
+            especie = 'Trigo'
+        case 95:
+            especie = 'Beterraba'
+        case 27:
+            especie = 'Cenoura'
+        case 39:
+            especie = 'Couve'
+        case 51:
+            especie = 'Pimentão'
+        case 40:
+            especie = 'Tomate'
+
 
     grupo = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')
     sleep(1)
     grupos = Select(grupo)
-    sleep(2)
-    grupos.select_by_value(itemgrupo)
-    sleep(1)
+    try:
+        grupos.select_by_value(itemgrupo)
+        sleep(1)
+    except:
+        grupos.select_by_visible_text(grupo)
+        sleep(1)
 
     especie = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')
     sleep(1)
     especies = Select(especie)
-    sleep(2)
-    especies.select_by_value(itemespecie)
-    sleep(1)
+    try:
+        especies.select_by_value(itemespecie)
+        sleep(1)
+    except:
+        especies.select_by_value(especie)
+        sleep(1)
 
     produto = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
     sleep(1)
     produtos = Select(produto)
-    sleep(2)
     produtos.select_by_visible_text(itemproduto)
     sleep(1)
+
+    #grupo = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
+    #sleep(1)
+    #grupos = Select(grupo)
+    #grupos.select_by_visible_text(grupo)
+    #sleep(1)
 
 
     driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
@@ -529,7 +582,7 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             sleep(1)
             page(driver)
             sleep(1)
-            item2 = scraw(driver)
+            itens2 = scraw(driver)
             for item in itens2:
                 st = json.dumps(item)
 
@@ -3125,9 +3178,10 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
 
        
 def scrap_preco():
-    
-    codigos = [{'13,5,Todos,arroz'},{'11,8,Todos,algodao'},{'11,30,Todos,amendoim'},{'11,92,Todos,cana'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},
+
+    codigos = [{'13,5,Todos,arroz'},{'11,8,Todos,algodao'},{'11,30,Todos,amendoim'},{'11,92,Todos,cana'},{'13,7,Todos,cafe'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},
     {'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
+
 
 
     driver = iniciar_driver()
@@ -3149,6 +3203,7 @@ def scrap_preco():
 
         crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat)
         sleep(1)
+
 
 
 
@@ -3693,7 +3748,7 @@ def scrapy_noticias():
     crawlNoticiasAgricolas()
     crawlNoticiasAgrolink()
     crawlNoticiasCanalRural()   
-    schedule.every(1).minute.do(run, scrapy_noticias)
+
 
 
 def scrapy_precos():
@@ -3711,12 +3766,10 @@ def run(job):
 
 
 
-    
-
-schedule.every().day.at("01:10", "America/Recife").do(run, scrapy_precos)
+        
+schedule.every(1).minute.do(run, scrapy_noticias)
+schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos)
 schedule.every().monday.do(run, scrapy_tabela)
-
-
 
 
 
