@@ -179,58 +179,59 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
             grupo = 'Hortaliças'
 
 
-    especie = itemespecie
+    especiee = itemespecie
 
-    match especie:
+    match especiee:
         case 122:
-            especie = 'Aves'
+            especiees = 'Aves'
         case 120:
-            especie = 'Bovinos'
+            especiees = 'Bovinos'
         case 147:
-            especie = 'Caprinos'
+            especiees = 'Caprinos'
         case 152:
-            especie = 'Ovinos'
+            especiees = 'Ovinos'
         case 144:
-            especie = 'Suínos'
+            especiees = 'Suínos'
         case 673:
-            especie = 'Açúcar'
+            especies = 'Açúcar'
         case 8:
-            especie = 'Algodão'
+            especiees = 'Algodão'
         case 30:
-            especie = 'Amendoim'
+            especiees = 'Amendoim'
         case 92:
-            especie = 'Cana-de-açúcar'
+            especiees = 'Cana-de-açúcar'
         case 24:
-            especie = 'Cebola'
+            especiees = 'Cebola'
         case 5:
-            especie = 'Arroz'
+            especiees = 'Arroz'
         case 7:
-            especie = 'Café'
+            especiees = 'Café'
         case 46:
-            especie = 'Feijão'
+            especiees = 'Feijão'
         case 2:
-            especie = 'Milho'
+            especiees = 'Milho'
         case 1:
-            especie = 'Soja'
+            especiees = 'Soja'
         case 31:
-            especie = 'Sorgo'
+            especiees = 'Sorgo'
         case 6:
-            especie = 'Trigo'
+            especiees = 'Trigo'
         case 95:
-            especie = 'Beterraba'
+            especiees = 'Beterraba'
         case 27:
-            especie = 'Cenoura'
+            especiees = 'Cenoura'
         case 39:
-            especie = 'Couve'
+            especiees = 'Couve'
         case 51:
-            especie = 'Pimentão'
+            especiees = 'Pimentão'
         case 40:
-            especie = 'Tomate'
+            especiees = 'Tomate'
 
 
     grupo = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')
-    sleep(1)
+    sleep(2)
     grupos = Select(grupo)
+    sleep(2)
     try:
         grupos.select_by_value(itemgrupo)
         sleep(1)
@@ -239,18 +240,17 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
         sleep(1)
 
     especie = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')
-    sleep(1)
+    sleep(2)
     especies = Select(especie)
-    try:
-        especies.select_by_value(itemespecie)
-        sleep(1)
-    except:
-        especies.select_by_value(especie)
-        sleep(1)
+    sleep(2)
+    especies.select_by_value(itemespecie)
+    sleep(1)
+    
 
     produto = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
-    sleep(1)
+    sleep(2)
     produtos = Select(produto)
+    sleep(1)
     produtos.select_by_visible_text(itemproduto)
     sleep(1)
 
@@ -3766,9 +3766,9 @@ def run(job):
 
 
 
-        
+
 schedule.every(1).minute.do(run, scrapy_noticias)
-schedule.every().day.at("01:20", "America/Sao_Paulo").do(run, scrapy_precos)
+schedule.every().day.at("04:20").do(run, scrapy_precos)
 schedule.every().monday.do(run, scrapy_tabela)
 
 
