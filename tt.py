@@ -50,7 +50,8 @@ def iniciar_driver():
     return driver
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 header = {
     'Content-Type': 'application/json'
@@ -3766,13 +3767,8 @@ def run(job):
 
 
 
-
-    schedule.every(1).minute.do(run, scrapy_noticias)
-    schedule.every().day.at("04:20").do(run, scrapy_precos)
-    schedule.every().monday.do(run, scrapy_tabela)
-
-
 scrapy_precos()
+
 
 while 1:
     schedule.run_pending()
