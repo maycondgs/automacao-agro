@@ -243,15 +243,24 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
     sleep(2)
     especies = Select(especie)
     sleep(2)
-    especies.select_by_value(itemespecie)
-    sleep(1)
+    try:
+        especies.select_by_value(itemespecie)
+        sleep(1)
+    except:
+        busca(driver, itemgrupo, itemespecie, itemproduto)
     
-
+    sleep(1)
     produto = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
     sleep(2)
     produtos = Select(produto)
     sleep(1)
-    produtos.select_by_visible_text(itemproduto)
+
+    try:
+        produtos.select_by_visible_text(itemproduto)
+        sleep(1)
+    except:
+        busca(driver, itemgrupo, itemespecie, itemproduto)
+    
     sleep(1)
 
     #grupo = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
@@ -3179,7 +3188,7 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
        
 def scrap_preco():
 
-    codigos = [{'13,5,Todos,arroz'},{'11,8,Todos,algodao'},{'11,30,Todos,amendoim'},{'11,92,Todos,cana'},{'13,7,Todos,cafe'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},
+    codigos = [{'11,8,Todos,algodao'},{'13,5,Todos,arroz'},{'11,30,Todos,amendoim'},{'13,7,Todos,cafe'},{'11,92,Todos,cana'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},
     {'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
 
 
@@ -3204,6 +3213,7 @@ def scrap_preco():
         crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat)
         sleep(1)
 
+    driver.close()
 
 
 
@@ -3338,6 +3348,8 @@ def crawlAlface():
         "Data": data_hoje
     })
 
+    driver.close()
+
     for dado in dados:
         print(dado)
         st = json.dumps(dado)
@@ -3460,6 +3472,8 @@ def crawlRepolho():
         "Data": data_hoje
     })
 
+    driver.close()
+
     for dado in dados:
         print(dado)
         st = json.dumps(dado)
@@ -3480,44 +3494,44 @@ def crawlNoticiasAgricolas():
 
     dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
 
-    if dia_cotacao == data:
+    itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
 
-        itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
+    dados = []
 
-        dados = []
+    for item in itens:
+        link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
+        hor = item.find_element(By.TAG_NAME, 'span').text
+        hora = hor + ':00'
+        titulo = item.find_element(By.TAG_NAME, 'h2').text
 
-        for item in itens:
-            link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
-            hor = item.find_element(By.TAG_NAME, 'span').text
-            hora = hor + ':00'
-            titulo = item.find_element(By.TAG_NAME, 'h2').text
+        dados.append([titulo, link, hora, data_hoje, referencia, referencia])
 
-            dados.append([titulo, link, hora, data_hoje, referencia, referencia])
+    driver.close()
 
-        bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/agricolas')
+    bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/agricolas')
 
-        tb = json.loads(bd.content)
+    tb = json.loads(bd.content)
 
-        ext = []
+    ext = []
 
-        for it in tb:
-            ctd = it[1]
-            ext.append(ctd)
+    for it in tb:
+        ctd = it[1]
+        ext.append(ctd)
 
-        for novo in dados:
-            if novo[1] not in ext:
-                payl = {
-                    "Titulo": novo[0],
-                    "Link": novo[1],
-                    "Hora": novo[2],
-                    "Data": novo[3],
-                    "Referencia": novo[4],
-                    "Categoria": novo[5]
-                }
+    for novo in dados:
+        if novo[1] not in ext:
+            payl = {
+                "Titulo": novo[0],
+                "Link": novo[1],
+                "Hora": novo[2],
+                "Data": novo[3],
+                "Referencia": novo[4],
+                "Categoria": novo[5]
+            }
 
-                st = json.dumps(payl)
+            st = json.dumps(payl)
                 
-                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
+            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
 
 def crawlNoticiasAgrolink():
         
@@ -3608,6 +3622,9 @@ def crawlNoticiasCanalRural():
         hora = f'{horaa[0]}:{minuto[0]}:00'
 
         dados.append([titulo, link, hora, data_hoje, referencia, referencia])
+
+
+    driver.close()
 
     bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/canalrural')
 
@@ -3759,6 +3776,9 @@ def scrapy_precos():
     crawlRepolho() 
 
 
+
+
+
 def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
@@ -3766,13 +3786,12 @@ def run(job):
 
 
 
+schedule.every(1).minute.do(run, scrapy_noticias)
+schedule.every().day.at("04:30").do(run, scrapy_precos)
+schedule.every().monday.do(run, scrapy_tabela)
 
-    schedule.every(1).minute.do(run, scrapy_noticias)
-    schedule.every().day.at("04:20").do(run, scrapy_precos)
-    schedule.every().monday.do(run, scrapy_tabela)
 
 
-scrapy_precos()
 
 while 1:
     schedule.run_pending()
