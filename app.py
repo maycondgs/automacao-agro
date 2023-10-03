@@ -20,7 +20,7 @@ import schedule
 import threading
 import json
 import math
-import mysql
+import mysql.connector
 import os
 
 
