@@ -3298,7 +3298,7 @@ def crawlRepolho():
 
 
 
-def crawlNoticiasAgricolas():
+def crawlNoticiasAgricolas(cursor):
     
     referencia = 'agricolas'
 
@@ -3331,12 +3331,11 @@ def crawlNoticiasAgricolas():
         novos.append([titu, lnk, hora, datafim, referencia, referencia])
     
 
-    cursor = db.cursor()
     sql = f"SELECT * FROM noticias_agricolas"
 
     cursor.execute(sql)
     ext = cursor.fetchall()
-    cursor.close()
+
     linksat = []
     for it in ext:
         linksat.append(it[1])
@@ -3352,16 +3351,15 @@ def crawlNoticiasAgricolas():
                 "Categoria" : novo[5]
             }
             print(f'Noticia: {payl}')
-            cursord = db.cursor()
-            sql = f"INSERT INTO noticias_agricolas (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-            cursord.execute(sql)
-            db.commit()
-            cursord.close()
 
-    db.close()
+            sql = f"INSERT INTO noticias_agricolas (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
+            cursor.execute(sql)
+            db.commit()
+
+
 
     
-def crawlNoticiasAgrolink():
+def crawlNoticiasAgrolink(cursor):
         
     links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/politica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista']
 
@@ -3400,12 +3398,11 @@ def crawlNoticiasAgrolink():
         for titu, link, data, hora in zip(titulo, lnks2, data, hora):     
             novos.append([titu, link, hora, data, referencia, categoria])
 
-        cursorl = db.cursor()
+        cursor = db.cursor()
         sql = f"SELECT * FROM noticias_agrolink"
 
-        cursorl.execute(sql)
-        ext = cursorl.fetchall()
-        cursorl.close()
+        cursor.execute(sql)
+        ext = cursor.fetchall()
 
         linksat = []
         for it in ext:
@@ -3422,17 +3419,15 @@ def crawlNoticiasAgrolink():
                     "Categoria" : novo[5]
                 }
                 print(f'Noticia: {payl}')
-                cursorld = db.cursor()
+
                 sql = f"INSERT INTO noticias_agrolink (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-                cursorld.execute(sql)
+                cursor.execute(sql)
                 db.commit()
-                cursorld.close()
         
-    
-    db.close()
+
                 
 
-def crawlNoticiasCanalRural(): 
+def crawlNoticiasCanalRural(cursor): 
             
     referencia = 'Canal Rural'
 
@@ -3464,12 +3459,10 @@ def crawlNoticiasCanalRural():
     
         novo = [titulo, link, hora, data, referencia, referencia]
 
-        cursorr = db.cursor()
         sql = "SELECT * FROM noticias_canal_rural"
 
-        cursorr.execute(sql)
-        ext = cursorr.fetchall()
-        cursorr.close()
+        cursor.execute(sql)
+        ext = cursor.fetchall()
 
         linksat = []
         for it in ext:
@@ -3485,14 +3478,13 @@ def crawlNoticiasCanalRural():
                 "Categoria" : novo[5]
             }
             print(f'Noticia: {payl}')
-            cursorrd = db.cursor()
+            cursor = db.cursor()
             sql = f"INSERT INTO noticias_canal_rural (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-            cursorrd.execute(sql)
+            cursor.execute(sql)
             db.commit()
-            cursorrd.close()
 
             
-    db.close()   
+
 
 
 
@@ -3605,9 +3597,12 @@ def scrapy_tabela():
         scrap(tipo, itemrq)        
 
 def scrapy_noticias():
-    crawlNoticiasAgricolas()
-    crawlNoticiasAgrolink()
-    crawlNoticiasCanalRural()   
+    cursor = db.cursor()
+    print('NOTICIAS')
+    crawlNoticiasAgricolas(cursor)
+    crawlNoticiasAgrolink(cursor)
+    crawlNoticiasCanalRural(cursor)
+    
 
 
 
