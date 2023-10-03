@@ -25,7 +25,6 @@ import os
 
 
 
-
 dda = datetime.today()
 da = str(dda).split(' ')
 dataa = da[0].split('-')
