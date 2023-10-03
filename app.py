@@ -3400,12 +3400,12 @@ def crawlNoticiasAgrolink():
         for titu, link, data, hora in zip(titulo, lnks2, data, hora):     
             novos.append([titu, link, hora, data, referencia, categoria])
 
-        cursor = db.cursor()
+        cursorl = db.cursor()
         sql = f"SELECT * FROM noticias_agrolink"
 
-        cursor.execute(sql)
-        ext = cursor.fetchall()
-        cursor.close()
+        cursorl.execute(sql)
+        ext = cursorl.fetchall()
+        cursorl.close()
 
         linksat = []
         for it in ext:
@@ -3422,11 +3422,11 @@ def crawlNoticiasAgrolink():
                     "Categoria" : novo[5]
                 }
                 print(f'Noticia: {payl}')
-                cursord = db.cursor()
+                cursorld = db.cursor()
                 sql = f"INSERT INTO noticias_agrolink (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-                cursord.execute(sql)
+                cursorld.execute(sql)
                 db.commit()
-                cursord.close()
+                cursorld.close()
         
     
     db.close()
@@ -3464,12 +3464,12 @@ def crawlNoticiasCanalRural():
     
         novo = [titulo, link, hora, data, referencia, referencia]
 
-        cursor = db.cursor()
+        cursorr = db.cursor()
         sql = "SELECT * FROM noticias_canal_rural"
 
-        cursor.execute(sql)
-        ext = cursor.fetchall()
-        cursor.close()
+        cursorr.execute(sql)
+        ext = cursorr.fetchall()
+        cursorr.close()
 
         linksat = []
         for it in ext:
@@ -3485,11 +3485,11 @@ def crawlNoticiasCanalRural():
                 "Categoria" : novo[5]
             }
             print(f'Noticia: {payl}')
-            cursord = db.cursor()
+            cursorrd = db.cursor()
             sql = f"INSERT INTO noticias_canal_rural (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-            cursord.execute(sql)
+            cursorrd.execute(sql)
             db.commit()
-            cursord.close()
+            cursorrd.close()
 
             
     db.close()   
