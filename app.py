@@ -1,6 +1,10 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import *
+from selenium.webdriver.support import expected_conditions as condicao_esperada
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
@@ -16,7 +20,10 @@ import schedule
 import threading
 import json
 import math
+import mysql.connector
 import os
+
+
 
 
 dda = datetime.today()
@@ -25,29 +32,43 @@ dataa = da[0].split('-')
 data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
+db = mysql.connector.connect(
+    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
+    port = '45821',
+    user='agrouser',
+    password='agropass_TC7EeT2DaheojULHMvxa',
+    database='agrolivre'
+)
 
-
-option = Options()
 
 def iniciar_driver():
     chrome_options = Options()
-
-    arguments = ['--window-size=1000,800',
-                 '--incognito', '--disable-gpu', '--no-sandbox', '--headless', '--disable-dev-shm-usage']
-
+    arguments = ['--lang=pt-BR', '--start-maximized', '--incognito', '--headless']
     for argument in arguments:
         chrome_options.add_argument(argument)
-    chrome_options.headless = True
+
     chrome_options.add_experimental_option('prefs', {
         'download.prompt_for_download': False,
         'profile.default_content_setting_values.notifications': 2,
-        'profile.default_content_setting_values.automatic_downloads': 1
+        'profile.default_content_setting_values.automatic_downloads': 1,
 
     })
-    driver = webdriver.Chrome(service=ChromeService(
-        ChromeDriverManager(version="114.0.5735.90").install()), options=chrome_options)
+    service = Service()
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
-    return driver
+    wait = WebDriverWait(
+        driver,
+        50,
+        poll_frequency=5,
+        ignored_exceptions=[
+            NoSuchElementException,
+            ElementNotVisibleException,
+            ElementNotSelectableException,
+        ]
+    )
+
+    return driver,wait
+
 
 
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
@@ -81,6 +102,7 @@ tipos_pimentao = ['/pimentao-verde-1kg']
 tipos_cebola = ['/cebola-nacional-sc-20kg','/cebola-pera-classe-3-a-5-sc-20kg', '/cebola-vermelha--crioula--produtor-1kg', '/cebola-vermelha--crioula--tipo-2-beneficiador-sc-20kg', '/cebola-vermelha--crioula--tipo-3-atacado-sc-20kg', '/cebola-vermelha--crioula--tipo-3-beneficiador-sc-20kg', '/cebola-vermelha--crioula--tipo-4-beneficiador-sc-20kg', '/cebola-vermelha-argentina-tipo-3-beneficiador-sc-20kg', '/cebola-vermelha-tipo-3-atacado-sc-20kg']
 tipos_couve = ['/couve-flor-1dz']
 tipos_cenoura = ['/cenoura-comum-cx-23-kg-cx-23kg', '/cenoura-cx-20kg', '/cenoura-extra-cx-19kg', '/cenoura-verao-a---atacado-cx-20kg', '/cenoura-verao-a-lavada-beneficiador-cx-20kg', '/cenoura-verao-aaa---beneficiador-cx-20kg', '/cenoura-verao-g---atacado-cx-20kg', '/cenoura-verao-g-lavada---beneficiador-cx-20kg', '/cenoura-verao-suja---produtor-cx-20kg']
+
 
 
 
@@ -158,30 +180,44 @@ def scrap(tipo, itemrq):
                 
                     
 
-def busca(driver, itemgrupo, itemespecie, itemproduto):
+def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
 
     driver.get('https://www.agrolink.com.br/cotacoes/busca')
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 290);')
+    driver.execute_script('window.scrollTo(0, 230);')
     sleep(1)
 
-    grupo = itemgrupo
-
-    match grupo:
+    match itemgrupo:
         case 10:
-            grupo = 'Carnes'
+            grupoo = 'Carnes'
         case 11:
-            grupo = 'Diversos'
+            grupoo = 'Diversos'
         case 13:
-            'Grãos'
+            grupoo = 'Grãos'
         case 14:
-            grupo = 'Hortaliças'
+            grupoo = 'Hortaliças'
 
+    
+    grupo = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')))
+    sleep(2)
+    grupos = Select(grupo)
+    sleep(2)
+    try:
+        grupos.select_by_value(itemgrupo)
+        sleep(1)
+    except:
+        grupos.select_by_visible_text(grupoo)
+        sleep(1)
 
-    especiee = itemespecie
+    especie = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')))
+    sleep(2)
+    especies = Select(especie)
+    sleep(2)
 
-    match especiee:
+    especiees = ''
+
+    match itemespecie:
         case 122:
             especiees = 'Aves'
         case 120:
@@ -226,31 +262,16 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
             especiees = 'Pimentão'
         case 40:
             especiees = 'Tomate'
+    
 
-
-    grupo = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')
-    sleep(2)
-    grupos = Select(grupo)
-    sleep(2)
-    try:
-        grupos.select_by_value(itemgrupo)
-        sleep(1)
-    except:
-        grupos.select_by_visible_text(grupo)
-        sleep(1)
-
-    especie = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')
-    sleep(2)
-    especies = Select(especie)
-    sleep(2)
     try:
         especies.select_by_value(itemespecie)
         sleep(1)
     except:
-        busca(driver, itemgrupo, itemespecie, itemproduto)
+        especies.select_by_visible_text(especiees)
     
     sleep(1)
-    produto = driver.find_element(By.XPATH,'//select[@id="FiltroCotacoesProduto"]')
+    produto = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesProduto"]')))
     sleep(2)
     produtos = Select(produto)
     sleep(1)
@@ -259,20 +280,17 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
         produtos.select_by_visible_text(itemproduto)
         sleep(1)
     except:
-        busca(driver, itemgrupo, itemespecie, itemproduto)
+        busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+
+    sleep(4)
+
+    driver.execute_script('window.scrollTo(0, 320);')
     
-    sleep(1)
-
-    #grupo = driver.find_element(By.XPATH,'//select[@id="FiltroGeoEstado"]')
-    #sleep(1)
-    #grupos = Select(grupo)
-    #grupos.select_by_visible_text(grupo)
-    #sleep(1)
-
-
-    driver.find_element(By.XPATH,'//*[@id="DataInicial"]').click()
+    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="DataInicial"]')))
+    dattaa.click()
     sleep(2)
-        
+    
+
     try:
         driver.find_element(By.XPATH,'//th[@class="today"]').click()
         sleep(3)
@@ -281,8 +299,9 @@ def busca(driver, itemgrupo, itemespecie, itemproduto):
         return
 
 
-    driver.find_element(By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]').click()
+    wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]'))).click()
     sleep(1)
+
 
 def page(driver):
     driver.execute_script('window.scrollTo(0, 1000);')
@@ -307,7 +326,8 @@ def page(driver):
             driver.find_element(By.XPATH,'//*[@id="dvPaginacao"]/ul/li[6]/a').click()
             sleep(1)
 
-def scraw(driver):
+def scraw(driver, wait):
+
     itens = []
 
     tabela = driver.find_element(By.XPATH,'//*[@id="agks-cont-tb1"]/table')
@@ -322,94 +342,90 @@ def scraw(driver):
 
     infos = df_full.drop(['PREÇO', 'Última Atualização', 'Freq', 'Gráfico'], axis='columns')
 
-    pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]/div')
+    pre = driver.find_elements(By.XPATH,'//*[@id="agks-cont-tb1"]/table/tbody/tr/td[3]')
     sleep(2)
-
-    links = []
-    widths = []
-    heights = []
-    starts = []
-    ends = []
 
     precos = []
 
+    print(len(pre))
     for prev in pre:
-        linkpre = prev.get_attribute('style')
-        i = linkpre.strip()
-        addr = i.split('"')
-        linkk = addr[1]
+        if prev.find_element(By.TAG_NAME, 'div'):
+    
+            linkpre = prev.find_element(By.TAG_NAME, 'div').get_attribute('style')
+            i = linkpre.strip()
+            addr = i.split('"')
+            linkk = addr[1]
 
-        link2 = addr[2].split(';')
-        wid = link2[2]
-        widt = wid.split(' ')
-        hei = link2[3]
-        heigh = hei.split(' ')
-        ind = link2[4]
-        indices = ind.split(': ')
-        indice = indices[1].split(' ')
-        sta = indice[0]
-        en = indice[1]
+            link2 = addr[2].split(';')
+            wid = link2[2]
+            widt = wid.split(' ')
+            hei = link2[3]
+            heigh = hei.split(' ')
+            ind = link2[4]
+            indices = ind.split(': ')
+            indice = indices[1].split(' ')
+            sta = indice[0]
+            en = indice[1]
 
-        star = sta.split('px')
-        enn = en.split('px')
+            star = sta.split('px')
+            enn = en.split('px')
 
 
-        if star[0] == '0':
-            start = star[0]
+            if star[0] == '0':
+                start = star[0]
+            else:
+                starr = star[0].split('-')
+                start = starr[1]
+
+            if enn[0] == '0':
+                end = enn[0]
+            else:
+                ennn = enn[0].split('-')
+                end = ennn[1]
+
+
+            width = widt[2].split('p')
+            height = heigh[2].split('p')
+
+            driver.execute_script(f"window.open('{linkk}', '_blank')")
+            sleep(1)
+            driver.switch_to.window(driver.window_handles[1])
+            sleep(2)
+            image = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/img')))
+            sleep(1)
+
+            with open('imagem.png', 'wb') as f:
+                f.write(image.screenshot_as_png)
+
+            sleep(1)
+            driver.close()
+
+            driver.switch_to.window(driver.window_handles[0])
+
+            img = cv2.imread("imagem.png")
+
+            ys = int(end)
+            yf = int(end) + int(height[0])
+
+            xs = int(start)
+            xf  = int(start) + int(width[0])
+
+
+            croped = img[ys:yf, xs:xf]
+
+            cv2.imwrite('tag.png', croped)
+
+            imagem = cv2.imread("tag.png")
+
+            pre = pytesseract.image_to_string(imagem)
+            prec = pre.split('\n')
+            preco = prec[0]
+            precos.append(str(preco))
+
         else:
-            starr = star[0].split('-')
-            start = starr[1]
+            preco = prev.text
+            precos.append(str(preco))
 
-        if enn[0] == '0':
-            end = enn[0]
-        else:
-            ennn = enn[0].split('-')
-            end = ennn[1]
-
-
-        width = widt[2].split('p')
-        height = heigh[2].split('p')
-
-        links.append(linkk)
-        widths.append(width[0])
-        heights.append(height[0])
-        starts.append(start)
-        ends.append(end)
-
-
-    for i in range(len(links)):
-
-        driver.get(links[i])
-        sleep(2)
-
-        image = driver.find_element(By.XPATH,'/html/body/img')
-        sleep(2)
-
-        with open('imagem.png', 'wb') as f:
-            f.write(image.screenshot_as_png)
-
-
-        img = cv2.imread("imagem.png")
-
-        ys = int(ends[i])
-        yf = int(ends[i]) + int(heights[i])
-
-        xs = int(starts[i])
-        xf  = int(starts[i]) + int(widths[i])
-
-
-
-        croped = img[ys:yf, xs:xf]
-
-        cv2.imwrite('tag.png', croped)
-
-        imagem = cv2.imread("tag.png")
-
-        pre = pytesseract.image_to_string(imagem)
-        prec = pre.split('\n')
-        preco = prec[0]
-
-        precos.append(str(preco))
 
     dados = infos.assign(preco=precos)
 
@@ -474,9 +490,17 @@ def scraw(driver):
     return itens
 
 
-def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
+def post(itemarq, item):
+
+    cursor = db.cursor()
+    sql = f"INSERT INTO {itemarq} (nome, estado, preco, data) VALUES ('{item['Produto']}', '{item['Estado']}', '{item['Preco']}', '{item['Data']}')"
+    cursor.execute(sql)
+    db.commit()
+
+
+def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
     
-    busca(driver, itemgrupo, itemespecie, itemproduto)
+    busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
     driver.execute_script('window.scrollTo(0, 2200);')
 
@@ -494,255 +518,226 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
 
     match tot:
         case 1:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
 
             for item in itens:
-                st = json.dumps(item)
-
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
+                post(prodformat, item)
 
         case 2:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver, wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 3:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 4:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             sleep(1)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 5:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
                 
         case 6:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 7:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -750,70 +745,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 8:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -821,12 +809,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -835,70 +822,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 9:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -906,12 +886,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -920,12 +899,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -935,70 +913,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 10:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1006,12 +977,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1020,12 +990,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1035,12 +1004,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1051,70 +1019,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 11:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1122,12 +1083,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1136,12 +1096,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1151,12 +1110,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1167,12 +1125,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1184,70 +1141,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 12:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1255,12 +1205,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1269,12 +1218,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1284,12 +1232,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1300,12 +1247,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1317,12 +1263,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1335,70 +1280,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 13:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1406,12 +1344,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1420,12 +1357,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1435,12 +1371,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1451,12 +1386,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1468,12 +1402,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1486,12 +1419,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1505,70 +1437,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens13 = scraw(driver)
+            itens13 = scraw(driver, wait)
             for item in itens13:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 14:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1576,12 +1501,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1590,12 +1514,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1605,12 +1528,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1621,12 +1543,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1638,12 +1559,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1656,12 +1576,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1676,70 +1595,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 15:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1747,12 +1659,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1761,12 +1672,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1776,12 +1686,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1792,12 +1701,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1809,12 +1717,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1827,12 +1734,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1847,12 +1753,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1868,70 +1773,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 16:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1939,12 +1837,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1953,12 +1850,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1968,12 +1864,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -1984,12 +1879,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2001,12 +1895,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2019,12 +1912,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2039,12 +1931,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2060,12 +1951,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2082,70 +1972,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens16 = scraw(driver)
+            itens16 = scraw(driver, wait)
             for item in itens16:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 17:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2153,12 +2036,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2167,12 +2049,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2182,12 +2063,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2198,12 +2078,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2215,12 +2094,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2233,12 +2111,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2253,12 +2130,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2274,12 +2150,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2296,12 +2171,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens16 = scraw(driver)
+            itens16 = scraw(driver, wait)
             for item in itens16:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2319,70 +2193,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens17 = scraw(driver)
+            itens17 = scraw(driver, wait)
             for item in itens17:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 18:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2390,12 +2257,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2404,12 +2270,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2419,12 +2284,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2435,12 +2299,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2452,12 +2315,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2470,12 +2332,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2490,12 +2351,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2511,12 +2371,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2533,12 +2392,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens16 = scraw(driver)
+            itens16 = scraw(driver, wait)
             for item in itens16:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2556,12 +2414,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens17 = scraw(driver)
+            itens17 = scraw(driver, wait)
             for item in itens17:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2580,70 +2437,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens18 = scraw(driver)
+            itens18 = scraw(driver, wait)
             for item in itens18:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 19:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2651,12 +2501,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2665,12 +2514,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2680,12 +2528,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2696,12 +2543,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2713,12 +2559,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2731,12 +2576,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2751,12 +2595,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2772,12 +2615,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2794,12 +2636,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens16 = scraw(driver)
+            itens16 = scraw(driver, wait)
             for item in itens16:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2817,12 +2658,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens17 = scraw(driver)
+            itens17 = scraw(driver, wait)
             for item in itens17:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2841,12 +2681,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens18 = scraw(driver)
+            itens18 = scraw(driver, wait)
             for item in itens18:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2866,70 +2705,63 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens19 = scraw(driver)
+            itens19 = scraw(driver, wait)
             for item in itens19:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
         case 20:
-            itens = scraw(driver)
+            itens = scraw(driver, wait)
             for item in itens:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             sleep(1)
-            itens2 = scraw(driver)
+            itens2 = scraw(driver, wait)
             for item in itens2:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
-            itens3 = scraw(driver)
+            itens3 = scraw(driver, wait)
             for item in itens3:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
-            itens4 = scraw(driver)
+            itens4 = scraw(driver, wait)
             for item in itens4:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens5 = scraw(driver)
+            itens5 = scraw(driver, wait)
             for item in itens5:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
             page(driver)
-            itens6 = scraw(driver)
+            itens6 = scraw(driver, wait)
             for item in itens6:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2937,12 +2769,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens7 = scraw(driver)
+            itens7 = scraw(driver, wait)
             for item in itens7:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2951,12 +2782,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens8 = scraw(driver)
+            itens8 = scraw(driver, wait)
             for item in itens8:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2966,12 +2796,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens9 = scraw(driver)
+            itens9 = scraw(driver, wait)
             for item in itens9:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2982,12 +2811,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens10 = scraw(driver)
+            itens10 = scraw(driver, wait)
             for item in itens10:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -2999,12 +2827,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens11 = scraw(driver)
+            itens11 = scraw(driver, wait)
             for item in itens11:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3017,12 +2844,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens12 = scraw(driver)
+            itens12 = scraw(driver, wait)
             for item in itens12:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3037,12 +2863,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens14 = scraw(driver)
+            itens14 = scraw(driver, wait)
             for item in itens14:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3058,12 +2883,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens15 = scraw(driver)
+            itens15 = scraw(driver, wait)
             for item in itens15:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3080,12 +2904,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens16 = scraw(driver)
+            itens16 = scraw(driver, wait)
             for item in itens16:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3103,12 +2926,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens17 = scraw(driver)
+            itens17 = scraw(driver, wait)
             for item in itens17:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3127,12 +2949,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens18 = scraw(driver)
+            itens18 = scraw(driver, wait)
             for item in itens18:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3152,12 +2973,11 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens19 = scraw(driver)
+            itens19 = scraw(driver, wait)
             for item in itens19:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
-            busca(driver, itemgrupo, itemespecie, itemproduto)
+            busca(driver,wait, itemgrupo, itemespecie, itemproduto)
             sleep(1)
             page(driver)
             page(driver)
@@ -3178,11 +2998,10 @@ def crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat):
             page(driver)
             page(driver)
             page(driver)
-            itens20 = scraw(driver)
+            itens20 = scraw(driver, wait)
             for item in itens20:
-                st = json.dumps(item)
+                post(prodformat, item)
 
-                requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/{prodformat}', headers=header, data=st)
 
 
        
@@ -3192,8 +3011,7 @@ def scrap_preco():
     {'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
 
 
-
-    driver = iniciar_driver()
+    driver,wait = iniciar_driver()
 
     login(driver)
     sleep(1)
@@ -3209,8 +3027,8 @@ def scrap_preco():
         itemproduto = it[2]
         fmt = it[3].split("'")
         prodformat = fmt[0]
-
-        crawler(driver,itemgrupo,itemespecie,itemproduto,prodformat)
+        print(f"Scraping : {prodformat}")
+        crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat)
         sleep(1)
 
     driver.close()
@@ -3218,7 +3036,8 @@ def scrap_preco():
 
 
 def crawlAlface():
-    driver = iniciar_driver()
+
+    driver, wait = iniciar_driver()
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/alface-ceasas')
 
@@ -3352,12 +3171,11 @@ def crawlAlface():
 
     for dado in dados:
         print(dado)
-        st = json.dumps(dado)
-
-        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/alface',headers=header, data=st)
+        post('alface',dado)
 
 def crawlRepolho():
-    driver = iniciar_driver()
+
+    driver, wait = iniciar_driver()
 
     driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
 
@@ -3476,9 +3294,7 @@ def crawlRepolho():
 
     for dado in dados:
         print(dado)
-        st = json.dumps(dado)
-        requests.post(f'https://api-cotacoes.agrolivrebrasil.com/pos/repolho',headers=header, data=st)
-
+        post('repolho',dado)
 
 
 
@@ -3487,52 +3303,65 @@ def crawlNoticiasAgricolas():
     
     referencia = 'agricolas'
 
-    driver = iniciar_driver()
-
-    driver.get('https://www.noticiasagricolas.com.br/noticias/agronegocio/')
+    page = requests.get('https://www.noticiasagricolas.com.br/noticias/agronegocio/')
     sleep(2)
+    
+    soup = BeautifulSoup(page.content, 'html.parser')
+    dom = etree.HTML(str(soup))
 
-    dia_cotacao = driver.find_element(By.XPATH,'//*[@id="content"]/div[2]/h3[1]').text
+    links = (dom.xpath('//*[@id="content"]/div[2]/ul[1]/li/a/@href'))
+    datanoticia = (dom.xpath('//*[@id="content"]/div[2]/h3[1]/text()'))
+    data_noticia = datanoticia[0].split('/')
+    dia = str(data_noticia[0])
+    mes = str(data_noticia[1])
+    ano = str(data_noticia[2])
+    datafim = f'{ano}-{mes}-{dia}'
+    titulo = (dom.xpath('//*[@id="content"]/div[2]/ul[1]/li/a/div/h2/text()'))
+    dat = (dom.xpath('//*[@id="content"]/div[2]/ul[1]/li/a/span/text()'))
+    horas = []
 
-    itens = driver.find_elements(By.XPATH,'//*[@id="content"]/div[2]/ul[1]/li')
+    for datt in dat:
+        hora = f'{datt}:00'
 
-    dados = []
+        horas.append(hora)
 
-    for item in itens:
-        link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
-        hor = item.find_element(By.TAG_NAME, 'span').text
-        hora = hor + ':00'
-        titulo = item.find_element(By.TAG_NAME, 'h2').text
+    novos = []
 
-        dados.append([titulo, link, hora, data_hoje, referencia, referencia])
+    for titu, link, hora in zip(titulo, links, horas):     
+        lnk = f'https://www.noticiasagricolas.com.br{link}'
+        novos.append([titu, lnk, hora, datafim, referencia, referencia])
+    
 
-    driver.close()
+    cursor = db.cursor()
+    sql = f"SELECT * FROM noticias_agricolas"
 
-    bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/agricolas')
-
-    tb = json.loads(bd.content)
-
-    ext = []
-
-    for it in tb:
-        ctd = it[1]
-        ext.append(ctd)
-
-    for novo in dados:
-        if novo[1] not in ext:
+    cursor.execute(sql)
+    ext = cursor.fetchall()
+    cursor.close()
+    linksat = []
+    for it in ext:
+        linksat.append(it[1])
+    
+    for novo in novos:
+        if novo[1] not in linksat:
             payl = {
                 "Titulo": novo[0],
                 "Link": novo[1],
                 "Hora": novo[2],
                 "Data": novo[3],
                 "Referencia": novo[4],
-                "Categoria": novo[5]
+                "Categoria" : novo[5]
             }
+            print(f'Noticia: {payl}')
+            cursor = db.cursor()
+            sql = f"INSERT INTO noticias_agricolas (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
+            cursor.execute(sql)
+            db.commit()
+            cursor.close()
 
-            st = json.dumps(payl)
-                
-            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agricolas', headers=header, data=st)
+    db.close()
 
+    
 def crawlNoticiasAgrolink():
         
     links = ['https://www.agrolink.com.br/noticias/categoria/agricultura/lista','https://www.agrolink.com.br/noticias/categoria/pecuaria/lista', 'https://www.agrolink.com.br/noticias/categoria/economia/lista','https://www.agrolink.com.br/noticias/categoria/politica/lista', 'https://www.agrolink.com.br/noticias/categoria/tecnologia/lista']
@@ -3572,18 +3401,19 @@ def crawlNoticiasAgrolink():
         for titu, link, data, hora in zip(titulo, lnks2, data, hora):     
             novos.append([titu, link, hora, data, referencia, categoria])
 
-        bd = requests.get(f'https://api-cotacoes.agrolivrebrasil.com/noticias/agrolink/{categoria}')
+        cursor = db.cursor()
+        sql = f"SELECT * FROM noticias_agrolink"
 
-        tb = json.loads(bd.content)
+        cursor.execute(sql)
+        ext = cursor.fetchall()
+        cursor.close()
 
-        ext = []
-
-        for it in tb:
-            ctd = it[1]
-            ext.append(ctd)
+        linksat = []
+        for it in ext:
+            linksat.append(it[1])
 
         for novo in novos:
-            if novo[1] not in ext:
+            if novo[1] not in linksat:
                 payl = {
                     "Titulo": novo[0],
                     "Link": novo[1],
@@ -3592,52 +3422,61 @@ def crawlNoticiasAgrolink():
                     "Referencia": novo[4],
                     "Categoria" : novo[5]
                 }
+                print(f'Noticia: {payl}')
+                cursor = db.cursor()
+                sql = f"INSERT INTO noticias_agrolink (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
+                cursor.execute(sql)
+                db.commit()
+                cursor.close()
+        
+    
+    db.close()
+                
 
-                st = json.dumps(payl)
-            
-                requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/agrolink', headers=header, data=st)
-
-def crawlNoticiasCanalRural():
+def crawlNoticiasCanalRural(): 
             
     referencia = 'Canal Rural'
 
-    driver = iniciar_driver()
-
-    driver.get('https://www.canalrural.com.br/noticias/')
-    sleep(2)
+    page = requests.get('https://www.canalrural.com.br/ultimas-noticias/')
     
-    itens = driver.find_elements(By.XPATH,'//*[@id="desktop"]/div/div[2]/div/div/div/div/div/div[1]/div/div/div[5]/div/div[2]')
+    soup = BeautifulSoup(page.content, 'html.parser')
+    dom = etree.HTML(str(soup))
 
-    dados = []
+    links = (dom.xpath('/html/body/main/div[2]/div/div[1]/div/article/a/@href'))
 
-    for item in itens:
-        link = item.find_element(By.TAG_NAME, 'a').get_attribute('href')
-        titulo = item.find_element(By.TAG_NAME, 'a').text
-        dat = item.find_element(By.TAG_NAME, 'div').text
-
-        datt = str(dat).split(' às ')
-        horraa = datt[1]
-        horaa = horraa.split('h')
-        minuto = horaa[1].split('\n')
-        hora = f'{horaa[0]}:{minuto[0]}:00'
-
-        dados.append([titulo, link, hora, data_hoje, referencia, referencia])
+    for link in links:
+        page1 = requests.get(link)
+    
+        soup1 = BeautifulSoup(page1.content, 'html.parser')
+        dom1 = etree.HTML(str(soup1))
 
 
-    driver.close()
+        titu = (dom1.xpath('/html/body/main/section[1]/div/div[1]/strong/h1/text()'))
+        titul = titu[0].split('\n')
+        titulo = titul[1]
+        dat = (dom1.xpath('/html/body/main/section[1]/div/div[2]/div[2]/time[1]/text()'))
+        datt = dat[1].split('\n')
+        dattt = datt[1].split()
+        
+        dattn = dattt[0].strip()
+        datan = dattn.split('/')
+        data = f'{datan[2]}-{datan[1]}-{datan[0]}'
+        hora = f'{dattt[1]}:00'
+    
+        novo = [titulo, link, hora, data, referencia, referencia]
 
-    bd = requests.get('https://api-cotacoes.agrolivrebrasil.com/noticias/canalrural')
+        cursor = db.cursor()
+        sql = "SELECT * FROM noticias_canal_rural"
 
-    tb = json.loads(bd.content)
+        cursor.execute(sql)
+        ext = cursor.fetchall()
+        cursor.close()
 
-    ext = []
-
-    for it in tb:
-        ctd = it[1]
-        ext.append(ctd)
-
-    for novo in dados:
-        if novo[1] not in ext:
+        linksat = []
+        for it in ext:
+            linksat.append(it[1])
+        
+        if novo[1] not in linksat:
             payl = {
                 "Titulo": novo[0],
                 "Link": novo[1],
@@ -3646,10 +3485,15 @@ def crawlNoticiasCanalRural():
                 "Referencia": novo[4],
                 "Categoria" : novo[5]
             }
+            print(f'Noticia: {payl}')
+            cursor = db.cursor()
+            sql = f"INSERT INTO noticias_canal_rural (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
+            cursor.execute(sql)
+            db.commit()
+            cursor.close()
 
-            st = json.dumps(payl)
             
-            requests.post('https://api-cotacoes.agrolivrebrasil.com/pos/noticias/canalrural', headers=header, data=st)
+    db.close()   
 
 
 
@@ -3789,6 +3633,8 @@ def run(job):
 schedule.every(1).minute.do(run, scrapy_noticias)
 schedule.every().day.at("04:30").do(run, scrapy_precos)
 schedule.every().monday.do(run, scrapy_tabela)
+
+
 
 
 
