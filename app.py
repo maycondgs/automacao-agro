@@ -32,10 +32,10 @@ data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
 db = mysql.connector.connect(
-    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
-    port = '45821',
     user='agrouser',
     password='agropass_TC7EeT2DaheojULHMvxa',
+    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
+    port = '45821',
     database='agrolivre'
 )
 
@@ -3352,11 +3352,11 @@ def crawlNoticiasAgricolas():
                 "Categoria" : novo[5]
             }
             print(f'Noticia: {payl}')
-            cursor = db.cursor()
+            cursord = db.cursor()
             sql = f"INSERT INTO noticias_agricolas (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-            cursor.execute(sql)
+            cursord.execute(sql)
             db.commit()
-            cursor.close()
+            cursord.close()
 
     db.close()
 
@@ -3422,11 +3422,11 @@ def crawlNoticiasAgrolink():
                     "Categoria" : novo[5]
                 }
                 print(f'Noticia: {payl}')
-                cursor = db.cursor()
+                cursord = db.cursor()
                 sql = f"INSERT INTO noticias_agrolink (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-                cursor.execute(sql)
+                cursord.execute(sql)
                 db.commit()
-                cursor.close()
+                cursord.close()
         
     
     db.close()
@@ -3485,11 +3485,11 @@ def crawlNoticiasCanalRural():
                 "Categoria" : novo[5]
             }
             print(f'Noticia: {payl}')
-            cursor = db.cursor()
+            cursord = db.cursor()
             sql = f"INSERT INTO noticias_canal_rural (Titulo, Link, Hora, Data, Referencia, Categoria) VALUES ('{payl['Titulo']}', '{payl['Link']}', '{payl['Hora']}', '{payl['Data']}', '{payl['Referencia']}', '{payl['Categoria']}')"
-            cursor.execute(sql)
+            cursord.execute(sql)
             db.commit()
-            cursor.close()
+            cursord.close()
 
             
     db.close()   
