@@ -39,7 +39,6 @@ db = mysql.connector.connect(
     database='agrolivre'
 )
 
-
 def iniciar_driver():
     chrome_options = Options()
     arguments = ['--lang=pt-BR', '--start-maximized', '--incognito', '--headless']
@@ -70,7 +69,8 @@ def iniciar_driver():
 
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 header = {
     'Content-Type': 'application/json'
@@ -3627,7 +3627,6 @@ def run(job):
     schedule.every(1).minute.do(run, scrapy_noticias)
     schedule.every().day.at("04:30").do(run, scrapy_precos)
     schedule.every().monday.do(run, scrapy_tabela)
-
 
 
 scrapy_precos()
