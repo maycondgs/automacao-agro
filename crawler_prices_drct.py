@@ -45,16 +45,14 @@ db = mysql.connector.connect(
 
 def iniciar_driver():
 
-    CHROME_DRIVER_PATH = "/usr/bin/chromedriver"
-
-    service = Service(executable_path=CHROME_DRIVER_PATH)
+    service = Service(executable_path='/usr/bin/chromedriver')
 
     chrome_options = Options()
     chrome_options.binary_location = "/usr/bin/chromium-browser"
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
 
-
+    driver=webdriver.Chrome(service=Service(Service.install()))
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     wait = WebDriverWait(
