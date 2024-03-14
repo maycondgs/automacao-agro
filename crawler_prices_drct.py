@@ -58,7 +58,7 @@ def iniciar_driver():
     })
     
 
-    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
+    driver = webdriver.Chrome('/usr/bin/google-chrome', options=chrome_options)
 
     wait = WebDriverWait(
         driver,
