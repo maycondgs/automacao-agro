@@ -49,8 +49,11 @@ def iniciar_driver():
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
 
-    driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_options)
+    service = Service('/usr/bin/chromedriver')
+
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
 
     wait = WebDriverWait(
