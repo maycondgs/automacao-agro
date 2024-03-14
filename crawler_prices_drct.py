@@ -50,7 +50,7 @@ def iniciar_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
 
-    service = Service(executable_path=r'/bin/chromedriver')
+    service = Service(executable_path=r'/usr/bin/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
