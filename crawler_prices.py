@@ -56,9 +56,9 @@ def iniciar_driver():
         'profile.default_content_setting_values.automatic_downloads': 1,
 
     })
-    
+
     service = Service()
-    driver = webdriver.Chrome('/usr/bin/chromedriver', service=service, options=chrome_options)
+    driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', service=service, options=chrome_options)
 
     wait = WebDriverWait(
         driver,
