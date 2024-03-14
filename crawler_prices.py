@@ -3149,6 +3149,7 @@ def scrap_preco():
 
 def scrapy_precos():
     try:
+        print('CRAWLER PRECOS')
         scrap_preco()
         sleep(1)
         crawlAlface()
@@ -3161,14 +3162,9 @@ def scrapy_precos():
 
 
 
-def run(job):
-    threaded = threading.Thread(target=job)
-    threaded.start()
-
-    schedule.every().day.at("06:30").do(run, scrapy_precos)
+schedule.every().day.at("06:30").do(scrapy_precos)
 
 
 while True:
-    schedule.run()
-
+    schedule.run_pending()
     sleep(1)

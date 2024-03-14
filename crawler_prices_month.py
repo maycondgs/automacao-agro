@@ -219,14 +219,9 @@ def scrapy_tabela():
 
 
 
-def run(job):
-    threaded = threading.Thread(target=job)
-    threaded.start()
-
-    schedule.every().monday.do(run, scrapy_tabela)
+schedule.every().monday.do(scrapy_tabela)
 
 
 while True:
-    schedule.run()
-
+    schedule.run_pending()
     sleep(1)
