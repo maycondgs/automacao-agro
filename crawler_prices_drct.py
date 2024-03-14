@@ -3148,17 +3148,15 @@ def scrap_preco():
 
 
 def scrapy_precos():
-    try:
-        print('CRAWLER PRECOS')
-        scrap_preco()
-        sleep(1)
-        crawlAlface()
-        sleep(1)
-        crawlRepolho() 
+   
+    print('CRAWLER PRECOS')
+    scrap_preco()
+    sleep(1)
+    crawlAlface()
+    sleep(1)
+    crawlRepolho() 
 
-    except:
-        print('Falha na execucao do app')
-        print('{error}')
+    
 
 
 
