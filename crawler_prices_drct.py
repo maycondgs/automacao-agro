@@ -3165,7 +3165,7 @@ def run(job):
     threaded = threading.Thread(target=job)
     threaded.start()
 
-    schedule.every().day.at("06:30").do(run, scrapy_precos)
+    schedule.every().day.at("03:30").do(run, scrapy_precos)
 
 
 while True:
