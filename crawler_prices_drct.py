@@ -53,7 +53,6 @@ def iniciar_driver():
     chrome_options.binary_location = "/usr/bin/chromium-browser"
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    chrome_options.add_argument('--no-sandbox')
 
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
