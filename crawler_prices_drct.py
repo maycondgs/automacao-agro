@@ -90,13 +90,12 @@ def login(driver):
 
 
 
-
 def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
 
     driver.get('https://www.agrolink.com.br/cotacoes/busca')
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 230);')
+    driver.execute_script('window.scrollTo(0, 270);')
     sleep(1)
 
     match itemgrupo:
@@ -195,7 +194,8 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
 
     sleep(4)
 
-    driver.execute_script('window.scrollTo(0, 320);')
+    driver.execute_script('window.scrollTo(0, 300);')
+    sleep(2)
     
     dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="DataInicial"]')))
     dattaa.click()
@@ -3118,7 +3118,6 @@ def scrap_preco():
     codigos = [{'11,8,Todos,algodao'},{'13,5,Todos,arroz'},{'11,30,Todos,amendoim'},{'13,7,Todos,cafe'},{'11,92,Todos,cana'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},{'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
     
     driver,wait = iniciar_driver()
-    print('iniciou driver')
 
     login(driver)
     sleep(1)
