@@ -44,7 +44,7 @@ db = mysql.connector.connect(
 
 def iniciar_driver():
 
-    service = Service(executable_path='/automacao-agro/venv/bin/chromedriver')
+    service = Service(executable_path='/venv/bin/chromedriver')
 
     chrome_options = Options()
     chrome_options.add_argument('--start-maximized')
