@@ -43,6 +43,9 @@ db = mysql.connector.connect(
 
 
 def iniciar_driver():
+    
+    service = Service(executable_path=r'/usr/bin/chromedriver')
+
     chrome_options = Options()
 
     chrome_options.add_argument('--headless')
@@ -57,8 +60,7 @@ def iniciar_driver():
 
     })
 
-    service = Service()
-    driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     wait = WebDriverWait(
         driver,

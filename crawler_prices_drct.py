@@ -44,13 +44,13 @@ db = mysql.connector.connect(
 
 def iniciar_driver():
 
-    service = Service(executable_path=r'/usr/bin/chromedriver')
 
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
-
+    
+    service = Service(executable_path=r'/usr/bin/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
