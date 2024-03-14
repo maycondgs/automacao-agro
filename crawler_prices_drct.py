@@ -43,8 +43,9 @@ db = mysql.connector.connect(
 
 
 def iniciar_driver():
+    
+    CHROME_DRIVER_PATH = "/usr/local/bin/"
 
-    CHROME_DRIVER_PATH = "/usr/lib/chromium-browser/chromedriver"
     os.environ["webdriver.chrome.driver"] = CHROME_DRIVER_PATH
 
     service = Service(executable_path='CHROME_DRIVER_PATH')
