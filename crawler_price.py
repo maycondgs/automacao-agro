@@ -334,7 +334,8 @@ def scraw(driver, wait):
 
 
 def page(driver, wait):
-    driver.execute_script('window.scrollTo(0, 2400);')
+    driver.execute_script("window.scroll(0, document.body.scrollHeight);")
+
     sleep(5)
     next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/form/div/a'))).click()
 
