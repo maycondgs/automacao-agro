@@ -55,7 +55,7 @@ def iniciar_driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
 
 
-    service = Service("/usr/bin/google-chrome-stable")
+    service = Service()
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
