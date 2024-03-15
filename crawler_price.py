@@ -46,12 +46,12 @@ db = mysql.connector.connect(
 def iniciar_driver():
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--remote-debugging-pipe')
+    #chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    #chrome_options.add_argument('--disable-dev-shm-usage')
 
 
     service = Service()
@@ -197,12 +197,11 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
     except:
         busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
-    sleep(4)
 
     driver.execute_script('window.scrollTo(0, 300);')
-    sleep(2)
+    sleep(5)
     
-    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="DataInicial"]')))
+    dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
     dattaa.click()
     sleep(2)
     
