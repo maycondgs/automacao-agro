@@ -48,11 +48,11 @@ def iniciar_driver():
     
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--remote-debugging-pipe')
+    #chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    #chrome_options.add_argument('--disable-dev-shm-usage')
 
 
     service = Service()
@@ -230,18 +230,20 @@ def scraw(driver, wait):
     produtos = produtos[1:]
 
     products = []
+    for produto in produtos:
+        produto = produto.text
+        products.append(produto)
+
+    locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[2]')))
+
     locals = []
 
-    for produto in produtos:
-        produto_texto = produto.text
-        prodd = produto_texto.split('\n')
-
-        local = prodd[1]
+    for local in locais:
+        local = local.text
 
         if "'" in local:
             local = local.replace("'", "")
-        
-        products.append(prodd[0])
+        print(local)
         locals.append(local)
 
     
