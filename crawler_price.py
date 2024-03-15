@@ -338,7 +338,8 @@ def page(driver, wait):
     driver.execute_script("window.scroll(0, 2500);")
 
     sleep(5)
-    next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
+    next_btn = driver.find_element(By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')
+    #next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
     next_btn.click()
 
 
