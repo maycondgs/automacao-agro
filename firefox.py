@@ -13,6 +13,7 @@ driver = webdriver.Firefox()
 
 # Exemplo: abrindo o Google
 driver.get('https://www.google.com')
+print('ABRIU')
 
 # Encerrando o driver
 driver.quit()
