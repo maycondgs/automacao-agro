@@ -3,11 +3,11 @@ from selenium.webdriver.firefox.options import Options
 import os
 
 # Configuração do driver (geckodriver)
-geckodriver_path = '/usr/bin/geckodriver'
+geckodriver_path = '/usr/local/bin/geckodriver'
 os.environ['PATH'] += os.pathsep + geckodriver_path
 
 firefox_options = Options()
-firefox_options.add_argument('-headless')
+firefox_options.add_argument('--headless')
 
 driver = webdriver.Firefox()
 
