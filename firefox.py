@@ -7,7 +7,7 @@ geckodriver_path = '/usr/bin/geckodriver'
 os.environ['PATH'] += os.pathsep + geckodriver_path
 
 firefox_options = Options()
-firefox_options.add_argument('--headless')
+firefox_options.add_argument('-headless')
 
 driver = webdriver.Firefox()
 
