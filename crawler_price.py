@@ -335,12 +335,11 @@ def scraw(driver, wait):
 
 def page(driver, wait):
 
-    next_btn = driver.find_element(By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')
+    next_btn = driver.find_element(By.XPATH, '//*/a[@class='btn-navigation btn-navigation-next']')
 
     sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", next_btn)
 
-    # Rollback the page
     driver.execute_script("window.scrollBy(0, -100);")
 
     driver.execute_script("arguments[0].click();", next_btn)
