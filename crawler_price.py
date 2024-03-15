@@ -335,7 +335,7 @@ def scraw(driver, wait):
 
 def page(driver, wait):
 
-    next_btn = driver.find_element(By.XPATH, '//*/a[@class='btn-navigation btn-navigation-next']')
+    next_btn = driver.find_element(By.XPATH, '//*/a[@class="btn-navigation btn-navigation-next"]')
 
     sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", next_btn)
