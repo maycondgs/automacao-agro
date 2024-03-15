@@ -49,7 +49,7 @@ def iniciar_driver():
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
@@ -241,7 +241,7 @@ def scraw(driver, wait):
 
         if "'" in local:
             local = local.replace("'", "")
-        print(local)
+
         locals.append(local)
 
     
@@ -336,7 +336,7 @@ def scraw(driver, wait):
 def page(driver, wait):
     driver.execute_script('window.scrollTo(0, 1250);')
     sleep(5)
-    next_btn = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH, '//*[@class="btn-navigation btn-navigation-next"]'))).click()
+    next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@class="btn-navigation btn-navigation-next"]'))).click()
 
 
 
