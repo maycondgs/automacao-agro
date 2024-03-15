@@ -1,5 +1,4 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -48,7 +47,7 @@ def iniciar_driver():
 
     
 
-    chrome_options = Options()
+    chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
@@ -56,7 +55,7 @@ def iniciar_driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
 
 
-    service = Service(ChromeDriverManager().install())
+    service = Service()
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
