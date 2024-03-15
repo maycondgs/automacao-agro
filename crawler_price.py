@@ -45,6 +45,8 @@ db = mysql.connector.connect(
 
 def iniciar_driver():
 
+    
+
     chrome_options = Options()
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
@@ -53,7 +55,7 @@ def iniciar_driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
 
 
-    service = Service("/usr/bin/chromedriver")
+    service = Service("/usr/bin/google-chrome-stable")
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
