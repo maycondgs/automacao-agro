@@ -342,8 +342,10 @@ def page(driver, wait):
 
     # Rollback the page
     driver.execute_script("window.scrollBy(0, -100);")
+
+    driver.execute_script("arguments[0].click();", next_btn)
     #next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
-    next_btn.click()
+    #next_btn.click()
 
 
 def post(itemarq, item):
