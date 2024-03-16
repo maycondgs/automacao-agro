@@ -25,6 +25,11 @@ import mysql.connector
 import os
 
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+
 dda = datetime.today()
 da = str(dda).split(' ')
 dataa = da[0].split('-')
@@ -42,25 +47,22 @@ db = mysql.connector.connect(
 
 
 
+
 def iniciar_driver():
-    
-    service = Service(executable_path=r'/usr/bin/chromedriver')
 
-    chrome_options = Options()
-
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--incognito')
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
+    chrome_options.add_argument('--incognito')
+    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
 
 
-    chrome_options.add_experimental_option('prefs', {
-        'download.prompt_for_download': False,
-        'profile.default_content_setting_values.notifications': 2,
-        'profile.default_content_setting_values.automatic_downloads': 1,
-
-    })
+    service = Service()
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
+
 
     wait = WebDriverWait(
         driver,
@@ -74,6 +76,7 @@ def iniciar_driver():
     )
 
     return driver,wait
+
 
 
 
@@ -103,7 +106,7 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
     driver.get('https://www.agrolink.com.br/cotacoes/busca')
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 230);')
+    driver.execute_script('window.scrollTo(0, 270);')
     sleep(1)
 
     match itemgrupo:
@@ -200,11 +203,11 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
     except:
         busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
-    sleep(4)
 
-    driver.execute_script('window.scrollTo(0, 320);')
+    driver.execute_script('window.scrollTo(0, 300);')
+    sleep(5)
     
-    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="DataInicial"]')))
+    dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
     dattaa.click()
     sleep(2)
     
@@ -231,18 +234,20 @@ def scraw(driver, wait):
     produtos = produtos[1:]
 
     products = []
+    for produto in produtos:
+        produto = produto.text
+        products.append(produto)
+
+    locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[2]')))
+
     locals = []
 
-    for produto in produtos:
-        produto_texto = produto.text
-        prodd = produto_texto.split('\n')
-
-        local = prodd[1]
+    for local in locais:
+        local = local.text
 
         if "'" in local:
             local = local.replace("'", "")
-        
-        products.append(prodd[0])
+
         locals.append(local)
 
     
@@ -335,10 +340,17 @@ def scraw(driver, wait):
 
 
 def page(driver, wait):
-    driver.execute_script('window.scrollTo(0, 1250);')
-    sleep(5)
-    next_btn = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH, '//*[@class="btn-navigation btn-navigation-next"]'))).click()
 
+    next_btn = driver.find_element(By.XPATH, '//*/a[@class="btn-navigation btn-navigation-next"]')
+
+    sleep(2)
+    driver.execute_script("arguments[0].scrollIntoView();", next_btn)
+
+    driver.execute_script("window.scrollBy(0, -100);")
+
+    driver.execute_script("arguments[0].click();", next_btn)
+    #next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
+    #next_btn.click()
 
 
 def post(itemarq, item):
@@ -347,6 +359,7 @@ def post(itemarq, item):
     sql = f"INSERT INTO quotes_{itemarq} (name, state, price, date_publication) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Data']}')"
     cursor.execute(sql)
     db.commit()
+
 
 
 def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
@@ -2993,7 +3006,9 @@ def crawlAlface():
     for dado in dados:
         if dado['Preco'] == 's/, c':
             dado['Preco'] = 'Sem cotacao'
-        post('alface',dado)
+        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+
+        post('alface',data)
 
 
 def crawlRepolho():
@@ -3116,8 +3131,12 @@ def crawlRepolho():
     driver.close()
 
     for dado in dados:
-        post('repolho',dado)
+        if dado['Preco'] == 's/, c':
+            dado['Preco'] = 'Sem cotacao'
 
+        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+
+        post('repolho',data)
 
        
 def scrap_preco():
@@ -3150,6 +3169,27 @@ def scrap_preco():
     driver.close()
 
 
+def send_mail():
+    sender_email = "meuclash3333@gmail.com"
+    sender_password = "mqzm swld bzsa hjau"
+    recipient_email = "mayconclementino44@gmail.com"
+    subject = "Python"
+    body = "ERRO NA APLICACAO AGROLIVRE"
+
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = recipient_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    # Send the email
+    smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+    smtp_server.starttls()
+    smtp_server.login(sender_email, sender_password)
+    smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
+    smtp_server.quit()
+
+
 
 
 def scrapy_precos():
@@ -3163,11 +3203,13 @@ def scrapy_precos():
 
     except:
         print('Erro na execucao do app')
+        send_mail()
+        
 
 
 
 
-schedule.every().day.at("06:30").do(scrapy_precos)
+schedule.every().day.at("05:30").do(scrapy_precos)
 
 
 while True:

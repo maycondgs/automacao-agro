@@ -8,6 +8,10 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import mysql.connector
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 db = mysql.connector.connect(
     user='marceloagrouser',
@@ -86,7 +90,7 @@ def scrap(tipo, itemrq):
 
             cursor = db.cursor()
                     
-            sql = f"SELECT * FROM quotes_month_{itemrq} WHERE item == {itemcontent}"
+            sql = f"SELECT * FROM quotes_month_{itemrq} WHERE type == {itemcontent}"
 
             cursor.execute(sql)
             ext = cursor.fetchall()
@@ -105,7 +109,7 @@ def scrap(tipo, itemrq):
 
 def post(itemarq, item):
     cursor = db.cursor()
-    sql = f"INSERT INTO quotes_month_{itemarq} (item, state, date, local, national) VALUES ('{item['Item']}', '{item['Estado']}', '{item['Data']}', '{item['Estadual']}', '{item['Nacional']}')"
+    sql = f"INSERT INTO quotes_month_{itemarq} (type, state, date, local, national) VALUES ('{item['Item']}', '{item['Estado']}', '{item['Data']}', '{item['Estadual']}', '{item['Nacional']}')"
     cursor.execute(sql)
     db.commit()
 
@@ -218,8 +222,36 @@ def scrapy_tabela():
         scrap(tipo, itemrq)        
 
 
+def send_mail():
+    sender_email = "meuclash3333@gmail.com"
+    sender_password = "mqzm swld bzsa hjau"
+    recipient_email = "mayconclementino44@gmail.com"
+    subject = "Python"
+    body = "ERRO NA APLICACAO AGROLIVRE"
 
-schedule.every().monday.do(scrapy_tabela)
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = recipient_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    # Send the email
+    smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+    smtp_server.starttls()
+    smtp_server.login(sender_email, sender_password)
+    smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
+    smtp_server.quit()
+
+
+def scraping():
+    try:
+        scrapy_tabela()
+    except:
+        send_mail()
+    
+
+
+schedule.every().monday.do(scraping)
 
 
 while True:

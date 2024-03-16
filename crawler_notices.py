@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 import mysql.connector
 import os
 
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 dda = datetime.today()
 da = str(dda).split(' ')
@@ -235,7 +237,6 @@ def crawlNoticiasCanalRural(cursor):
             
 
 
-
 def crawlerNoticias():
     cursor = db.cursor()
     crawlNoticiasAgricolas(cursor)
@@ -243,7 +244,36 @@ def crawlerNoticias():
     crawlNoticiasCanalRural(cursor)
 
 
-schedule.every(1).minutes.do(crawlerNoticias)
+def send_mail():
+    sender_email = "meuclash3333@gmail.com"
+    sender_password = "mqzm swld bzsa hjau"
+    recipient_email = "mayconclementino44@gmail.com"
+    subject = "Python"
+    body = "ERRO NA APLICACAO AGROLIVRE"
+
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = recipient_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    # Send the email
+    smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+    smtp_server.starttls()
+    smtp_server.login(sender_email, sender_password)
+    smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
+    smtp_server.quit()
+
+
+
+
+def crawler():
+    try:
+        crawlerNoticias()
+    except:
+        send_mail()
+
+schedule.every(1).minutes.do(crawler)
 
 while True:
     schedule.run_pending()

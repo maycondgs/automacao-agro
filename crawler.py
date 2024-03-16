@@ -2999,7 +2999,9 @@ def crawlAlface():
     for dado in dados:
         if dado['Preco'] == 's/, c':
             dado['Preco'] = 'Sem cotacao'
-        post('alface',dado)
+        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+
+        post('alface',data)
 
 
 def crawlRepolho():
@@ -3122,7 +3124,12 @@ def crawlRepolho():
     driver.close()
 
     for dado in dados:
-        post('repolho',dado)
+        if dado['Preco'] == 's/, c':
+            dado['Preco'] = 'Sem cotacao'
+
+        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+
+        post('repolho',data)
 
 
        
