@@ -241,7 +241,8 @@ def scraw(driver, wait):
         produto = produto.text
         products.append(produto)
 
-    locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr[2]/td[2]')))
+    locais = driver.find_elements(By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr[2]/td[2]')
+    #locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr[2]/td[2]')))
 
     locals = []
 
