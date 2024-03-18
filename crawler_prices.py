@@ -203,14 +203,19 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
     except:
         busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
+    sleep(2)
 
-    driver.execute_script('window.scrollTo(0, 300);')
-    print('DATA')
+    dattaa = driver.find_element(By.XPATH, '//*[@id="DataInicial"]')
+
     sleep(2)
     
-    dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="DataInicial"]'))).click()
-    sleep(2)
+    driver.execute_script("arguments[0].scrollIntoView();", dattaa)
+
+    driver.execute_script("window.scrollBy(0, -100);")
+
+    driver.execute_script("arguments[0].click();", dattaa)
     
+
 
     try:
         btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
