@@ -3211,7 +3211,8 @@ def scrapy_precos():
         send_mail()
         
 
-scrapy_precos()
+
+scrap_preco()
 
 
 #schedule.every().day.at("05:30").do(scrapy_precos)
