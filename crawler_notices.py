@@ -248,8 +248,8 @@ def send_mail():
     sender_email = "meuclash3333@gmail.com"
     sender_password = "mqzm swld bzsa hjau"
     recipient_email = "mayconclementino44@gmail.com"
-    subject = "Python"
-    body = "ERRO NA APLICACAO AGROLIVRE"
+    subject = "SUPORTE - DEV"
+    body = "BUG APP AGROLIVRE - CRAWLER NOTICES"
 
     msg = MIMEMultipart()
     msg["From"] = sender_email
