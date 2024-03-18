@@ -371,7 +371,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
 
     result = busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
-    if result != False:
+    if result == True:
 
         driver.execute_script('window.scrollTo(0, 2200);')
 
