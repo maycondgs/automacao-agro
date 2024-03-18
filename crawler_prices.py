@@ -205,10 +205,11 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
 
 
     driver.execute_script('window.scrollTo(0, 300);')
-    sleep(5)
+    sleep(2)
     
     dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
-    dattaa.click()
+
+    driver.execute_script("arguments[0].click();", dattaa)
     sleep(2)
     
 
