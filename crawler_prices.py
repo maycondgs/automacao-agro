@@ -386,6 +386,8 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
         except:
             tot = 1
 
+        print(F'CRAWLING... {prodformat} : {tot}')
+
         match tot:
             case 1:
                 itens = scraw(driver, wait)
