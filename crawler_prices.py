@@ -82,7 +82,7 @@ def iniciar_driver():
 
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
-
+continu = True
 
 def login(driver):
 
@@ -212,20 +212,19 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
     driver.execute_script("arguments[0].click();", dattaa)
     sleep(2)
     
+    
 
     try:
-        wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
+        btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]')))
         sleep(3)
+        driver.execute_script("arguments[0].click();", btn_date)
+
+        btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
+        sleep(1)
+        driver.execute_script("arguments[0].click();", btn_form)
 
     except:
-        return False
-
-
-    wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]'))).click()
-    sleep(1)
-
-    return True
-
+        continu = False
 
 
 
@@ -369,9 +368,9 @@ def post(itemarq, item):
 def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
     
 
-    result = busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+    busca(driver,wait, itemgrupo, itemespecie, itemproduto)
 
-    if result == True:
+    if continu == True:
 
         driver.execute_script('window.scrollTo(0, 2200);')
 
@@ -390,6 +389,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
 
         match tot:
             case 1:
+                
                 itens = scraw(driver, wait)
 
                 for item in itens:
@@ -3204,7 +3204,6 @@ def send_mail():
 
 def scrapy_precos():
     try:
-        print('CRAWLER PRECOS')
         scrap_preco()
         sleep(1)
         crawlAlface()
