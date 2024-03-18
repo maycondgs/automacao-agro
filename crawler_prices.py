@@ -54,7 +54,7 @@ def iniciar_driver():
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
@@ -205,19 +205,16 @@ def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
 
 
     driver.execute_script('window.scrollTo(0, 300);')
+    print('DATA')
     sleep(2)
     
-    dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
-
-    driver.execute_script("arguments[0].click();", dattaa)
+    dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="DataInicial"]'))).click()
     sleep(2)
-    
     
 
     try:
-        btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]')))
+        btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
         sleep(3)
-        driver.execute_script("arguments[0].click();", btn_date)
 
         btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
         sleep(1)
