@@ -3211,12 +3211,12 @@ def scrapy_precos():
         send_mail()
         
 
+scrapy_precos()
 
 
+#schedule.every().day.at("05:30").do(scrapy_precos)
 
-schedule.every().day.at("05:30").do(scrapy_precos)
 
-
-while True:
-    schedule.run_pending()
-    sleep(1)
+#while True:
+#    schedule.run_pending()
+#    sleep(1)
