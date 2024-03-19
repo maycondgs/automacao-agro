@@ -101,121 +101,66 @@ def login(driver):
 
 
 
-def busca(driver,wait, itemgrupo, itemespecie, itemproduto):
+def busca(driver,wait, prodformat):
 
-    driver.get('https://www.agrolink.com.br/cotacoes/busca')
+    match prodformat:
+        case 'algodao':
+            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/algodao/'
+        case 'arroz':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/arroz/'
+        case 'amendoim':
+            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/amendoim/'
+        case 'cafe':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/cafe/'
+        case 'cana':
+            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cafe/'
+        case 'feijao':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/feijao/'
+        case 'milho':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/milho/'
+        case 'soja':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/soja/'
+        case 'sorgo':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/sorgo/'
+        case 'trigo':
+            link_search = 'https://www.agrolink.com.br/cotacoes/graos/trigo/'
+        case 'suinos':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/suinos/'
+        case 'aves':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/aves/'
+        case 'caprinos':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/caprinos/'
+        case 'ovinos':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/ovinos/'
+        case 'beterraba':
+            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/'
+        case 'tomate':
+            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/tomate/'
+        case 'pimentao':
+            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/'
+        case 'cebola':
+            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cebola/'
+        case 'couve':
+            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/couve/'
+        case 'cenoura':
+            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/'
+        case 'boi':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'
+        case 'vaca':
+            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'
+
+
+    driver.get(link_search)
     sleep(1)
 
     driver.execute_script('window.scrollTo(0, 270);')
     sleep(1)
 
-    match itemgrupo:
-        case 10:
-            grupoo = 'Carnes'
-        case 11:
-            grupoo = 'Diversos'
-        case 13:
-            grupoo = 'Grãos'
-        case 14:
-            grupoo = 'Hortaliças'
+    dattaa = driver.find_element(By.XPATH, '//*[@id="DataInicial"]').click()
+
+    sleep(4)
 
     
-    grupo = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesGrupo"]')))
-    sleep(2)
-    grupos = Select(grupo)
-    sleep(2)
-    try:
-        grupos.select_by_value(itemgrupo)
-        sleep(1)
-    except:
-        grupos.select_by_visible_text(grupoo)
-        sleep(1)
-
-    especie = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesEspecie"]')))
-    sleep(2)
-    especies = Select(especie)
-    sleep(2)
-
-    especiees = ''
-
-    match itemespecie:
-        case 122:
-            especiees = 'Aves'
-        case 120:
-            especiees = 'Bovinos'
-        case 147:
-            especiees = 'Caprinos'
-        case 152:
-            especiees = 'Ovinos'
-        case 144:
-            especiees = 'Suínos'
-        case 673:
-            especies = 'Açúcar'
-        case 8:
-            especiees = 'Algodão'
-        case 30:
-            especiees = 'Amendoim'
-        case 92:
-            especiees = 'Cana-de-açúcar'
-        case 24:
-            especiees = 'Cebola'
-        case 5:
-            especiees = 'Arroz'
-        case 7:
-            especiees = 'Café'
-        case 46:
-            especiees = 'Feijão'
-        case 2:
-            especiees = 'Milho'
-        case 1:
-            especiees = 'Soja'
-        case 31:
-            especiees = 'Sorgo'
-        case 6:
-            especiees = 'Trigo'
-        case 95:
-            especiees = 'Beterraba'
-        case 27:
-            especiees = 'Cenoura'
-        case 39:
-            especiees = 'Couve'
-        case 51:
-            especiees = 'Pimentão'
-        case 40:
-            especiees = 'Tomate'
-    
-
-    try:
-        especies.select_by_value(itemespecie)
-        sleep(1)
-    except:
-        especies.select_by_visible_text(especiees)
-    
-    sleep(1)
-    produto = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//select[@id="FiltroCotacoesProduto"]')))
-    sleep(2)
-    produtos = Select(produto)
-    sleep(1)
-
-    try:
-        produtos.select_by_visible_text(itemproduto)
-        sleep(1)
-    except:
-        busca(driver,wait, itemgrupo, itemespecie, itemproduto)
-
-    sleep(2)
-
-    dattaa = driver.find_element(By.XPATH, '//*[@id="DataInicial"]')
-
-    sleep(2)
-    
-    driver.execute_script("arguments[0].scrollIntoView();", dattaa)
-
-    driver.execute_script("window.scrollBy(0, -100);")
-
-    driver.execute_script("arguments[0].click();", dattaa)
-    
-
 
     try:
         btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
@@ -238,13 +183,14 @@ def scraw(driver, wait):
     produtos = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[1]')))
     produtos = produtos[1:]
 
+    locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[1]/span')))
+    locais = locais[1:]
+
     products = []
     for produto in produtos:
         produto = produto.text
         products.append(produto)
 
-    locais = driver.find_elements(By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[2]')
-    #locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr[2]/td[2]')))
 
     locals = []
 
@@ -259,6 +205,7 @@ def scraw(driver, wait):
     
 
     pre = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[3]/div')))
+
 
 
 
@@ -368,10 +315,10 @@ def post(itemarq, item):
 
 
 
-def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
+def crawler(driver, wait, prodformat):
     
 
-    busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+    busca(driver, wait, prodformat)
 
     if continu == True:
 
@@ -403,7 +350,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver, wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -419,7 +366,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                     post(prodformat, item)
 
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -427,7 +374,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -441,7 +388,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -449,7 +396,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -458,7 +405,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -474,7 +421,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                     post(prodformat, item)
 
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -482,7 +429,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -490,7 +437,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -499,7 +446,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -515,7 +462,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -523,7 +470,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -531,7 +478,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -540,7 +487,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -550,7 +497,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -567,7 +514,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -575,7 +522,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -583,7 +530,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -592,7 +539,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -602,7 +549,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -613,7 +560,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -631,7 +578,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -639,7 +586,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -647,7 +594,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -656,7 +603,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -666,7 +613,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -677,7 +624,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -689,7 +636,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -708,7 +655,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -716,7 +663,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -724,7 +671,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -733,7 +680,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -743,7 +690,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -754,7 +701,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -766,7 +713,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -779,7 +726,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -799,7 +746,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -807,7 +754,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -815,7 +762,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -824,7 +771,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -834,7 +781,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -845,7 +792,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -857,7 +804,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -870,7 +817,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -884,7 +831,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -905,7 +852,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -913,7 +860,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -921,7 +868,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -930,7 +877,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -940,7 +887,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -951,7 +898,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -963,7 +910,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -976,7 +923,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -990,7 +937,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1005,7 +952,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1027,7 +974,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1035,7 +982,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1043,7 +990,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1052,7 +999,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1062,7 +1009,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1073,7 +1020,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1085,7 +1032,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1098,7 +1045,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1112,7 +1059,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1127,7 +1074,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1143,7 +1090,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1166,7 +1113,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1174,7 +1121,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1182,7 +1129,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1191,7 +1138,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1201,7 +1148,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1212,7 +1159,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1224,7 +1171,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1237,7 +1184,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1251,7 +1198,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1266,7 +1213,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1282,7 +1229,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1299,7 +1246,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1323,7 +1270,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1331,7 +1278,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1339,7 +1286,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1348,7 +1295,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1358,7 +1305,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1369,7 +1316,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1381,7 +1328,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1394,7 +1341,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1408,7 +1355,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1423,7 +1370,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1439,7 +1386,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1456,7 +1403,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1481,7 +1428,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1489,7 +1436,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1497,7 +1444,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1506,7 +1453,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1516,7 +1463,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1527,7 +1474,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1539,7 +1486,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1552,7 +1499,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1566,7 +1513,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1581,7 +1528,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1597,7 +1544,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1614,7 +1561,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1633,7 +1580,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1659,7 +1606,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1667,7 +1614,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1675,7 +1622,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1684,7 +1631,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1694,7 +1641,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1705,7 +1652,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1717,7 +1664,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1730,7 +1677,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1744,7 +1691,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1759,7 +1706,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1775,7 +1722,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1792,7 +1739,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1811,7 +1758,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1831,7 +1778,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1858,7 +1805,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1866,7 +1813,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1874,7 +1821,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1883,7 +1830,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1893,7 +1840,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1904,7 +1851,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1916,7 +1863,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1929,7 +1876,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1943,7 +1890,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1958,7 +1905,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1974,7 +1921,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -1991,7 +1938,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2010,7 +1957,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2030,7 +1977,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2051,7 +1998,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2079,7 +2026,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -2087,7 +2034,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2095,7 +2042,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2104,7 +2051,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2114,7 +2061,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2125,7 +2072,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2137,7 +2084,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2150,7 +2097,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2164,7 +2111,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2179,7 +2126,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2195,7 +2142,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2212,7 +2159,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2231,7 +2178,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2251,7 +2198,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2272,7 +2219,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2294,7 +2241,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2323,7 +2270,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -2331,7 +2278,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2339,7 +2286,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2348,7 +2295,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2358,7 +2305,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2369,7 +2316,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2381,7 +2328,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2394,7 +2341,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2408,7 +2355,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2423,7 +2370,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2439,7 +2386,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2456,7 +2403,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2475,7 +2422,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2495,7 +2442,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2516,7 +2463,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2538,7 +2485,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2561,7 +2508,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens18:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2591,7 +2538,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -2599,7 +2546,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2607,7 +2554,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2616,7 +2563,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2626,7 +2573,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2637,7 +2584,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2649,7 +2596,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2662,7 +2609,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2676,7 +2623,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2691,7 +2638,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2707,7 +2654,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2724,7 +2671,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2743,7 +2690,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2763,7 +2710,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2784,7 +2731,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2806,7 +2753,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2829,7 +2776,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens18:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -2853,7 +2800,7 @@ def crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat):
                 for item in itens19:
                     post(prodformat, item)
 
-                busca(driver,wait, itemgrupo, itemespecie, itemproduto)
+                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 page(driver, wait)
@@ -3174,7 +3121,7 @@ def scrap_preco():
         fmt = it[3].split("'")
         prodformat = fmt[0]
         print(f"Scraping : {prodformat}")
-        crawler(driver,wait,itemgrupo,itemespecie,itemproduto,prodformat)
+        crawler(driver,wait,prodformat)
         sleep(1)
 
         
