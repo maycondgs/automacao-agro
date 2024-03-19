@@ -156,7 +156,8 @@ def busca(driver,wait, prodformat):
     driver.execute_script('window.scrollTo(0, 400);')
     sleep(2)
 
-    dattaa = driver.find_element((By.XPATH,'//*[@id="DataInicial"]'))
+    dattaa = wait.untill(condicao_esperada.element_to_be_clickable((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
+
     driver.execute_script("arguments[0].click();", dattaa)
 
     sleep(5)
