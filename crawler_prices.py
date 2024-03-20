@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
 from bs4 import BeautifulSoup
+from lxml import etree 
 from PIL import Image
 from time import sleep
 import pytesseract
@@ -54,7 +55,7 @@ def iniciar_driver():
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
@@ -79,10 +80,12 @@ def iniciar_driver():
 
 
 
-
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
+
+
 
 def login(driver):
 
@@ -153,25 +156,25 @@ def busca(driver,wait, prodformat):
     driver.get(link_search)
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 400);')
-    sleep(2)
-
-    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
-
-    driver.execute_script("arguments[0].click();", dattaa)
-
+    driver.execute_script('window.scrollTo(0, 350);')
     sleep(5)
 
     try:
+        dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
+
+        sleep(3)
+
         btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
         sleep(3)
 
         btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
         sleep(1)
+
         driver.execute_script("arguments[0].click();", btn_form)
 
     except:
         continu = False
+        return
 
 
 
@@ -180,32 +183,33 @@ def scraw(driver, wait):
     itens = []
     sleep(3)
 
-    produtos = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[1]')))
-    produtos = produtos[1:]
-
-    locais = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[1]/span')))
-    locais = locais[1:]
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    dom = etree.HTML(str(soup)) 
+    
+    table = (dom.xpath('//*/table/tbody'))
 
     products = []
-    for produto in produtos:
-        produto = produto.text
-        products.append(produto)
-
-
     locals = []
+    last_update = []
 
-    for local in locais:
-        local = local.text
+    for tbody in table:
+        trs = tbody.xpath('.//tr')
+        trs = trs[1:]
+        for tr in trs:
+            td1 = tr.xpath('.//td[1]/text()')
+            td2 = tr.xpath('.//td[2]/text()')
+            td4 = tr.xpath('.//td[4]/text()')
+            
+            up = td4[0].strip()
+            up = up.split('/')
+            td4 = f'{up[2]}-{up[1]}-{up[0]}'
 
-        if "'" in local:
-            local = local.replace("'", "")
+            products.append(td1[0].strip())
+            locals.append(td2[0].strip())
+            last_update.append(td4)
 
-        locals.append(local)
-
-    
 
     pre = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[3]/div')))
-
 
 
 
@@ -277,16 +281,17 @@ def scraw(driver, wait):
 
     data = []
 
-    for product, locale, price in  zip(products, locals, precos):
-
-        data.append({
+    for product, locale, price, ultup in  zip(products, locals, precos, last_update):
+        obj = {
             'Produto': product,
             'Local': locale,
             'Preco': price,
+            'Update': ultup,
             'Data': data_hoje
-        })
+        }
 
-
+        data.append(obj)
+        
 
     return data
 
@@ -309,7 +314,7 @@ def page(driver, wait):
 def post(itemarq, item):
 
     cursor = db.cursor()
-    sql = f"INSERT INTO quotes_{itemarq} (name, state, price, date_publication) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Data']}')"
+    sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
     cursor.execute(sql)
     db.commit()
 
@@ -322,13 +327,13 @@ def crawler(driver, wait, prodformat):
 
     if continu == True:
 
-        driver.execute_script('window.scrollTo(0, 2200);')
+        driver.execute_script('window.scrollTo(0, 2100);')
 
         inf = driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/form/div/div').text
         info = str(inf)
-
         txt = info.split(' ')
         num = int(txt[5])
+        print(num)
         pag = num / 30
         tot = math.ceil(pag)
 
@@ -3118,7 +3123,6 @@ def scrap_preco():
         itemproduto = it[2]
         fmt = it[3].split("'")
         prodformat = fmt[0]
-        print(f"Scraping : {prodformat}")
         crawler(driver,wait,prodformat)
         sleep(1)
 
