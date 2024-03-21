@@ -55,9 +55,9 @@ def iniciar_driver():
     chrome_options.add_argument('--remote-debugging-pipe')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--incognito')
-    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    #chrome_options.add_argument('--headless')
 
 
     service = Service()
@@ -80,8 +80,8 @@ def iniciar_driver():
 
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -89,6 +89,7 @@ continu = True
 
 def login(driver):
 
+    sleep(1)
     driver.get('https://www.agrolink.com.br/login')
     sleep(2)
 
@@ -116,7 +117,7 @@ def busca(driver,wait, prodformat):
         case 'cafe':
             link_search = 'https://www.agrolink.com.br/cotacoes/graos/cafe/'
         case 'cana':
-            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cafe/'
+            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'
         case 'feijao':
             link_search = 'https://www.agrolink.com.br/cotacoes/graos/feijao/'
         case 'milho':
@@ -160,9 +161,7 @@ def busca(driver,wait, prodformat):
     sleep(5)
 
     try:
-        dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
-
-        driver.execute_script("arguments[0].click();", dattaa)
+        dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
         sleep(3)
 
         btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
@@ -200,13 +199,17 @@ def scraw(driver, wait):
             td1 = tr.xpath('.//td[1]/text()')
             td2 = tr.xpath('.//td[2]/text()')
             td4 = tr.xpath('.//td[4]/text()')
+
+            td2 = td2[0].strip()
+            if "'" in td2:
+                td2 = td2.replace("'", "")
             
             up = td4[0].strip()
             up = up.split('/')
             td4 = f'{up[2]}-{up[1]}-{up[0]}'
 
             products.append(td1[0].strip())
-            locals.append(td2[0].strip())
+            locals.append(td2)
             last_update.append(td4)
 
 
@@ -300,6 +303,7 @@ def scraw(driver, wait):
 
 def page(driver, wait):
 
+
     next_btn = driver.find_element(By.XPATH, '//*/a[@class="btn-navigation btn-navigation-next"]')
 
     sleep(2)
@@ -310,6 +314,8 @@ def page(driver, wait):
     driver.execute_script("arguments[0].click();", next_btn)
     #next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
     #next_btn.click()
+    sleep(5)
+    driver.execute_script('window.scrollTo(0, 2200);')
 
 
 def post(itemarq, item):
@@ -328,15 +334,21 @@ def crawler(driver, wait, prodformat):
 
     if continu == True:
 
-        driver.execute_script('window.scrollTo(0, 2100);')
+        driver.execute_script('window.scrollTo(0, 2000);')
+        sleep(3)
 
-        inf = driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/form/div/div').text
-        info = str(inf)
-        txt = info.split(' ')
-        num = int(txt[5])
-        print(num)
-        pag = num / 30
-        tot = math.ceil(pag)
+
+        try:
+            inf = driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/form/div/div').text
+            info = str(inf)
+            txt = info.split(' ')
+            num = int(txt[5])
+            print(num)
+            pag = num / 30
+            tot = math.ceil(pag)
+        except:
+            tot = 1
+
 
 
         print(F'CRAWLING... {prodformat} : {tot}')
@@ -354,10 +366,9 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                sleep(1)
+
                 itens2 = scraw(driver, wait)
                 for item in itens2:
                     post(prodformat, item)
@@ -370,7 +381,6 @@ def crawler(driver, wait, prodformat):
                     post(prodformat, item)
 
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -378,9 +388,7 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
@@ -392,7 +400,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -400,19 +407,14 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 sleep(1)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
@@ -425,7 +427,6 @@ def crawler(driver, wait, prodformat):
                     post(prodformat, item)
 
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -433,28 +434,19 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
@@ -466,7 +458,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -474,39 +465,25 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
@@ -518,7 +495,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -526,51 +502,31 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
@@ -582,7 +538,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -590,64 +545,37 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
@@ -659,7 +587,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -667,78 +594,43 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
@@ -750,7 +642,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -758,93 +649,49 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
@@ -856,7 +703,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -864,109 +710,55 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
@@ -978,7 +770,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -986,126 +777,61 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
@@ -1117,7 +843,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1125,144 +850,67 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens13 = scraw(driver, wait)
                 for item in itens13:
@@ -1274,7 +922,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1282,145 +929,67 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
@@ -1432,7 +1001,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1440,165 +1008,73 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens15 = scraw(driver, wait)
                 for item in itens15:
@@ -1610,7 +1086,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1618,186 +1093,79 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens15 = scraw(driver, wait)
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens16 = scraw(driver, wait)
                 for item in itens16:
@@ -1809,7 +1177,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -1817,208 +1184,85 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens15 = scraw(driver, wait)
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens16 = scraw(driver, wait)
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens17 = scraw(driver, wait)
                 for item in itens17:
@@ -2030,7 +1274,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -2038,231 +1281,91 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens15 = scraw(driver, wait)
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens16 = scraw(driver, wait)
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens17 = scraw(driver, wait)
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens18 = scraw(driver, wait)
                 for item in itens18:
@@ -2274,264 +1377,121 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                sleep(1)
+
                 itens2 = scraw(driver, wait)
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
+
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+   
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens15 = scraw(driver, wait)
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens16 = scraw(driver, wait)
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+
                 itens17 = scraw(driver, wait)
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens18 = scraw(driver, wait)
                 for item in itens18:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
+                driver.execute_script('window.scrollTo(0, 1700);')
+
                 itens19 = scraw(driver, wait)
                 for item in itens19:
                     post(prodformat, item)
@@ -2542,7 +1502,6 @@ def crawler(driver, wait, prodformat):
                 for item in itens:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
                 page(driver, wait)
                 sleep(1)
@@ -2550,280 +1509,108 @@ def crawler(driver, wait, prodformat):
                 for item in itens2:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
                 page(driver, wait)
                 itens3 = scraw(driver, wait)
                 for item in itens3:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens4 = scraw(driver, wait)
                 for item in itens4:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens5 = scraw(driver, wait)
                 for item in itens5:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens6 = scraw(driver, wait)
                 for item in itens6:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens7 = scraw(driver, wait)
                 for item in itens7:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
+
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens8 = scraw(driver, wait)
                 for item in itens8:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
+ 
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens9 = scraw(driver, wait)
                 for item in itens9:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
+
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens10 = scraw(driver, wait)
                 for item in itens10:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
+
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens11 = scraw(driver, wait)
                 for item in itens11:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
+
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens12 = scraw(driver, wait)
                 for item in itens12:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens14 = scraw(driver, wait)
                 for item in itens14:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens15 = scraw(driver, wait)
                 for item in itens15:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens16 = scraw(driver, wait)
                 for item in itens16:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens17 = scraw(driver, wait)
                 for item in itens17:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens18 = scraw(driver, wait)
                 for item in itens18:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens19 = scraw(driver, wait)
                 for item in itens19:
                     post(prodformat, item)
 
-                busca(driver,wait, prodformat)
                 sleep(1)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
-                page(driver, wait)
                 page(driver, wait)
                 itens20 = scraw(driver, wait)
                 for item in itens20:
@@ -2969,7 +1756,15 @@ def crawlAlface():
     for dado in dados:
         if dado['Preco'] == 's/, c':
             dado['Preco'] = 'Sem cotacao'
-        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+
+        data = {
+            'Produto': dado["Produto"],
+            'Local': dado["Estado"],
+            'Preco': dado["Preco"],
+            'Update': dado["Data"],
+            'Data': dado["Data"]
+        }
+
 
         post('alface',data)
 
@@ -3097,7 +1892,13 @@ def crawlRepolho():
         if dado['Preco'] == 's/, c':
             dado['Preco'] = 'Sem cotacao'
 
-        data = {dado["Produto"], dado["Estado"], dado["Preco"], dado["Data"]}
+        data = {
+            'Produto': dado["Produto"],
+            'Local': dado["Estado"],
+            'Preco': dado["Preco"],
+            'Update': dado["Data"],
+            'Data': dado["Data"]
+        }
 
         post('repolho',data)
 
@@ -3106,6 +1907,7 @@ def scrap_preco():
 
     print('CRAWLER PRICES')
     codigos = [{'11,8,Todos,algodao'},{'13,5,Todos,arroz'},{'11,30,Todos,amendoim'},{'13,7,Todos,cafe'},{'11,92,Todos,cana'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},{'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
+
     
 
     driver,wait = iniciar_driver()
@@ -3169,7 +1971,6 @@ def scrapy_precos():
 
 
 scrap_preco()
-
 
 #schedule.every().day.at("05:30").do(scrapy_precos)
 
