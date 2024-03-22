@@ -57,7 +57,7 @@ def iniciar_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
 
 
     service = Service()
@@ -160,17 +160,14 @@ def busca(driver,wait, prodformat):
     driver.execute_script('window.scrollTo(0, 320);')
     sleep(5)
 
+    btdate = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="DataInicial"]'))).click()
+    sleep(2)
+    
+    btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
+    sleep(3)
+
+
     try:
-        ind = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="app"]/div[1]/main/section[1]/div/div/div/div/div/div/div[1]/a')))
-
-
-        wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
-        sleep(3)
-
-        btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]')))
-        driver.execute_script("arguments[0].click();", btn_date)
-        sleep(3)
-
         btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
         sleep(1)
 
@@ -178,7 +175,6 @@ def busca(driver,wait, prodformat):
 
     except:
         continu = False
-        return
 
 
 
