@@ -14,7 +14,7 @@ from email.mime.multipart import MIMEMultipart
 
 
 db = mysql.connector.connect(
-    user='marceloagrouser',
+    user='root',
     password='7e3867b1e054fe1f49f8',
     host = '5.161.90.90',
     port = '7129',
