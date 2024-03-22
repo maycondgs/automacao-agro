@@ -164,7 +164,7 @@ def busca(driver,wait, prodformat):
     driver.execute_script("arguments[0].click();", btdate)
     sleep(2)
     
-    btn_date = driver.find_element(By.XPATH,'//*/div[@class="datepicker-days"]/table/tfoot/tr/th[1]')
+    btn_date = driver.find_element(By.XPATH,'//*/div[@class="datepicker-days"]/table/tfoot/tr[1]/th')
     driver.execute_script("arguments[0].click();", btn_date)
     sleep(3)
 
