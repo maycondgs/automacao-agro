@@ -57,7 +57,7 @@ def iniciar_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
 
 
     service = Service()
@@ -157,11 +157,11 @@ def busca(driver,wait, prodformat):
     driver.get(link_search)
     sleep(1)
 
-    driver.execute_script('window.scrollTo(0, 350);')
+    driver.execute_script('window.scrollTo(0, 320);')
     sleep(5)
 
     try:
-        wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
+        wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
         sleep(3)
 
         btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]')))
