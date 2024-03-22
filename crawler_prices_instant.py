@@ -1971,5 +1971,5 @@ def scrapy_precos():
         
 
 
-scrapy_precos()
+scrap_preco()
 
