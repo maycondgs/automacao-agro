@@ -40,11 +40,12 @@ data_hoje = da[0]
 
 db = mysql.connector.connect(
     user='marceloagrouser',
-    password='zHXBNu99drvBzHXBNu99drvBTf0Exe3pTf0Exe3p',
-    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
-    port = '45821',
+    password='7e3867b1e054fe1f49f8',
+    host = '5.161.90.90',
+    port = '7129',
     database='agrolivre'
 )
+
 
 
 
@@ -80,8 +81,8 @@ def iniciar_driver():
 
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -160,13 +161,14 @@ def busca(driver,wait, prodformat):
     driver.execute_script('window.scrollTo(0, 350);')
     sleep(5)
 
+    
+    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
+    sleep(3)
+
+    btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
+    sleep(3)
+
     try:
-        dattaa = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input'))).click()
-        sleep(3)
-
-        btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
-        sleep(3)
-
         btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
         sleep(1)
 
@@ -1969,11 +1971,11 @@ def scrapy_precos():
         send_mail()
         
 
+scrap_preco()
+
+#schedule.every().day.at("05:30").do(scrapy_precos)
 
 
-schedule.every().day.at("05:30").do(scrapy_precos)
-
-
-while True:
-    schedule.run_pending()
-    sleep(1)
+#while True:
+#    schedule.run_pending()
+#    sleep(1)
