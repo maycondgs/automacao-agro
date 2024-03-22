@@ -160,7 +160,8 @@ def busca(driver,wait, prodformat):
     driver.execute_script('window.scrollTo(0, 320);')
     sleep(5)
 
-    btdate = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div'))).click()
+    btdate = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div')))
+    btdate.click()
     sleep(2)
     
     btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//th[@class="today"]'))).click()
