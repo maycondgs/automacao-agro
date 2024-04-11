@@ -120,8 +120,10 @@ def busca(driver,wait, link, prodformat):
     sleep(5)
 
     btn_date = driver.find_elements(By.XPATH, '//*/th[@class="today"]')
-    btn_date[1].click()
-    sleep(3)
+    for btns in btn_date:
+        btns.click()
+        sleep(3)
+        break
 
     try:
         btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
