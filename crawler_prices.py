@@ -112,16 +112,17 @@ def busca(driver,wait, link, prodformat):
     sleep(1)
 
     driver.execute_script('window.scrollTo(0, 350);')
-    sleep(5)
-
+    sleep(2)
     
     dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
     sleep(1)
     driver.execute_script("arguments[0].click();", dattaa)
     sleep(3)
 
-    btn_date = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[8]/div[1]/table/tfoot/tr[1]/th')))
-    driver.execute_script("arguments[0].click();", btn_date)
+    calendar = wait.until(condicao_esperada.visibility_of_element_located((By.XPATH, '//div[@class="datepicker datepicker-dropdown dropdown-menu"]')))
+
+    btn_date = driver.find_elements(By.XPATH, '//th[@class="today"]')
+    driver.execute_script("arguments[0].click();", btn_date[1])
     sleep(3)
 
     try:
