@@ -38,13 +38,13 @@ data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
 
-db = mysql.connector.connect(
-    user='marceloagrouser',
-    password='7e3867b1e054fe1f49f8',
-    host = '5.161.90.90',
-    port = '7129',
-    database='agrolivre'
-)
+#db = mysql.connector.connect(
+#    user='root',
+#    password='7e3867b1e054fe1f49f8',
+#    host = '5.161.90.90',
+#    port = '7129',
+#    database='agrolivre'
+#)
 
 
 
@@ -81,8 +81,8 @@ def iniciar_driver():
 
 
 
-#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -106,56 +106,9 @@ def login(driver):
 
 
 
-def busca(driver,wait, prodformat):
+def busca(driver,wait, link, prodformat):
 
-    match prodformat:
-        case 'algodao':
-            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/algodao/'
-        case 'arroz':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/arroz/'
-        case 'amendoim':
-            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/amendoim/'
-        case 'cafe':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/cafe/'
-        case 'cana':
-            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/'
-        case 'feijao':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/feijao/'
-        case 'milho':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/milho/'
-        case 'soja':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/soja/'
-        case 'sorgo':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/sorgo/'
-        case 'trigo':
-            link_search = 'https://www.agrolink.com.br/cotacoes/graos/trigo/'
-        case 'suinos':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/suinos/'
-        case 'aves':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/aves/'
-        case 'caprinos':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/caprinos/'
-        case 'ovinos':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/ovinos/'
-        case 'beterraba':
-            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/'
-        case 'tomate':
-            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/tomate/'
-        case 'pimentao':
-            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/'
-        case 'cebola':
-            link_search = 'https://www.agrolink.com.br/cotacoes/diversos/cebola/'
-        case 'couve':
-            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/couve/'
-        case 'cenoura':
-            link_search = 'https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/'
-        case 'boi':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg'
-        case 'vaca':
-            link_search = 'https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg'
-
-
-    driver.get(link_search)
+    driver.get(link)
     sleep(1)
 
     driver.execute_script('window.scrollTo(0, 350);')
@@ -322,17 +275,17 @@ def page(driver, wait):
 
 def post(itemarq, item):
 
-    cursor = db.cursor()
-    sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
-    cursor.execute(sql)
-    db.commit()
+    print(item)
+    #cursor = db.cursor()
+    #sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
+    #cursor.execute(sql)
+    #db.commit()
 
 
 
-def crawler(driver, wait, prodformat):
+def crawler(driver, wait, link, prodformat):
     
-
-    busca(driver, wait, prodformat)
+    busca(driver, wait, link, prodformat)
 
     if continu == True:
 
@@ -1620,7 +1573,6 @@ def crawler(driver, wait, prodformat):
 
 
 
-
 def crawlAlface():
 
     driver, wait = iniciar_driver()
@@ -1908,32 +1860,23 @@ def crawlRepolho():
 def scrap_preco():
 
     print('CRAWLER PRICES')
-    codigos = [{'11,8,Todos,algodao'},{'13,5,Todos,arroz'},{'11,30,Todos,amendoim'},{'13,7,Todos,cafe'},{'11,92,Todos,cana'},{'13,46,Todos,feijao'},{'13,2,Todos,milho'},{'13,1,Todos,soja'},{'13,31,Todos,sorgo'},{'13,6,Todos,trigo'},{'10,144,Todos,suinos'},{'10,122,Todos,aves'},{'10,147,Todos,caprinos'},{'10,152,Todos,ovinos'},{'14,95,Todos,beterraba'},{'14,40,Todos,tomate'},{'14,51,Todos,pimentao'},{'11,24,Todos,cebola'},{'14,39,Todos,couve'},{'14,27,Todos,cenoura'},{'10,120,Boi Gordo 15Kg,boi'},{'10,120,Vaca Gorda 15Kg,vaca'}]
+    links = ['algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/', 'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/', 'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/', 'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/', 'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/', 'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/' ,'milho,https://www.agrolink.com.br/cotacoes/graos/milho/', 'soja,https://www.agrolink.com.br/cotacoes/graos/soja/', 'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/', 'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/', 'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/' ,'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/', 'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/', 'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/', 'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/', 'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/', 'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/', 'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/', 'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/', 'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/', 'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg', 'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
 
-    
+    for link in links:
 
-    driver,wait = iniciar_driver()
+        l = link.split(',')
+        prodformat = l[0]
+        link = l[1]
 
-    login(driver)
-    sleep(1)
+        driver,wait = iniciar_driver()
 
-    for cod in codigos:
-
-        item = str(cod)
-        it = item.split(',')
-
-        grp = it[0].split("'")
-        itemgrupo = grp[1]
-        itemespecie = it[1]
-        itemproduto = it[2]
-        fmt = it[3].split("'")
-        prodformat = fmt[0]
-        crawler(driver,wait,prodformat)
+        login(driver)
         sleep(1)
 
-        
+        crawler(driver, wait, link ,prodformat)
+        sleep(1)
 
-    driver.close()
+        driver.close()
 
 
 def send_mail():

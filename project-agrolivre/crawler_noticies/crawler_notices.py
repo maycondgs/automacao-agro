@@ -7,9 +7,7 @@ from bs4 import BeautifulSoup
 import mysql.connector
 import os
 
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+
 
 dda = datetime.today()
 da = str(dda).split(' ')
@@ -17,12 +15,11 @@ dataa = da[0].split('-')
 data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
-
 db = mysql.connector.connect(
-    user='root',
-    password='7e3867b1e054fe1f49f8',
-    host = '5.161.90.90',
-    port = '7129',
+    user='marceloagrouser',
+    password='zHXBNu99drvBzHXBNu99drvBTf0Exe3pTf0Exe3p',
+    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
+    port = '45821',
     database='agrolivre'
 )
 
@@ -238,6 +235,7 @@ def crawlNoticiasCanalRural(cursor):
             
 
 
+
 def crawlerNoticias():
     cursor = db.cursor()
     crawlNoticiasAgricolas(cursor)
@@ -245,36 +243,7 @@ def crawlerNoticias():
     crawlNoticiasCanalRural(cursor)
 
 
-def send_mail():
-    sender_email = "meuclash3333@gmail.com"
-    sender_password = "mqzm swld bzsa hjau"
-    recipient_email = "mayconclementino44@gmail.com"
-    subject = "SUPORTE - DEV"
-    body = "BUG APP AGROLIVRE - CRAWLER NOTICES"
-
-    msg = MIMEMultipart()
-    msg["From"] = sender_email
-    msg["To"] = recipient_email
-    msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
-
-    # Send the email
-    smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-    smtp_server.starttls()
-    smtp_server.login(sender_email, sender_password)
-    smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
-    smtp_server.quit()
-
-
-
-
-def crawler():
-    try:
-        crawlerNoticias()
-    except:
-        send_mail()
-
-schedule.every(1).minutes.do(crawler)
+schedule.every(1).minutes.do(crawlerNoticias)
 
 while True:
     schedule.run_pending()

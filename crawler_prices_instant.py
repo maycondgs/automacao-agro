@@ -39,10 +39,10 @@ data_hoje = da[0]
 
 
 db = mysql.connector.connect(
-    user='marceloagrouser',
-    password='zHXBNu99drvBzHXBNu99drvBTf0Exe3pTf0Exe3p',
-    host = 'connection-agrolivre-542543.agrolivrebrasil.com',
-    port = '45821',
+    user='root',
+    password='7e3867b1e054fe1f49f8',
+    host = '5.161.90.90',
+    port = '7129',
     database='agrolivre'
 )
 
