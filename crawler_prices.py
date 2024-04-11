@@ -58,7 +58,7 @@ def iniciar_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
 
 
     service = Service()
@@ -81,8 +81,8 @@ def iniciar_driver():
 
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -109,14 +109,14 @@ def login(driver):
 def busca(driver,wait, link, prodformat):
 
     driver.get(link)
-    sleep(1)
+    sleep(2)
 
     driver.execute_script('window.scrollTo(0, 350);')
-    sleep(2)
+    sleep(3)
     
     dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
     sleep(1)
-    driver.execute_script("arguments[0].click();", dattaa)
+    dattaa.click()
     sleep(5)
 
     btn_date = driver.find_elements(By.XPATH, '//*/th[@class="today"]')
