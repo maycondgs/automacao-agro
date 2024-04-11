@@ -119,7 +119,7 @@ def busca(driver,wait, link, prodformat):
     driver.execute_script("arguments[0].click();", dattaa)
     sleep(5)
 
-    btn_date = driver.find_element(By.XPATH, '//*[@id="app"]/div[8]/div[1]/table/tfoot/tr[1]/th')
+    btn_date = driver.find_element(By.XPATH, '/html/body/div[8]/div[1]/table/tfoot/tr[1]/th')
     btn_date.click()
     sleep(3)
 
