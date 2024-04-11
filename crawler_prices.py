@@ -38,13 +38,13 @@ data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
 data_hoje = da[0]
 
 
-#db = mysql.connector.connect(
-#    user='root',
-#    password='7e3867b1e054fe1f49f8',
-#    host = '5.161.90.90',
-#    port = '7129',
-#    database='agrolivre'
-#)
+db = mysql.connector.connect(
+    user='root',
+    password='63d08ecd4c92b34acf3b',
+    host = '5.161.188.61',
+    port = '7129',
+    database='agrolivre'
+)
 
 
 
@@ -282,11 +282,11 @@ def page(driver, wait):
 
 def post(itemarq, item):
 
-    print(item)
-    #cursor = db.cursor()
-    #sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
-    #cursor.execute(sql)
-    #db.commit()
+    #print(item)
+    cursor = db.cursor()
+    sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
+    cursor.execute(sql)
+    db.commit()
 
 
 
