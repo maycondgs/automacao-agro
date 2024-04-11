@@ -119,10 +119,10 @@ def busca(driver,wait, link, prodformat):
     driver.execute_script("arguments[0].click();", dattaa)
     sleep(3)
 
-    calendar = wait.until(condicao_esperada.visibility_of_element_located((By.XPATH, '//div[@class="datepicker datepicker-dropdown dropdown-menu"]')))
+    calendar = wait.until(condicao_esperada.visibility_of_element_located((By.XPATH, '//*[@id="app"]/div[8]/div[@class="datepicker-days"]')))
 
-    btn_date = driver.find_elements(By.XPATH, '//th[@class="today"]')
-    driver.execute_script("arguments[0].click();", btn_date[1])
+    btn_date = driver.find_element(By.XPATH, '//*[@id="app"]/div[8]/div[1]/table/tfoot/tr[1]/th')
+    driver.execute_script("arguments[0].click();", btn_date)
     sleep(3)
 
     try:
