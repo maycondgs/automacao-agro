@@ -119,8 +119,8 @@ def busca(driver,wait, link, prodformat):
     driver.execute_script("arguments[0].click();", dattaa)
     sleep(5)
 
-    btn_date = driver.find_element(By.XPATH, '//*/th[@class="today"]')
-    btn_date.click()
+    btn_date = driver.find_elements(By.XPATH, '//*/th[@class="today"]')
+    btn_date[1].click()
     sleep(3)
 
     try:
