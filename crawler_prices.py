@@ -121,9 +121,9 @@ def busca(driver,wait, link, prodformat):
             print('RELOAD')
             busca(driver, wait, link, prodformat)
 
+        actions = ActionChains(driver)
+        actions.move_to_element(prod).perform()
 
-        prod.click()
-        wait.until(condicao_esperada.presence_of_element_located((By.XPATH, "//option[. = 'Vaca Gorda 15Kg']")))
         prod_opt.select_by_value('1772')
         
 
