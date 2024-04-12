@@ -114,14 +114,15 @@ def busca(driver,wait, link, prodformat):
     sleep(5)
 
     if prodformat == 'vaca':
-        print('VACA')
         prod = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesProduto"]')))
         prod_opt = Select(prod)
         qtd = len(prod_opt.options)
         if qtd == 1:
+            print('RELOAD')
             busca(driver, wait, link, prodformat)
 
 
+        prod.click()
         wait.until(condicao_esperada.presence_of_element_located((By.XPATH, "//option[. = 'Vaca Gorda 15Kg']")))
         prod_opt.select_by_value('1772')
         
