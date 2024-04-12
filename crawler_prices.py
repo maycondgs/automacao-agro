@@ -123,7 +123,7 @@ def busca(driver,wait, link, prodformat):
 
 
         wait.until(condicao_esperada.presence_of_element_located((By.XPATH, "//option[. = 'Vaca Gorda 15Kg']")))
-        prod_opt.select_by_visible_text('Vaca Gorda 15Kg')
+        prod_opt.select_by_value('1772')
         
 
     
