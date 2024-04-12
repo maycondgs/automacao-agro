@@ -129,7 +129,9 @@ def crawlNoticiasAgrolink(cursor):
             dattt = da.split(' ')
             datt = str(dattt[2]).split('/')
             data.append(f'{datt[2]}-{datt[1]}-{datt[0]}')
-            hora.append(dattt[3].strip())
+            horaa = dattt[3].strip()
+            horaa = horaa.replace('h', ':00')
+            hora.append(horaa)
 
         for lnk in links2:
             lnks2.append(f'https://www.agrolink.com.br{lnk}')
@@ -242,8 +244,11 @@ def crawlNoticiasCanalRural(cursor):
 
 def crawlerNoticias():
     cursor = db.cursor()
+    sleep(1)
     crawlNoticiasAgricolas(cursor)
+    sleep(1)
     crawlNoticiasAgrolink(cursor)
+    sleep(1)
     crawlNoticiasCanalRural(cursor)
 
 
@@ -269,6 +274,7 @@ def send_mail():
 
 
 
+crawlerNoticias()
 
 def crawler():
     try:
@@ -276,8 +282,8 @@ def crawler():
     except:
         send_mail()
 
-schedule.every(1).minutes.do(crawler)
+#schedule.every(1).minutes.do(crawler)
 
-while True:
+#while True:
     schedule.run_pending()
     sleep(1)
