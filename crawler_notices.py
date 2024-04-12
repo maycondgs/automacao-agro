@@ -274,16 +274,14 @@ def send_mail():
 
 
 
-crawlerNoticias()
-
 def crawler():
     try:
         crawlerNoticias()
     except:
         send_mail()
 
-#schedule.every(1).minutes.do(crawler)
+schedule.every(1).minutes.do(crawler)
 
-#while True:
+while True:
     schedule.run_pending()
     sleep(1)
