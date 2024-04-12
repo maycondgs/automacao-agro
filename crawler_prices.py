@@ -1,31 +1,31 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import *
 from selenium.webdriver.support import expected_conditions as condicao_esperada
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import *
+from pandas import pandas as pd
+from selenium import webdriver
+from datetime import datetime
 from bs4 import BeautifulSoup
+from time import sleep
+import mysql.connector
 from lxml import etree 
 from PIL import Image
-from time import sleep
-import pytesseract
 import urllib.request
-from pandas import pandas as pd
-import cv2
-from datetime import datetime
+import pytesseract
+import threading
 import requests
 import schedule
-import threading
 import json
 import math
-import mysql.connector
+import cv2
 import os
 
-
+#SEND MAIL
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -58,7 +58,7 @@ def iniciar_driver():
     chrome_options.add_argument('--incognito')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
 
 
     service = Service()
@@ -80,9 +80,8 @@ def iniciar_driver():
     return driver,wait
 
 
-
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -109,10 +108,24 @@ def login(driver):
 def busca(driver,wait, link, prodformat):
 
     driver.get(link)
-    sleep(2)
+    sleep(5)
 
     driver.execute_script('window.scrollTo(0, 350);')
-    sleep(3)
+    sleep(5)
+
+    if prodformat == 'vaca':
+        print('VACA')
+        prod = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesProduto"]')))
+        prod_opt = Select(prod)
+        qtd = len(prod_opt.options)
+        if qtd == 1:
+            busca(driver, wait, link, prodformat)
+
+
+        wait.until(condicao_esperada.presence_of_element_located((By.XPATH, "//option[. = 'Vaca Gorda 15Kg']")))
+        prod_opt.select_by_visible_text('Vaca Gorda 15Kg')
+        
+
     
     dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
     sleep(1)
@@ -1867,7 +1880,7 @@ def crawlRepolho():
 def scrap_preco():
 
     print('CRAWLER PRICES')
-    links = ['algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/', 'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/', 'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/', 'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/', 'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/', 'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/' ,'milho,https://www.agrolink.com.br/cotacoes/graos/milho/', 'soja,https://www.agrolink.com.br/cotacoes/graos/soja/', 'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/', 'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/', 'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/' ,'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/', 'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/', 'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/', 'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/', 'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/', 'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/', 'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/', 'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/', 'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/', 'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg', 'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
+    links = ['vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
 
     for link in links:
 
@@ -1877,7 +1890,7 @@ def scrap_preco():
 
         driver,wait = iniciar_driver()
 
-        login(driver)
+        #login(driver)
         sleep(1)
 
         crawler(driver, wait, link ,prodformat)
@@ -1920,10 +1933,11 @@ def scrapy_precos():
     except:
         send_mail()
         
+scrap_preco()
 
-schedule.every().day.at("05:30").do(scrapy_precos)
+#schedule.every().day.at("05:30").do(scrapy_precos)
 
 
-while True:
-    schedule.run_pending()
-    sleep(1)
+#while True:
+#    schedule.run_pending()
+#    sleep(1)
