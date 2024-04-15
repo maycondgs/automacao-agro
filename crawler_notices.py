@@ -268,18 +268,17 @@ def send_mail():
     smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
     smtp_server.quit()
 
-crawlerNoticias()
 
 
 def crawler():
-
     try:
         crawlerNoticias()
     except:
         send_mail()
 
-    schedule.every(1).minutes.do(crawler)
 
-    while True:
-        schedule.run_pending()
-        sleep(1)
+schedule.every(1).minutes.do(crawler)
+
+while True:
+    schedule.run_pending()
+    sleep(1)
