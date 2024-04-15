@@ -194,10 +194,6 @@ def crawlNoticiasCanalRural(cursor):
         titu = (dom1.xpath('/html/body/main/section[1]/div/div[1]/div/h1/text()'))
         titulo = titu[0].strip()
 
-        categ = (dom1.xpath('/html/body/main/section[1]/div/div[1]/div/p/text()'))
-        categoria = categ[0].strip()
-
-
         dat = (dom1.xpath('/html/body/main/section[1]/div/div[2]/div[2]/time/text()'))
         datt = dat[1].split('\n')
         dattt = datt[1].split()
@@ -210,7 +206,7 @@ def crawlNoticiasCanalRural(cursor):
         if "'" in titulo:
             titulo = titulo.replace("'", "")
 
-        novo = [titulo, link, hora, data, referencia, categoria]
+        novo = [titulo, link, hora, data, referencia, referencia]
 
         novos.append(novo)
     
@@ -272,16 +268,18 @@ def send_mail():
     smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
     smtp_server.quit()
 
+crawlerNoticias()
 
 
 def crawler():
+
     try:
         crawlerNoticias()
     except:
         send_mail()
 
-schedule.every(1).minutes.do(crawler)
+    schedule.every(1).minutes.do(crawler)
 
-while True:
-    schedule.run_pending()
-    sleep(1)
+    while True:
+        schedule.run_pending()
+        sleep(1)
