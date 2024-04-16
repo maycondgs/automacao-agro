@@ -276,7 +276,7 @@ def crawler():
     except:
         send_mail()
 
-#t
+
 schedule.every(1).minutes.do(crawler)
 
 while True:
