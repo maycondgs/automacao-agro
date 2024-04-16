@@ -80,8 +80,8 @@ def iniciar_driver():
     return driver,wait
 
 
-#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
