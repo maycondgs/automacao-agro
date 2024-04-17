@@ -1969,11 +1969,11 @@ def scrapy_precos():
     except:
         send_mail()
         
-scrap_preco()
-
-#schedule.every().day.at("05:30").do(scrapy_precos)
 
 
-#while True:
-#    schedule.run_pending()
-#    sleep(1)
+schedule.every().day.at("05:30").do(scrapy_precos)
+
+
+while True:
+    schedule.run_pending()
+    sleep(1)
