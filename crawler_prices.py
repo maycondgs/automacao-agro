@@ -80,8 +80,8 @@ def iniciar_driver():
     return driver,wait
 
 
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 continu = True
 
@@ -118,8 +118,11 @@ def busca(driver,wait, link, prodformat):
         prod_opt = Select(prod)
         qtd = len(prod_opt.options)
         if qtd == 1:
-            print('RELOAD')
-            busca(driver, wait, link, prodformat)
+            espec = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')))
+            espec_opt = Select(espec)
+            espec_opt.select_by_value('122')
+            sleep(5)
+            espec_opt.select_by_value('120')
 
         actions = ActionChains(driver)
         actions.move_to_element(prod).perform()
@@ -131,8 +134,11 @@ def busca(driver,wait, link, prodformat):
         prod_opt = Select(prod)
         qtd = len(prod_opt.options)
         if qtd == 1:
-            print('RELOAD')
-            busca(driver, wait, link, prodformat)
+            espec = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')))
+            espec_opt = Select(espec)
+            espec_opt.select_by_value('122')
+            sleep(5)
+            espec_opt.select_by_value('120')
 
         actions = ActionChains(driver)
         actions.move_to_element(prod).perform()
@@ -167,6 +173,77 @@ def busca(driver,wait, link, prodformat):
 
 
 
+def convert_price(pre):
+    i = pre.strip()
+    addr = i.split("'")
+
+    link_img = addr[1]
+
+    cords = addr[2].split(';')
+
+    wi = cords[2].strip()
+    wid = wi.split(':')
+    wid = wid[1].strip()
+    widt = wid.split('px')
+    width = widt[0]
+    
+    he = cords[3].strip()
+    hei = he.split(':')
+    hei = hei[1].strip()
+    heig = hei.split('px')
+    height = heig[0]
+    
+    xy = cords[4].strip()
+    xy = xy.split(':')
+    xy = xy[1].strip()
+    xy = xy.split('px')
+
+    sta = xy[0].strip()
+
+    end = xy[1].strip()
+
+
+    if sta == '0':
+        start = sta
+    else:
+        starr = sta.split('-')
+        start = starr[1]
+
+    if end == '0':
+        end = end
+    else:
+        ennn = end.split('-')
+        end = ennn[1]
+
+
+    urllib.request.urlretrieve(link_img, "./imagem.png")
+
+
+    img = Image.open("imagem.png")
+
+    ys = int(end)
+    yf = int(end) + int(height)
+
+    xs = int(start)
+    xf  = int(start) + int(width)
+
+    croped = img.crop((xs, ys, xf, yf))
+
+    pre = pytesseract.image_to_string(croped)
+    prec = pre.split('\n')
+    preco = str(prec[0])
+
+    if 'B' in preco:
+        preco = preco.replace("B", "8")
+    if 'O' in preco:
+        preco = preco.replace("O", "0")
+    if 'S' in preco:
+        preco = preco.replace("S", "5")
+
+    return preco
+
+
+
 def scraw(driver, wait):
 
     itens = []
@@ -179,6 +256,7 @@ def scraw(driver, wait):
 
     products = []
     locals = []
+    precos = []
     last_update = []
 
     for tbody in table:
@@ -187,11 +265,21 @@ def scraw(driver, wait):
         for tr in trs:
             td1 = tr.xpath('.//td[1]/text()')
             td2 = tr.xpath('.//td[2]/text()')
+            td3 = tr.xpath('.//td[3]/text()')
+            preco = td3[0].strip()
+            if preco == '':
+                td3 = tr.xpath('.//td[3]/div')[0]
+                prcc = td3.attrib['style']
+                preco = convert_price(prcc)
+                
+
             td4 = tr.xpath('.//td[4]/text()')
 
             td2 = td2[0].strip()
             if "'" in td2:
                 td2 = td2.replace("'", "")
+            
+            
             
             up = td4[0].strip()
             up = up.split('/')
@@ -200,81 +288,15 @@ def scraw(driver, wait):
             products.append(td1[0].strip())
             locals.append(td2)
             last_update.append(td4)
-
-
-    pre = wait.until(condicao_esperada.visibility_of_all_elements_located((By.XPATH, '/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/div/div/table/tbody/tr/td[3]/div')))
-
-
-
-    precos = []
-
-    for prev in pre:
-        linkpre = prev.get_attribute('style')
-        i = linkpre.strip()
-        addr = i.split('"')
-        linkk = addr[1]
-
-        link2 = addr[2].split(';')
-        wid = link2[2]
-        widt = wid.split(' ')
-        hei = link2[3]
-        heigh = hei.split(' ')
-        ind = link2[4]
-        indices = ind.split(': ')
-        indice = indices[1].split(' ')
-        sta = indice[0]
-        en = indice[1]
-
-        star = sta.split('px')
-        enn = en.split('px')
-
-
-        if star[0] == '0':
-            start = star[0]
-        else:
-            starr = star[0].split('-')
-            start = starr[1]
-
-        if enn[0] == '0':
-            end = enn[0]
-        else:
-            ennn = enn[0].split('-')
-            end = ennn[1]
-
-
-        width = widt[2].split('p')
-        height = heigh[2].split('p')
-
-        urllib.request.urlretrieve(linkk, "./imagem.png")
-
-
-        img = Image.open("imagem.png")
-
-        ys = int(end)
-        yf = int(end) + int(height[0])
-
-        xs = int(start)
-        xf  = int(start) + int(width[0])
-
-        croped = img.crop((xs, ys, xf, yf))
-
-        pre = pytesseract.image_to_string(croped)
-        prec = pre.split('\n')
-        preco = str(prec[0])
-
-        if 'B' in preco:
-            preco = preco.replace("B", "8")
-        if 'O' in preco:
-            preco = preco.replace("O", "0")
-        if 'S' in preco:
-            preco = preco.replace("S", "5")
-
-        precos.append(str(preco))
+            precos.append(str(preco))
 
 
     data = []
 
     for product, locale, price, ultup in  zip(products, locals, precos, last_update):
+        if "," not in price:
+            price += ',00'
+
         obj = {
             'Produto': product,
             'Local': locale,
@@ -1894,7 +1916,8 @@ def crawlRepolho():
 def scrap_preco():
 
     print('CRAWLER PRICES')
-    links = ['algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/', 'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/', 'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/', 'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/', 'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/', 'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/' ,'milho,https://www.agrolink.com.br/cotacoes/graos/milho/', 'soja,https://www.agrolink.com.br/cotacoes/graos/soja/', 'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/', 'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/', 'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/' ,'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/', 'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/', 'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/', 'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/', 'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/', 'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/', 'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/', 'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/', 'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/', 'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg', 'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
+    #links = ['algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/', 'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/', 'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/', 'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/', 'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/', 'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/' ,'milho,https://www.agrolink.com.br/cotacoes/graos/milho/', 'soja,https://www.agrolink.com.br/cotacoes/graos/soja/', 'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/', 'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/', 'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/' ,'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/', 'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/', 'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/', 'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/', 'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/', 'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/', 'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/', 'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/', 'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/', 'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg', 'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
+    links = ['cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/']
 
     for link in links:
 
