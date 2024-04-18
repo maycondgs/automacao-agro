@@ -1,0 +1,1973 @@
+from selenium.webdriver.support import expected_conditions as condicao_esperada
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import *
+from pandas import pandas as pd
+from selenium import webdriver
+from datetime import datetime
+from bs4 import BeautifulSoup
+from time import sleep
+import mysql.connector
+from lxml import etree 
+from PIL import Image
+import urllib.request
+import pytesseract
+import threading
+import requests
+import schedule
+import json
+import math
+import cv2
+import os
+
+#SEND MAIL
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+
+dda = datetime.today()
+da = str(dda).split(' ')
+dataa = da[0].split('-')
+data = f'{dataa[2]}/{dataa[1]}/{dataa[0]}'
+data_hoje = da[0]
+
+
+db = mysql.connector.connect(
+    user='root',
+    password='63d08ecd4c92b34acf3b',
+    host = '5.161.188.61',
+    port = '7129',
+    database='agrolivre'
+)
+
+
+
+
+
+def iniciar_driver():
+
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--remote-debugging-pipe')
+    chrome_options.add_argument('--start-maximized')
+    chrome_options.add_argument('--incognito')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--headless')
+
+
+    service = Service()
+
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+
+    wait = WebDriverWait(
+        driver,
+        50,
+        poll_frequency=5,
+        ignored_exceptions=[
+            NoSuchElementException,
+            ElementNotVisibleException,
+            ElementNotSelectableException,
+        ]
+    )
+
+    return driver,wait
+
+
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+#pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+
+continu = True
+
+
+
+def login(driver):
+
+    sleep(1)
+    driver.get('https://www.agrolink.com.br/login')
+    sleep(2)
+
+    driver.execute_script('window.scrollTo(0, 310);')
+    sleep(1)
+
+    driver.find_element(By.XPATH,'/html/body/div[1]/main/div[2]/div/div/div/section[1]/div/div/form/div[1]/div[2]/input').send_keys('xetedo9314@ratedane.com')
+    sleep(2)
+    driver.find_element(By.XPATH,'/html/body/div[1]/main/div[2]/div/div/div/section[1]/div/div/form/div[2]/div[2]/input').send_keys('webscraper')
+
+    driver.find_element(By.XPATH,'/html/body/div[1]/main/div[2]/div/div/div/section[1]/div/div/form/div[3]/button').click()
+
+
+
+
+def busca(driver,wait, link, prodformat):
+
+    driver.get(link)
+    sleep(5)
+
+    driver.execute_script('window.scrollTo(0, 350);')
+    sleep(5)
+
+    if prodformat == 'vaca':
+        prod = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesProduto"]')))
+        prod_opt = Select(prod)
+        qtd = len(prod_opt.options)
+        if qtd == 1:
+            espec = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')))
+            espec_opt = Select(espec)
+            espec_opt.select_by_value('122')
+            sleep(5)
+            espec_opt.select_by_value('120')
+
+        actions = ActionChains(driver)
+        actions.move_to_element(prod).perform()
+
+        prod_opt.select_by_value('1772')
+
+    if prodformat == 'boi':
+        prod = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesProduto"]')))
+        prod_opt = Select(prod)
+        qtd = len(prod_opt.options)
+        if qtd == 1:
+            espec = wait.until(condicao_esperada.presence_of_element_located((By.XPATH,'//*[@id="FiltroCotacoesEspecie"]')))
+            espec_opt = Select(espec)
+            espec_opt.select_by_value('122')
+            sleep(5)
+            espec_opt.select_by_value('120')
+
+        actions = ActionChains(driver)
+        actions.move_to_element(prod).perform()
+
+        prod_opt.select_by_value('11')
+        
+
+    
+    dattaa = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[1]/div/div/div/form/div[2]/div[3]/div[2]/div/div[1]/div/input')))
+    sleep(1)
+    actions = ActionChains(driver)
+    actions.move_to_element(dattaa).perform()
+    sleep(1)
+    dattaa.click()
+    sleep(5)
+
+    btn_date = driver.find_elements(By.XPATH, '//*/th[@class="today"]')
+    for btns in btn_date:
+        btns.click()
+        sleep(3)
+        break
+
+    try:
+        btn_form = wait.until(condicao_esperada.element_to_be_clickable((By.XPATH,'//*[@id="btnEnviarFiltroGeral-5231"]')))
+        sleep(1)
+
+        driver.execute_script("arguments[0].click();", btn_form)
+
+    except:
+        continu = False
+        return
+
+
+
+def convert_price(pre):
+    i = pre.strip()
+    addr = i.split("'")
+
+    link_img = addr[1]
+
+    cords = addr[2].split(';')
+
+    wi = cords[2].strip()
+    wid = wi.split(':')
+    wid = wid[1].strip()
+    widt = wid.split('px')
+    width = widt[0]
+    
+    he = cords[3].strip()
+    hei = he.split(':')
+    hei = hei[1].strip()
+    heig = hei.split('px')
+    height = heig[0]
+    
+    xy = cords[4].strip()
+    xy = xy.split(':')
+    xy = xy[1].strip()
+    xy = xy.split('px')
+
+    sta = xy[0].strip()
+
+    end = xy[1].strip()
+
+
+    if sta == '0':
+        start = sta
+    else:
+        starr = sta.split('-')
+        start = starr[1]
+
+    if end == '0':
+        end = end
+    else:
+        ennn = end.split('-')
+        end = ennn[1]
+
+
+    urllib.request.urlretrieve(link_img, "./imagem.png")
+
+
+    img = Image.open("imagem.png")
+
+    ys = int(end)
+    yf = int(end) + int(height)
+
+    xs = int(start)
+    xf  = int(start) + int(width)
+
+    croped = img.crop((xs, ys, xf, yf))
+
+    pre = pytesseract.image_to_string(croped)
+    prec = pre.split('\n')
+    preco = str(prec[0])
+
+    if 'B' in preco:
+        preco = preco.replace("B", "8")
+    if 'O' in preco:
+        preco = preco.replace("O", "0")
+    if 'S' in preco:
+        preco = preco.replace("S", "5")
+
+    return preco
+
+
+
+def scraw(driver, wait):
+
+    itens = []
+    sleep(3)
+
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    dom = etree.HTML(str(soup)) 
+    
+    table = (dom.xpath('//*/table/tbody'))
+
+    products = []
+    locals = []
+    precos = []
+    last_update = []
+
+    for tbody in table:
+        trs = tbody.xpath('.//tr')
+        trs = trs[1:]
+        for tr in trs:
+            td1 = tr.xpath('.//td[1]/text()')
+            td2 = tr.xpath('.//td[2]/text()')
+            td3 = tr.xpath('.//td[3]/text()')
+            preco = td3[0].strip()
+            if preco == '':
+                td3 = tr.xpath('.//td[3]/div')[0]
+                prcc = td3.attrib['style']
+                preco = convert_price(prcc)
+                
+
+            td4 = tr.xpath('.//td[4]/text()')
+
+            td2 = td2[0].strip()
+            if "'" in td2:
+                td2 = td2.replace("'", "")
+            
+            
+            
+            up = td4[0].strip()
+            up = up.split('/')
+            td4 = f'{up[2]}-{up[1]}-{up[0]}'
+
+            products.append(td1[0].strip())
+            locals.append(td2)
+            last_update.append(td4)
+            precos.append(str(preco))
+
+
+    data = []
+
+    for product, locale, price, ultup in  zip(products, locals, precos, last_update):
+        if "," not in price:
+            price += ',00'
+
+        obj = {
+            'Produto': product,
+            'Local': locale,
+            'Preco': price,
+            'Update': ultup,
+            'Data': data_hoje
+        }
+
+        data.append(obj)
+        
+
+    return data
+
+
+
+def page(driver, wait):
+
+
+    next_btn = driver.find_element(By.XPATH, '//*/a[@class="btn-navigation btn-navigation-next"]')
+
+    sleep(2)
+    driver.execute_script("arguments[0].scrollIntoView();", next_btn)
+
+    driver.execute_script("window.scrollBy(0, -100);")
+
+    driver.execute_script("arguments[0].click();", next_btn)
+    #next_btn = wait.until(condicao_esperada.presence_of_element_located((By.XPATH, '//*[@id="frmMercadoFisico-5181"]/div/a')))
+    #next_btn.click()
+    sleep(5)
+    driver.execute_script('window.scrollTo(0, 2200);')
+
+
+def post(itemarq, item):
+
+    #print(item)
+    cursor = db.cursor()
+    sql = f"INSERT INTO quotes_{itemarq} (item, state, price, date_update ,date_scraping) VALUES ('{item['Produto']}', '{item['Local']}', '{item['Preco']}', '{item['Update']}', '{item['Data']}')"
+    cursor.execute(sql)
+    db.commit()
+
+
+
+def crawler(driver, wait, link, prodformat):
+    
+    busca(driver, wait, link, prodformat)
+
+    if continu == True:
+
+        driver.execute_script('window.scrollTo(0, 2000);')
+        sleep(3)
+
+
+        try:
+            inf = driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div/div/div[1]/div[4]/div/form/div/div').text
+            info = str(inf)
+            txt = info.split(' ')
+            num = int(txt[5])
+            print(num)
+            pag = num / 30
+            tot = math.ceil(pag)
+        except:
+            tot = 1
+
+
+
+        print(F'CRAWLING... {prodformat} : {tot}')
+
+        match tot:
+            case 1:
+                
+                itens = scraw(driver, wait)
+
+                for item in itens:
+                    post(prodformat, item)
+
+            case 2:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+                
+
+
+            case 3:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+
+            case 4:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+
+            case 5:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                    
+            case 6:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+
+            case 7:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+
+            case 8:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+
+            case 9:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+
+            case 10:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+
+            case 11:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+
+            case 12:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+
+            case 13:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens13 = scraw(driver, wait)
+                for item in itens13:
+                    post(prodformat, item)
+
+
+            case 14:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+
+            case 15:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+
+            case 16:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens16 = scraw(driver, wait)
+                for item in itens16:
+                    post(prodformat, item)
+
+
+            case 17:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens16 = scraw(driver, wait)
+                for item in itens16:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens17 = scraw(driver, wait)
+                for item in itens17:
+                    post(prodformat, item)
+
+
+            case 18:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens16 = scraw(driver, wait)
+                for item in itens16:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens17 = scraw(driver, wait)
+                for item in itens17:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens18 = scraw(driver, wait)
+                for item in itens18:
+                    post(prodformat, item)
+
+
+            case 19:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+   
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens16 = scraw(driver, wait)
+                for item in itens16:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+
+                itens17 = scraw(driver, wait)
+                for item in itens17:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens18 = scraw(driver, wait)
+                for item in itens18:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                driver.execute_script('window.scrollTo(0, 1700);')
+
+                itens19 = scraw(driver, wait)
+                for item in itens19:
+                    post(prodformat, item)
+
+
+            case 20:
+                itens = scraw(driver, wait)
+                for item in itens:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                sleep(1)
+                itens2 = scraw(driver, wait)
+                for item in itens2:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens3 = scraw(driver, wait)
+                for item in itens3:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens4 = scraw(driver, wait)
+                for item in itens4:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens5 = scraw(driver, wait)
+                for item in itens5:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens6 = scraw(driver, wait)
+                for item in itens6:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens7 = scraw(driver, wait)
+                for item in itens7:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                itens8 = scraw(driver, wait)
+                for item in itens8:
+                    post(prodformat, item)
+
+ 
+                sleep(1)
+                page(driver, wait)
+                itens9 = scraw(driver, wait)
+                for item in itens9:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                itens10 = scraw(driver, wait)
+                for item in itens10:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                itens11 = scraw(driver, wait)
+                for item in itens11:
+                    post(prodformat, item)
+
+
+                sleep(1)
+                page(driver, wait)
+                itens12 = scraw(driver, wait)
+                for item in itens12:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens14 = scraw(driver, wait)
+                for item in itens14:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens15 = scraw(driver, wait)
+                for item in itens15:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens16 = scraw(driver, wait)
+                for item in itens16:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens17 = scraw(driver, wait)
+                for item in itens17:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens18 = scraw(driver, wait)
+                for item in itens18:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens19 = scraw(driver, wait)
+                for item in itens19:
+                    post(prodformat, item)
+
+                sleep(1)
+                page(driver, wait)
+                itens20 = scraw(driver, wait)
+                for item in itens20:
+                    post(prodformat, item)
+
+
+
+def crawlAlface():
+
+    driver, wait = iniciar_driver()
+
+    driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/alface-ceasas')
+
+    texto = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[1]/div').text
+    data_cotacao = texto.split(' ')
+    dia_c = data_cotacao[1]
+    dia_cotacao = f'{dia_c[2]}-{dia_c[1]}-{dia_c[0]}'
+
+    tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
+    html_tabela1 = tabela1.get_attribute('outerHTML')
+    sleep(2)
+
+    soup1 = BeautifulSoup(html_tabela1, 'html.parser')
+    table1 = soup1.find(name='table')
+
+    df_alface = pd.read_html( str(table1) ) [0]
+    sleep(1)
+
+    itens = []
+
+    for i, item in enumerate(df_alface['Tipo / Unidade medida']):
+        produto = df_alface.loc[i, "Tipo / Unidade medida"]
+        prec = df_alface.loc[i, "Preço"]
+        if prec == '***':
+            preco = 0
+        else:
+            if len(prec) == 3:
+                x = slice(1)
+                y = slice(1,3)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+            else:
+                x = slice(2)
+                y = slice(2,4)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+
+            
+        itens.append({
+            "item": produto, 
+            "valor": preco
+            })
+
+            
+    linha1 = itens[0]
+    linha2 = itens[1]
+    linha3 = itens[2]
+    linha4 = itens[3]
+    linha5 = itens[4]
+    linha6 = itens[5]
+    linha7 = itens[6]
+    linha8 = itens[7]
+    linha9 = itens[8]
+
+    dados= []
+
+
+    estado1 = linha1['item']
+
+    item1 = linha2['item']
+    preco1 = linha2['valor']
+
+    item2 = linha3['item']
+    preco2 = linha3['valor']
+
+    dados.append({
+        "Produto": item1,
+        "Estado": estado1,
+        "Preco": preco1,
+        "Data": data_hoje
+    })
+
+    dados.append({
+        "Produto": item2,
+        "Estado": estado1,
+        "Preco": preco2,
+        "Data": data_hoje
+    })
+
+
+    estado2 = linha4['item']
+
+    item3 = linha5['item']
+    preco3 = linha5['valor']
+
+    item4 = linha6['item']
+    preco4 = linha6['valor']
+
+    dados.append({
+        "Produto": item3,
+        "Estado": estado2,
+        "Preco": preco3,
+        "Data": data_hoje
+    })
+
+    dados.append({
+        "Produto": item4,
+        "Estado": estado2,
+        "Preco": preco4,
+        "Data": data_hoje
+    })
+
+
+    estado3 = linha7['item']
+
+    item5 = linha8['item']
+    preco5 = linha8['valor']
+
+    item6 = linha9['item']
+    preco6 = linha9['valor']
+
+    dados.append({
+        "Produto": item6,
+        "Estado": estado3,
+        "Preco": preco6,
+        "Data": data_hoje
+    })
+
+    dados.append({
+        "Produto": item5,
+        "Estado": estado3,
+        "Preco": preco5,
+        "Data": data_hoje
+    })
+
+    driver.close()
+
+    for dado in dados:
+        if dado['Preco'] == 's/, c':
+            dado['Preco'] = 'Sem cotacao'
+
+        data = {
+            'Produto': dado["Produto"],
+            'Local': dado["Estado"],
+            'Preco': dado["Preco"],
+            'Update': dado["Data"],
+            'Data': dado["Data"]
+        }
+
+
+        post('alface',data)
+
+
+def crawlRepolho():
+
+    driver, wait = iniciar_driver()
+
+    driver.get('https://www.noticiasagricolas.com.br/cotacoes/verduras/repolho-ceasas')
+
+
+    tabela1 = driver.find_element(By.XPATH,'//*[@id="content"]/div[3]/div[3]/div[1]/div[2]/table')
+    html_tabela1 = tabela1.get_attribute('outerHTML')
+    sleep(2)
+
+    soup1 = BeautifulSoup(html_tabela1, 'html.parser')
+    table1 = soup1.find(name='table')
+
+    df_repolho = pd.read_html( str(table1) ) [0]
+    sleep(1)
+
+    itens = []
+
+    for i, item in enumerate(df_repolho['Tipo / Unidade medida']):
+        produto = df_repolho.loc[i, "Tipo / Unidade medida"]
+        prec = df_repolho.loc[i, "Preço"]
+        if prec == '***':
+            preco = 0
+        else:
+            if len(prec) == 3:
+                x = slice(1)
+                y = slice(1,3)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+            else:
+                x = slice(2)
+                y = slice(2,4)
+
+                real = prec[x]
+                cent = prec[y]
+                preco = f'{real},{cent}'
+
+            
+        itens.append({
+            "item": produto, 
+            "valor": preco
+        })
+
+            
+    linha1 = itens[0]
+    linha2 = itens[1]
+    linha3 = itens[2]
+    linha4 = itens[3]
+    linha5 = itens[4]
+    linha6 = itens[5]
+    linha7 = itens[6]
+    linha8 = itens[7]
+
+    dados= []
+
+
+    estado1 = linha1['item']
+
+    item1 = linha2['item']
+    preco1 = linha2['valor']
+
+    item2 = linha3['item']
+    preco2 = linha3['valor']
+
+    dados.append({
+        "Produto": item1,
+        "Estado": estado1,
+        "Preco": preco1,
+        "Data": data_hoje
+    })
+
+    dados.append({
+        "Produto": item2,
+        "Estado": estado1,
+        "Preco": preco2,
+        "Data": data_hoje
+    })
+
+
+    estado2 = linha4['item']
+
+    item3 = linha5['item']
+    preco3 = linha5['valor']
+
+    dados.append({
+        "Produto": item3,
+        "Estado": estado2,
+        "Preco": preco3,
+        "Data": data_hoje
+    })
+
+
+    estado3 = linha6['item']
+
+    item4 = linha7['item']
+    preco4 = linha7['valor']
+
+    item5 = linha8['item']
+    preco5 = linha8['valor']
+    
+    dados.append({
+        "Produto": item4,
+        "Estado": estado3,
+        "Preco": preco4,
+        "Data": data_hoje
+    })
+
+    dados.append({
+        "Produto": item5,
+        "Estado": estado3,
+        "Preco": preco5,
+        "Data": data_hoje
+    })
+
+    driver.close()
+
+    for dado in dados:
+        if dado['Preco'] == 's/, c':
+            dado['Preco'] = 'Sem cotacao'
+
+        data = {
+            'Produto': dado["Produto"],
+            'Local': dado["Estado"],
+            'Preco': dado["Preco"],
+            'Update': dado["Data"],
+            'Data': dado["Data"]
+        }
+
+        post('repolho',data)
+
+       
+def scrap_preco():
+
+    print('CRAWLER PRICES')
+    links = ['algodao,https://www.agrolink.com.br/cotacoes/diversos/algodao/', 'arroz,https://www.agrolink.com.br/cotacoes/graos/arroz/', 'amendoim,https://www.agrolink.com.br/cotacoes/diversos/amendoim/', 'cafe,https://www.agrolink.com.br/cotacoes/graos/cafe/', 'cana,https://www.agrolink.com.br/cotacoes/diversos/cana-de-acucar/', 'feijao,https://www.agrolink.com.br/cotacoes/graos/feijao/' ,'milho,https://www.agrolink.com.br/cotacoes/graos/milho/', 'soja,https://www.agrolink.com.br/cotacoes/graos/soja/', 'sorgo,https://www.agrolink.com.br/cotacoes/graos/sorgo/', 'trigo,https://www.agrolink.com.br/cotacoes/graos/trigo/', 'suinos,https://www.agrolink.com.br/cotacoes/carnes/suinos/' ,'aves,https://www.agrolink.com.br/cotacoes/carnes/aves/', 'caprinos,https://www.agrolink.com.br/cotacoes/carnes/caprinos/', 'ovinos,https://www.agrolink.com.br/cotacoes/carnes/ovinos/', 'beterraba,https://www.agrolink.com.br/cotacoes/hortalicas/beterraba/', 'tomate,https://www.agrolink.com.br/cotacoes/hortalicas/tomate/', 'pimentao,https://www.agrolink.com.br/cotacoes/hortalicas/pimentao/', 'cebola,https://www.agrolink.com.br/cotacoes/diversos/cebola/', 'couve,https://www.agrolink.com.br/cotacoes/hortalicas/couve/', 'cenoura,https://www.agrolink.com.br/cotacoes/hortalicas/cenoura/', 'boi,https://www.agrolink.com.br/cotacoes/carnes/bovinos/boi-gordo-15kg', 'vaca,https://www.agrolink.com.br/cotacoes/carnes/bovinos/vaca-gorda-15kg']
+
+    for link in links:
+
+        l = link.split(',')
+        prodformat = l[0]
+        link = l[1]
+
+        driver,wait = iniciar_driver()
+
+        login(driver)
+        sleep(1)
+
+        crawler(driver, wait, link ,prodformat)
+        sleep(1)
+
+        driver.close()
+
+
+def send_mail():
+    sender_email = "meuclash3333@gmail.com"
+    sender_password = "mqzm swld bzsa hjau"
+    recipient_email = "mayconclementino44@gmail.com"
+    subject = "SUPORTE - DEV"
+    body = "BUG APP AGROLIVRE - CRAWLER PRICES"
+
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = recipient_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    # Send the email
+    smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+    smtp_server.starttls()
+    smtp_server.login(sender_email, sender_password)
+    smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
+    smtp_server.quit()
+
+
+
+
+def scrapy_precos():
+    try:
+        scrap_preco()
+        sleep(1)
+        crawlAlface()
+        sleep(1)
+        crawlRepolho() 
+
+    except:
+        send_mail()
+        
+
+scrapy_precos()
